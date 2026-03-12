@@ -161,7 +161,6 @@ const IMAGES = [
   "/selvam.jpg",
   "/bhaskaran.jpg",
   "/bharath.png",
-  "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
 ];
 
 export default function TeamTeaser() {
