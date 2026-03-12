@@ -1,6 +1,5 @@
 ﻿"use client";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState} from "react";
 import gsap from "gsap";
 import {
   CheckCircleIcon,
@@ -20,7 +19,6 @@ import {
 } from "@heroicons/react/24/outline";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import ImageCascadeGSAP from "../app/components/ImageCascadeGSAP";
 import TeamCarousel from "../app/components/TeamCarousel";
 
 import ServiceTabs from "../app/components/ServiceTabs";
@@ -32,85 +30,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 
 export default function Home() {
-  const marketplaceImgs = [
-    "https://images.unsplash.com/photo-1581090405962-9a28c1b1f7b3?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1542567455-4f8b968d5d63?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1581090700227-1e37b190418e?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1581090707285-92c0f5c95c5b?q=80&w=1200&auto=format&fit=crop",
-  ];
-
-  const makeImages = (seed) => [
-    `https://picsum.photos/seed/${seed}1/900/700`,
-    `https://picsum.photos/seed/${seed}2/900/700`,
-    `https://picsum.photos/seed/${seed}3/900/700`,
-  ];
-
-  const useCaseImgs = [
-    "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1581091014534-047f69f1f5ae?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1581091215831-7b5e8d9a9a6b?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1581090406132-7b9a1d25d7f8?q=80&w=1200&auto=format&fit=crop",
-  ];
-  const [activeIndustry, setActiveIndustry] = useState(null);
-  const industriesInfo = {
-    Aerospace: {
-      blurb:
-        "Lightweight brackets, ducts, and tooling with documentation and process traceability for regulated programs. High-performance parts that meet stringent aerospace standards.",
-    },
-    Defence: {
-      blurb:
-        "Ruggedized parts and on-demand spares using engineering polymers and metals for mission-readiness. Custom solutions for defense applications with security and reliability.",
-    },
-    Medical: {
-      blurb:
-        "Patient-specific models, dental fixtures, surgical guides, and biocompatible components with validated workflows. FDA-compliant materials and processes for medical applications.",
-    },
-    Tooling: {
-      blurb:
-        "Custom jigs, fixtures, and production tools with rapid turnaround. Optimize your manufacturing process with additive tooling solutions that reduce costs and lead times.",
-    },
-    Automotive: {
-      blurb:
-        "Jigs, fixtures, and prototype housings enabling faster iteration and ergonomic improvements. From concept cars to production parts with advanced materials.",
-    },
-    "Oil & Gas": {
-      blurb:
-        "Flow components and heat-resistant parts with complex internal channels for demanding environments. Corrosion-resistant materials for harsh operating conditions.",
-    },
-  };
-  const tech = [
-    {
-      id: "DMLS",
-      title: "DMLS",
-      subtitle: "Direct Metal Laser Sintering",
-      color: "red",
-      icon: "fa-atom",
-      description:
-        "High-precision metal printing for complex, strong, production-grade parts. Ideal for aerospace and engineering components.",
-    },
-    {
-      id: "SLS",
-      title: "SLS",
-      subtitle: "Selective Laser Sintering",
-      color: "blue",
-      icon: "fa-cube",
-      description:
-        "Powder-based printing for durable nylon parts without support structures. Great for functional prototypes.",
-    },
-    {
-      id: "FDM",
-      title: "FDM",
-      subtitle: "Fused Deposition Modeling",
-      color: "green",
-      icon: "fa-layer-group",
-      description:
-        "Cost-effective plastic printing for rapid prototyping and low-volume production.",
-    },
-  ];
-
-
+ 
   const videos = [
     "/galactic-bg.mp4",
     "/bharath.mp4",
@@ -118,21 +38,14 @@ export default function Home() {
 
   const [activeVideo, setActiveVideo] = useState(0);
 
-  const [active, setActive] = useState(null);
-
-
-
-
   return (
     <div
       className="min-h-screen text-white relative overflow-hidden 
     // bg-gradient-to-br from-black via-[#0f0b0b] to-[#b91c1c] 
     "
     >
-      {/* Hero Banner */}
       <section className=" relative min-h-screen bg-black text-white overflow-hidden ">
 
-        {/* VIDEO STAGE */}
         <div className="absolute inset-0 ">
           <video
             key={activeVideo}
@@ -152,12 +65,10 @@ export default function Home() {
         </div>
 
 
-        {/* INDUSTRIAL FRAME */}
         <div className="absolute  inset-5 border border-white/10 pointer-events-none"></div>
 
 
 
-        {/* ISO BADGE */}
         <div className="absolute bottom-10 right-10 z-20 flex items-center gap-2 border border-white/20 px-4 py-2 rounded-full backdrop-blur-xl">
 
           <img src="/ios.webp" className="w-6 h-6" />
@@ -170,7 +81,6 @@ export default function Home() {
 
 
 
-        {/* TECHNOLOGY BAR */}
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-4 z-20">
 
           <span className="border border-white/20 rounded-full px-4 py-1 text-sm">
@@ -189,7 +99,6 @@ export default function Home() {
 
 
 
-        {/* HERO CONTENT PANEL */}
         <div className="absolute left-12 bottom-20 z-20 max-w-xl">
 
           <div className="text-xs tracking-widest text-red-300 uppercase font-['dena'] mb-4">
@@ -225,7 +134,6 @@ export default function Home() {
         
 
       </section>
-
       <section className="relative py-36 bg-black text-white overflow-hidden">
 
         {/* ambient background */}
@@ -355,10 +263,6 @@ export default function Home() {
         </div>
 
       </section>
-
-
-
-      {/* Contract Manufacturing Offerings */}
       <section className="py-20 bg-gradient-to-b from-transparent to-red-950/20">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
@@ -378,71 +282,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Industries We Serve */}
-      {/* <section className="py-20">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-5xl font-['test'] mb-2">
-            Industries We Serve
-          </h2>
-          <p className="text-gray-400 font-['scrib'] mb-6 ">
-            We support mission-critical programs across regulated and
-            high-performance sectors with material traceability, process
-            documentation, and dimensional reports.
-          </p>
-          <div className="overflow-x-auto">
-            <div className="flex font-['dena'] gap-6 min-w-max py-2">
-              {[
-                { label: "Aerospace", icon: "fa-plane" },
-                { label: "Defence", icon: "fa-shield-halved" },
-                { label: "Medical", icon: "fa-heart-pulse" },
-                { label: "Tooling", icon: "fa-toolbox" },
-                { label: "Automotive", icon: "fa-car" },
-                { label: "Oil & Gas", icon: "fa-oil-well" },
-              ].map(({ label, icon }) => (
-                <button
-                  key={label}
-                  type="button"
-                  onClick={() => setActiveIndustry(label)}
-                  className={`shrink-0 flex flex-col items-center rounded-xl px-6 py-6 border transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                    activeIndustry === label
-                      ? "bg-white/10 border-primary"
-                      : "bg-dark-100/40 border-gray-800 hover:bg-white/5"
-                  }`}
-                  aria-pressed={activeIndustry === label}
-                >
-                  <div className="text-3xl mb-3">
-                    <i className={`fa-solid ${icon}`} />
-                  </div>
-                  <span className="text-gray-200">{label}</span>
-                </button>
-              ))}
-            </div>
-            {activeIndustry && (
-              <div className="mt-6 bg-white/5 border border-red-500/20 rounded-xl p-5 md:p-6 backdrop-blur animate-fadeIn">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="text-xl md:text-2xl font-['dena'] mb-2">
-                      {activeIndustry}
-                    </h3>
-                    <p className="text-gray-300 font-['scrib'] max-w-3xl">
-                      {industriesInfo[activeIndustry]?.blurb}
-                    </p>
-                  </div>
-                  <a
-                    href="/industries"
-                    className="self-start bg-primary hover:bg-secondary text-white font-monumentExtended px-4 py-2 rounded-md transition"
-                  >
-                    Learn More
-                  </a>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </section> */}
-
-
-      {/* Our Technologies */}
+      
       <div className="container mx-auto px-6 mb-20">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-5xl font-['test'] mb-4">
@@ -457,129 +297,7 @@ export default function Home() {
 
 
 
-      {/* Training CTA Section */}
-      {/* <section className="relative py-28 overflow-hidden">
-        <div className="absolute inset-0 -z-20 overflow-hidden">
-          <video
-            className="w-full h-full object-cover opacity-30"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-          >
-            <source
-              src="https://ik.imagekit.io/0s6dxbeae/EOS%20M290%20Metal%203D%20Printer.mp4?updatedAt=1756027916993"
-              type="video/mp4"
-            />
-          </video>
-        </div>
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/80 via-[#1a0f0f]/70 to-black/80"></div>
-
-        <div className="container mx-auto px-6">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-3 mb-6 bg-blue-500/10 border border-blue-500/30 rounded-sm px-6 py-2">
-                <i className="fa-solid fa-graduation-cap text-blue-400" />
-                <span className="text-sm  text-blue-300 tracking-widest uppercase">
-                  Training & Development
-                </span>
-              </div>
-              <h2 className="text-4xl md:text-6xl font-['test'] mb-6 leading-tight">
-                Build Your Future in
-                <br />
-                <span className="text-blue-400">Additive Manufacturing</span>
-              </h2>
-              <p className="text-gray-300 font-['scrib'] text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-8">
-                From schools to institutions and industry professionals, we
-                offer comprehensive training programs that combine hands-on
-                experience with expert mentorship to prepare you for the future
-                of manufacturing.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6 mb-12">
-              <div className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-sm p-6 backdrop-blur">
-                <div className="text-3xl mb-4 text-center">
-                  <i className="fa-solid fa-school text-blue-400" />
-                </div>
-                <h3 className="text-lg  mb-3 text-center">School Programs</h3>
-                <p className="text-gray-400 font-['scrib'] text-sm text-center leading-relaxed">
-                  STREAM-based learning modules introducing students to 3D
-                  printing and design thinking from an early age.
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-sm p-6 backdrop-blur">
-                <div className="text-3xl mb-4 text-center">
-                  <i className="fa-solid fa-building-columns text-purple-400" />
-                </div>
-                <h3 className="text-lg  mb-3 text-center">
-                  Institution Programs
-                </h3>
-                <p className="text-gray-400 font-['scrib'] text-sm text-center leading-relaxed">
-                  Comprehensive curriculum covering design basics to advanced
-                  machine building for career-focused learning.
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-sm p-6 backdrop-blur">
-                <div className="text-3xl mb-4 text-center">
-                  <i className="fa-solid fa-industry text-red-400" />
-                </div>
-                <h3 className="text-lg  mb-3 text-center">Industry Training</h3>
-                <p className="text-gray-400 font-['scrib'] text-sm text-center leading-relaxed">
-                  Expert-led programs for professionals covering design,
-                  operations, and real-world AM implementation.
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/30 rounded-sm p-8 backdrop-blur mb-8">
-              <div className="grid md:grid-cols-3 gap-6 text-center">
-                <div>
-                  <div className="text-3xl font-bold text-blue-400 mb-2">
-                    30+
-                  </div>
-                  <p className="text-gray-300 font-['scrib'] text-sm">
-                    Years of Combined Experience
-                  </p>
-                </div>
-                <div>
-                  <div className=" text-3xl font-bold text-blue-400 mb-2">
-                    <Image
-                      src="/eos.svg"
-                      alt="Galactic"
-                      width={100} height={100}
-                    />
-                  </div>
-                  <p className="text-gray-300 font-['scrib'] text-sm">
-                    Approved Training Partner
-                  </p>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-blue-400 mb-2">
-                    100%
-                  </div>
-                  <p className="text-gray-300 font-['scrib'] text-sm">
-                    Hands-On Learning
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="text-center">
-              <a
-                href="/training"
-                className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white  px-10 py-5 rounded-sm transition-all duration-300 shadow-xl hover:shadow-blue-500/50"
-              >
-                <span>Explore Training Programs</span>
-                <i className="fa-solid fa-arrow-right" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </section> */}
+      
 
       <section className="relative py-28 overflow-hidden">
 
@@ -752,76 +470,8 @@ export default function Home() {
 
 
 
-      {/* Manufacturing Process */}
       <AdvancedProcess />
 
-      {/* Why Choose Galactic */}
-      {/* <section className="py-20">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-5xl font-['test'] mb-8">
-            Why Choose Galactic
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="card bg-red-500/10 border border-red-500/20 backdrop-blur-xl">
-              <h3 className="text-xl font-['dena'] mb-3">
-                Building in India for the globe
-              </h3>
-              <p className="text-gray-400 font-['scrib'] mb-3">
-                Trusted by teams across industries for performance, reliability, and
-                speed.
-              </p>
-              <ul className="text-gray-400 font-['scrib'] text-sm space-y-1 list-none">
-                <li className="flex items-start gap-2">
-                  <i className="fa-solid fa-globe text-blue-400 mt-1" />
-                  <span>Serving aerospace, medical, defence</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <i className="fa-solid fa-truck-fast text-blue-400 mt-1" />
-                  <span>Fast logistics and delivery</span>
-                </li>
-              </ul>
-            </div>
-            <div className="card bg-red-500/10 border border-red-500/20 backdrop-blur-xl">
-              <h3 className="text-xl font-['dena'] mb-3">
-                Metal 3D Printing/DMLS/LPBF in Bengaluru
-              </h3>
-              <p className="text-gray-400 font-['scrib'] mb-3">
-                Multiple technologies under one roof for the right process per
-                part.
-              </p>
-              <ul className="text-gray-400 font-['scrib'] text-sm space-y-1 list-none">
-                <li className="flex items-start gap-2">
-                  <i className="fa-solid fa-atom text-blue-400 mt-1" />
-                  <span>Certified materials and parameters</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <i className="fa-solid fa-flask text-blue-400 mt-1" />
-                  <span>Material testing on request</span>
-                </li>
-              </ul>
-            </div>
-            <div className="card bg-red-500/10 border border-red-500/20 backdrop-blur-xl">
-              <h3 className="text-xl font-['dena'] mb-3">
-                Research and Collaboration Oriented
-              </h3>
-              <p className="text-gray-400 font-['scrib'] mb-3">
-                Design, manufacturing, post-processing, and inspection—handled
-                seamlessly.
-              </p>
-              <ul className="text-gray-400 font-['scrib'] text-sm space-y-1 list-none">
-                <li className="flex items-start gap-2">
-                  <i className="fa-solid fa-screwdriver-wrench text-blue-400 mt-1" />
-                  <span>Machining, surface finishing, painting</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <i className="fa-solid fa-check-double text-blue-400 mt-1" />
-                  <span>Dimensional reports and documentation</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section> */}
 
       <section className="py-20 bg-black text-white">
         <div className="max-w-7xl mx-auto px-6">
@@ -942,171 +592,7 @@ export default function Home() {
       </section>
 
 
-      {/* Facilities & Capabilities */}
-      {/* <section className="py-20">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-5xl font-['test'] mb-4 text-center">
-            Facilities Designed for the Future
-          </h2>
-          <p className="text-gray-400 font-['scrib'] mb-12 text-center max-w-3xl mx-auto">
-            Our advanced manufacturing facilities are equipped with cutting-edge
-            technology and expert staff, ensuring superior performance and
-            efficiency at every step of the process.
-          </p>
-
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
-            
-            <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-8 backdrop-blur-2xl shadow-[0_14px_40px_rgba(0,0,0,0.3)]">
-              <div className="pointer-events-none absolute -top-16 -right-14 h-48 w-48 rounded-full bg-sky-300/20 blur-3xl" />
-              <div className="pointer-events-none absolute -bottom-16 -left-10 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
-              <div className="relative">
-                <div className="flex items-center justify-between gap-3 mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="text-4xl">
-                      <i className="fa-solid fa-atom text-sky-200" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-['dena']">Metal</h3>
-                      <p className="text-sm text-gray-300 font-['scrib']">
-                        Build Size: Up to 250x250x300mm
-                      </p>
-                    </div>
-                  </div>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-sky-200/30 bg-sky-300/10 px-3 py-1 text-[11px] uppercase tracking-wide text-sky-100 font-['dena']">
-                    <i className="fa-solid fa-award" />
-                    Performance Set
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="rounded-lg border border-white/20 bg-white/10 p-3">
-                    <h4 className="font-['dena'] text-sm mb-2 text-sky-100">
-                      Titanium
-                    </h4>
-                    <p className="text-xs text-gray-300 font-['scrib']">
-                      Ti64Al4V, Ti64 ELI, Grade 5, Grade 23
-                    </p>
-                  </div>
-                  <div className="rounded-lg border border-white/20 bg-white/10 p-3">
-                    <h4 className="font-['dena'] text-sm mb-2 text-sky-100">
-                      Aluminum
-                    </h4>
-                    <p className="text-xs text-gray-300 font-['scrib']">
-                      AlSi10Mg, AlF357, Al6061, Al7050
-                    </p>
-                  </div>
-                  <div className="rounded-lg border border-white/20 bg-white/10 p-3">
-                    <h4 className="font-['dena'] text-sm mb-2 text-sky-100">
-                      Stainless Steel
-                    </h4>
-                    <p className="text-xs text-gray-300 font-['scrib']">
-                      SS316L, SS304L, 17-4PH, 15-5PH
-                    </p>
-                  </div>
-                  <div className="rounded-lg border border-white/20 bg-white/10 p-3">
-                    <h4 className="font-['dena'] text-sm mb-2 text-sky-100">
-                      Tool and Maraging Steel
-                    </h4>
-                    <p className="text-xs text-gray-300 font-['scrib']">
-                      M300, H13, MS1, C300
-                    </p>
-                  </div>
-                  <div className="rounded-lg border border-white/20 bg-white/10 p-3">
-                    <h4 className="font-['dena'] text-sm mb-2 text-sky-100">
-                      Superalloys
-                    </h4>
-                    <p className="text-xs text-gray-300 font-['scrib']">
-                      Inconel 718, Inconel 625, Inconel 939, Haynes 282
-                    </p>
-                  </div>
-                  <div className="rounded-lg border border-white/20 bg-white/10 p-3">
-                    <h4 className="font-['dena'] text-sm mb-2 text-sky-100">
-                      Cobalt and Copper Alloys
-                    </h4>
-                    <p className="text-xs text-gray-300 font-['scrib']">
-                      CoCr MP1, CuCr1Zr, Pure Copper, Bronze blends
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            
-            <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-8 backdrop-blur-2xl shadow-[0_14px_40px_rgba(0,0,0,0.3)]">
-              <div className="pointer-events-none absolute -top-16 -left-14 h-48 w-48 rounded-full bg-cyan-300/20 blur-3xl" />
-              <div className="pointer-events-none absolute -bottom-16 -right-10 h-40 w-40 rounded-full bg-blue-200/15 blur-3xl" />
-              <div className="relative">
-                <div className="flex items-center justify-between gap-3 mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="text-4xl">
-                      <i className="fa-solid fa-cube text-cyan-200" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-['dena']">Polymer</h3>
-                      <p className="text-sm text-gray-300 font-['scrib']">
-                        Build Size: Up to 250x250x250mm
-                      </p>
-                    </div>
-                  </div>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-cyan-200/30 bg-cyan-300/10 px-3 py-1 text-[11px] uppercase tracking-wide text-cyan-100 font-['dena']">
-                    <i className="fa-solid fa-award" />
-                    Material Range
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="rounded-lg border border-white/20 bg-white/10 p-3">
-                    <h4 className="font-['dena'] text-sm mb-2 text-cyan-100">
-                      Polyamide-12
-                    </h4>
-                    <p className="text-xs text-gray-300 font-['scrib']">
-                      PA 2200, PA 2202, PA 2210 FR, PA 3200 GF
-                    </p>
-                  </div>
-                  <div className="rounded-lg border border-white/20 bg-white/10 p-3">
-                    <h4 className="font-['dena'] text-sm mb-2 text-cyan-100">
-                      Polyamide-11
-                    </h4>
-                    <p className="text-xs text-gray-300 font-['scrib']">
-                      PA 1100, PA 1101, PA 1102, castable PA blends
-                    </p>
-                  </div>
-                  <div className="rounded-lg border border-white/20 bg-white/10 p-3">
-                    <h4 className="font-['dena'] text-sm mb-2 text-cyan-100">
-                      FDM Engineering
-                    </h4>
-                    <p className="text-xs text-gray-300 font-['scrib']">
-                      PLA, ABS, ASA, PETG, TPU, TPE, PP
-                    </p>
-                  </div>
-                  <div className="rounded-lg border border-white/20 bg-white/10 p-3">
-                    <h4 className="font-['dena'] text-sm mb-2 text-cyan-100">
-                      High-Temp Polymers
-                    </h4>
-                    <p className="text-xs text-gray-300 font-['scrib']">
-                      PEEK, PEKK, ULTEM 9085, PPSU
-                    </p>
-                  </div>
-                  <div className="rounded-lg border border-white/20 bg-white/10 p-3">
-                    <h4 className="font-['dena'] text-sm mb-2 text-cyan-100">
-                      Resins and Elastomers
-                    </h4>
-                    <p className="text-xs text-gray-300 font-['scrib']">
-                      Tough, clear, castable, dental, rubber-like resins
-                    </p>
-                  </div>
-                  <div className="rounded-lg border border-white/20 bg-white/10 p-3">
-                    <h4 className="font-['dena'] text-sm mb-2 text-cyan-100">
-                      Vacuum Casting
-                    </h4>
-                    <p className="text-xs text-gray-300 font-['scrib']">
-                      PU-ABS, PC-like, PP-like, silicone and shore A rubbers
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
+     
 
       <section className="relative py-24 bg-black text-white overflow-hidden">
 
@@ -1310,57 +796,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Team Carousel Section */}
       <TeamCarousel />
 
-      {/* Quick Contact Form */}
-      {/* <section className="py-20">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-5xl font-['test'] mb-2">
-            Quick Contact
-          </h2>
-          <p className="text-gray-400 font-['scrib'] mb-6">
-            Share your requirements—we typically respond within 24 hours. NDAs
-            available upon request.
-          </p>
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-red-500/5 p-6 rounded-xl border border-red-500/20 backdrop-blur-xl"
-          >
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-['dena'] text-gray-400">
-                Name
-              </label>
-              <input type="text" className="input-primary" required />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-['dena'] text-gray-400">
-                Email
-              </label>
-              <input type="email" className="input-primary" required />
-            </div>
-            <div className="md:col-span-2 flex flex-col gap-2">
-              <label className="text-sm font-['dena'] text-gray-400">
-                Message
-              </label>
-              <textarea rows={5} className="input-primary" required />
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="bg-primary hover:bg-secondary text-white px-6 py-3 rounded-lg transition-colors duration-300 font-['dena']"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
-        </div>
-      </section> */}
-
+      
          <section className="relative  bg-black text-white overflow-hidden pb-[5vw]">
 
-      {/* subtle glow background */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_60%)]" />
 
       <div className="relative max-w-4xl mx-auto px-6 text-center">
@@ -1374,7 +814,6 @@ export default function Home() {
           get back to you within 24 hours.
         </p>
 
-        {/* FORM PANEL */}
         <form
           onSubmit={(e) => e.preventDefault()}
           className="relative p-10 rounded-2xl 
@@ -1382,7 +821,6 @@ export default function Home() {
           border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
         >
 
-          {/* glass reflection */}
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 to-transparent opacity-40 pointer-events-none" />
 
           <div className="relative grid md:grid-cols-2 gap-6">
