@@ -33,7 +33,7 @@ const MEMBERS = [
     id: 5,
     name: "Selva Kumar S",
     role: "Head of Production",
-    img: "/selvam.jpg",
+    img: "/slvm.jpeg",
     bio: "Strategic partnerships driving global market expansion.",
     achievements: ["Fortune 500 Client Relations", "50+ Enterprise Deals", "Industry Keynote Speaker"]
   },
@@ -41,7 +41,7 @@ const MEMBERS = [
     id: 4,
     name: "Bhaskaran P",
     role: "Application Engineer",
-    img: "/bhaskaran.jpg",
+    img: "/bhskrn.jpeg",
     bio: "Research-driven approach to advanced material development and testing.",
     achievements: ["PhD in Materials Science", "6 Published Papers", "Materials Lab Director"]
   },
@@ -49,7 +49,7 @@ const MEMBERS = [
     id: 6,
     name: "Bharath Kumar S",
     role: "Business Development Executive",
-    img: "/bharath.png",
+    img: "/brth.png",
     bio: "User-centered design creating intuitive 3D printing solutions.",
     achievements: ["Figma Community Featured", "Product Design Lead", "2M+ Users Served"]
   },

@@ -158,9 +158,9 @@ const IMAGES = [
   "/nithin.jpg",
   "/abid.jpg",
   "/dipak.jpg",
-  "/selvam.jpg",
-  "/bhaskaran.jpg",
-  "/bharath.png",
+  "/slvm.jpeg",
+  "/bhskrn.jpeg",
+  "/brth.png",
 ];
 
 export default function TeamTeaser() {
