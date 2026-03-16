@@ -766,11 +766,11 @@ export default function About() {
         </div>
       </section> */}
 
-      <section className="relative py-40 bg-[#0a0a0a] overflow-hidden">
+      {/* <section className="relative py-40 bg-[#0a0a0a] overflow-hidden">
 
         <div className="max-w-7xl mx-auto px-10">
 
-          {/* TITLE */}
+          
 
           <motion.h2
             className="text-6xl font-['dena'] mb-32"
@@ -783,7 +783,7 @@ export default function About() {
           </motion.h2>
 
 
-          {/* FOUNDER 1 */}
+        
 
           <motion.div
             className="grid lg:grid-cols-2 gap-20 items-center mb-40"
@@ -825,7 +825,7 @@ export default function About() {
 
 
 
-          {/* FOUNDER 2 */}
+          
 
           <motion.div
             className="grid lg:grid-cols-2 gap-20 items-center mb-40"
@@ -867,7 +867,7 @@ export default function About() {
 
 
 
-          {/* FOUNDER 3 */}
+         
 
           <motion.div
             className="grid lg:grid-cols-[1fr_420px] gap-24 items-center mb-40"
@@ -916,8 +916,7 @@ export default function About() {
           {/* JOIN OUR TEAM */}
 
           
-          </div>
-      </section>
+          
 
       
 
