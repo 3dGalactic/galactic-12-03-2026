@@ -220,6 +220,7 @@
 
 
 "use client";
+
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -234,11 +235,7 @@ const services = [
       "Functional testing capabilities",
       "Certified materials available",
     ],
-    images: [
-      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=900",
-      "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=900",
-      "https://images.unsplash.com/photo-1581092335397-9ccec58b4513?q=80&w=900",
-    ],
+    images: ["/services/rp.jpg", "/services/rp2.jpg", "/services/rp3.jpg"],
   },
   {
     id: "production",
@@ -250,11 +247,7 @@ const services = [
       "Consistent batch quality",
       "End-use materials",
     ],
-    images: [
-      "https://images.unsplash.com/photo-1581091215831-7b5e8d9a9a6b?q=80&w=900",
-      "https://images.unsplash.com/photo-1581090405962-9a28c1b1f7b3?q=80&w=900",
-      "https://images.unsplash.com/photo-1581093458791-9f302f54a1n?q=80&w=900",
-    ],
+    images: ["/services/fs1.jpg", "/services/fs2.jpg", "/services/fs3.jpg"],
   },
   {
     id: "custom",
@@ -266,11 +259,7 @@ const services = [
       "Specialized materials",
       "Custom finishing",
     ],
-    images: [
-      "https://images.unsplash.com/photo-1581091014534-047f69f1f5ae?q=80&w=900",
-      "https://images.unsplash.com/photo-1581090700227-1e37b190418e?q=80&w=900",
-      "https://images.unsplash.com/photo-1581093588401-fbb62a02f13a?q=80&w=900",
-    ],
+    images: ["/services/cm1.jpg", "/services/cm2.jpg", "/services/cm3.jpg"],
   },
 ];
 
@@ -289,7 +278,12 @@ export default function ServiceTabs() {
     return () => clearInterval(interval);
   }, [activeIndex]);
 
-  // rotate images array
+  // reset cascade when tab changes
+  useEffect(() => {
+    setCascadeIndex(0);
+  }, [activeIndex]);
+
+  // rotate images
   const rotateImages = (images, offset) => {
     const arr = [...images];
     for (let i = 0; i < offset; i++) {
@@ -319,10 +313,7 @@ export default function ServiceTabs() {
               {services.map((service, i) => (
                 <div
                   key={service.id}
-                  onMouseEnter={() => {
-                    setActiveIndex(i);
-                    setCascadeIndex(0);
-                  }}
+                  onMouseEnter={() => setActiveIndex(i)}
                   className={`cursor-pointer px-4 py-4 rounded-lg transition
                   ${
                     activeIndex === i
@@ -375,14 +366,14 @@ export default function ServiceTabs() {
             </AnimatePresence>
 
             {/* CASCADE IMAGES */}
-            <div className="relative h-[260px]">
+            <div key={active.id} className="relative h-[260px]">
 
               {images.map((img, i) => {
                 const pos = positions[i];
 
                 return (
                   <motion.img
-                    key={img}
+                    key={`${active.id}-${img}`}
                     src={img}
                     layout
                     className="absolute w-[70%] rounded-xl object-cover border border-white/10 shadow-2xl"

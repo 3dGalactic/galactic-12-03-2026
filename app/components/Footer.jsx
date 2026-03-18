@@ -536,9 +536,9 @@ export default function Footer() {
             <div className="flex gap-2">
 
               {[
-                {icon:Linkedin,href:"#"},
-                {icon:Instagram,href:"#"},
-                {icon:Twitter,href:"#"},
+                {icon:Linkedin,href:"https://www.linkedin.com/company/galactic-3d/posts/?feedView=all"},
+                {icon:Instagram,href:"https://www.instagram.com/galactic.3d/?hl=en"},
+              
                 {icon:Youtube,href:"#"}
               ].map(({icon:Icon,href},i)=>(
                 <a

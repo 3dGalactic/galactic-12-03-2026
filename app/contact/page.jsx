@@ -53,26 +53,97 @@ export default function Contact() {
   };
 
   const faqData = [
+
 {
-question: "What materials do you work with?",
-answer: "We work with plastics, resins, metals like aluminum and titanium, and composites depending on the project requirements."
+question: "What additive manufacturing technologies do you offer?",
+answer: "We offer multiple additive manufacturing technologies depending on the application requirements. These include FDM (Fused Deposition Modeling) for functional prototypes and cost-efficient parts, SLA (Stereolithography) for high-resolution components and smooth surface finishes, and SLS (Selective Laser Sintering) for strong nylon production parts. Each technology has different strengths in terms of accuracy, mechanical performance, and surface finish, and our engineering team helps select the best process for your part."
 },
+
 {
-question: "How long does the 3D printing process take?",
-answer: "Simple prototypes can be completed within 1–3 days while complex parts may take 1–2 weeks depending on size and materials."
+question: "What materials can you print with?",
+answer: "We support a wide range of engineering-grade materials. For polymer printing we commonly use PLA, ABS, PETG, Nylon (PA12), TPU, and high-performance resins. For advanced applications we also work with reinforced composites such as carbon-fiber infused filaments. Depending on project needs we can also produce metal parts through partner networks using aluminum, stainless steel, or titanium additive manufacturing systems."
 },
+
 {
-question: "Do you offer design services?",
-answer: "Yes. Our engineering team provides CAD modelling, design optimization and manufacturability consulting."
+question: "What is the maximum build volume you support?",
+answer: "Build volume depends on the printing technology used. Typical build plate sizes include: FDM printers up to approximately 300 x 300 x 400 mm, SLA printers around 145 x 145 x 175 mm for high resolution resin parts, and larger industrial machines up to 500 mm in one dimension for batch production. For parts larger than the build plate, we can segment the model and assemble it after printing."
 },
+
+{
+question: "What tolerances can you achieve?",
+answer: "Dimensional tolerances vary depending on technology and part geometry. Typical tolerances are ±0.2 mm or ±0.5% of the dimension for FDM prints, and ±0.1–0.15 mm for SLA parts due to the higher resolution of resin printing. For precision mechanical parts, we recommend post-processing or secondary machining to achieve tighter tolerances."
+},
+
+{
+question: "How long does 3D printing take?",
+answer: "Print times depend on part size, layer height, infill density, and technology used. Small prototypes can often be printed within 12–24 hours. Medium sized parts typically require 1–3 days including post-processing. Larger components or production batches may take 3–10 days depending on the queue and finishing requirements."
+},
+
 {
 question: "What file formats do you accept?",
-answer: "We accept STL, STEP, IGES, OBJ and most native CAD formats including SolidWorks and Fusion360."
+answer: "We accept most standard CAD and mesh formats including STL, STEP (.step/.stp), IGES (.igs/.iges), OBJ, and 3MF. Native CAD formats such as SolidWorks (.sldprt) or Fusion 360 exports can also be used. For best results we recommend exporting files as STL or STEP with high resolution settings."
 },
+
 {
-question: "Can you handle large production runs?",
-answer: "Yes. Our facility supports both prototyping and scalable production using industrial additive systems."
+question: "How should I prepare my 3D model before sending it?",
+answer: "Your model should be watertight (no holes or non-manifold edges), correctly scaled, and exported at high mesh resolution. Wall thickness should generally be at least 1–1.5 mm for structural parts depending on the material used. Overhangs greater than 45 degrees may require supports, and thin features should be reinforced to prevent breakage."
+},
+
+{
+question: "Do you offer CAD design or design optimization services?",
+answer: "Yes. Our engineering team provides full CAD modeling, design optimization for additive manufacturing (DfAM), topology optimization, and manufacturability consulting. If you only have a sketch or concept, we can create a printable CAD model and optimize it for strength, weight reduction, and print efficiency."
+},
+
+{
+question: "What surface finish can I expect?",
+answer: "Surface finish depends on the printing technology and layer height. FDM parts typically have visible layer lines with layer heights ranging from 0.1–0.3 mm. SLA prints offer smoother surfaces with layer heights as fine as 25–50 microns. Additional finishing processes such as sanding, vapor smoothing, painting, or resin coating can significantly improve the final appearance."
+},
+
+{
+question: "Do you provide post-processing and finishing services?",
+answer: "Yes. We offer several finishing options including sanding, polishing, primer coating, painting, threaded inserts, mechanical assembly, and basic CNC finishing for precision features. These finishing steps improve both aesthetics and functional performance depending on the application."
+},
+
+{
+question: "Can you handle production runs or only prototypes?",
+answer: "We support both rapid prototyping and small to medium scale production. For batch manufacturing we can run multiple machines simultaneously and optimize part nesting on the build plate to maximize throughput. For higher volumes we can also recommend transitioning from additive manufacturing to injection molding when appropriate."
+},
+
+{
+question: "How strong are 3D printed parts?",
+answer: "The strength of printed parts depends heavily on the material and printing orientation. Nylon and engineering resins can produce strong functional parts suitable for mechanical use. However, due to the layered manufacturing process, parts may have anisotropic strength (weaker along layer lines). Our team optimizes orientation and infill patterns to improve structural performance."
+},
+
+{
+question: "What infill options are available?",
+answer: "For FDM prints we can adjust internal infill structures to balance strength and material usage. Common infill densities range from 10% for lightweight prototypes up to 80–100% for structural components. Patterns such as gyroid, grid, and cubic infill provide different mechanical characteristics."
+},
+
+{
+question: "Can you print functional mechanical parts?",
+answer: "Yes. Many of our customers use additive manufacturing for brackets, enclosures, fixtures, jigs, and functional prototypes. With proper material selection and print orientation, printed parts can withstand significant mechanical loads."
+},
+
+{
+question: "Do you offer confidentiality or NDAs?",
+answer: "Yes. We understand that many projects involve proprietary designs. We are happy to sign non-disclosure agreements (NDAs) before reviewing files and ensure that all submitted models remain confidential."
+},
+
+{
+question: "How do I request a quote?",
+answer: "To request a quote simply upload your 3D model along with material preferences, quantity, and any finishing requirements. Our team will analyze the file, estimate print time, material usage, and provide a detailed quotation."
+},
+
+{
+question: "What industries do you work with?",
+answer: "Our additive manufacturing services support a wide range of industries including product design, robotics, automotive prototyping, aerospace components, academic research, medical device development, and industrial tooling."
+},
+
+{
+question: "Can you help choose the right printing technology?",
+answer: "Absolutely. If you're unsure which technology to use, our engineers will evaluate your design, required mechanical properties, surface finish, and production quantity to recommend the most suitable additive manufacturing process."
 }
+
 ];
 
   const handleChange = (e) => {
@@ -167,12 +238,7 @@ answer: "Yes. Our facility supports both prototyping and scalable production usi
           </span>
         </div>
 
-        <div className="px-5 py-2 rounded-full 
-        bg-white/[0.05] border border-white/15 backdrop-blur-md">
-          <span className="text-sm font-['scrib'] text-gray-200">
-            NDA Available
-          </span>
-        </div>
+        
 
       </div>
 

@@ -69,15 +69,18 @@ export default function Home() {
 
 
 
-        <div className="absolute bottom-10 right-10 z-20 flex items-center gap-2 border border-white/20 px-4 py-2 rounded-full backdrop-blur-xl">
+       <a
+  href="/iso.pdf"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="absolute bottom-10 right-10 z-20 flex items-center gap-2 border border-white/20 px-4 py-2 rounded-full backdrop-blur-xl cursor-pointer"
+>
+  <img src="/ios.webp" className="w-6 h-6" />
 
-          <img src="/ios.webp" className="w-6 h-6" />
-
-          <span className="text-xs tracking-widest text-white/80 font-['dena']">
-            ISO CERTIFIED
-          </span>
-
-        </div>
+  <span className="text-xs tracking-widest text-white/80 font-['dena']">
+    ISO CERTIFIED
+  </span>
+</a>
 
 
 
