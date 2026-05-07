@@ -1,17 +1,13 @@
 ﻿"use client";
-import { useState} from "react";
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import {
   CheckCircleIcon,
   CursorArrowRaysIcon,
-  CpuChipIcon,
   CubeTransparentIcon,
   LightBulbIcon,
   GlobeAltIcon,
-  AcademicCapIcon,
-  BuildingLibraryIcon,
-  Cog6ToothIcon,
-  ArrowRightIcon,
   WrenchScrewdriverIcon,
   BeakerIcon,
   TruckIcon,
@@ -20,23 +16,39 @@ import {
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import TeamCarousel from "../app/components/TeamCarousel";
-
+import MS from './components/MaterialShowcase'
 import ServiceTabs from "../app/components/ServiceTabs";
-import TechShowcase from "../app/components/TechShowcase";
+import TechShowcase from "./components/TechShowcase";
 import AdvancedProcess from "../app/components/AdvancedProcess";
+import TrainingBento from "./components/TrainingBento";
 
 gsap.registerPlugin(ScrollTrigger);
 
 
 
 export default function Home() {
- 
+
   const videos = [
     "/galactic-bg.mp4",
     "/bharath.mp4",
   ];
 
+
+
   const [activeVideo, setActiveVideo] = useState(0);
+  const videoRef = useRef(null);
+
+  // This function runs every single time a new video source loads
+  const handleVideoLoad = () => {
+    if (videoRef.current) {
+      if (activeVideo === 0) {
+        videoRef.current.playbackRate = 2.0; // Force 2x for the first video
+      } else {
+        videoRef.current.playbackRate = 1.0; // Reset to normal for others
+      }
+      videoRef.current.defaultPlaybackRate = videoRef.current.playbackRate;
+    }
+  };
 
   return (
     <div
@@ -44,97 +56,85 @@ export default function Home() {
     // bg-gradient-to-br from-black via-[#0f0b0b] to-[#b91c1c] 
     "
     >
-      <section className=" relative min-h-screen bg-black text-white overflow-hidden ">
+      <section className="relative min-h-screen bg-black text-white overflow-hidden">
 
-        <div className="absolute inset-0 ">
-          <video
-            key={activeVideo}
-            className="w-full h-full object-cover"
-            autoPlay
-            muted
-            playsInline
-            preload="auto"
-            onEnded={() => {
-              setActiveVideo((prev) => (prev + 1) % videos.length);
-            }}
-          >
-            <source src={videos[activeVideo]} type="video/mp4" />
-          </video>
-
+        {/* VIDEO BACKGROUND */}
+        <div className="absolute inset-0 z-0">
+          <AnimatePresence mode="wait">
+            <motion.video
+              ref={videoRef}
+              key={activeVideo}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1 }}
+              className="w-full h-full object-cover"
+              autoPlay
+              muted
+              playsInline
+              onPlay={handleVideoLoad}
+              // CRITICAL: This fires every time the 'key' changes and a new video loads
+              onLoadedMetadata={handleVideoLoad}
+              onEnded={() => setActiveVideo((prev) => (prev + 1) % videos.length)}
+            >
+              <source src={videos[activeVideo]} type="video/mp4" />
+            </motion.video>
+          </AnimatePresence>
           <div className="absolute inset-0 bg-black/55"></div>
         </div>
 
+        {/* ARCHITECTURAL FRAME */}
+        <div className="absolute inset-5 border border-white/10 pointer-events-none z-10"></div>
 
-        <div className="absolute  inset-5 border border-white/10 pointer-events-none"></div>
+        {/* ISO BADGE */}
+        <a
+          href="/iso.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute bottom-10 right-10 z-20 flex items-center gap-2 border border-white/20 px-4 py-2 rounded-full backdrop-blur-xl transition-all hover:bg-white/10"
+        >
+          <img src="/ios.webp" className="w-6 h-6" alt="ISO Logo" />
+          <span className="text-xs tracking-widest text-white/80 font-['dena']">
+            ISO CERTIFIED
+          </span>
+        </a>
 
-
-
-       <a
-  href="/iso.pdf"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="absolute bottom-10 right-10 z-20 flex items-center gap-2 border border-white/20 px-4 py-2 rounded-full backdrop-blur-xl cursor-pointer"
->
-  <img src="/ios.webp" className="w-6 h-6" />
-
-  <span className="text-xs tracking-widest text-white/80 font-['dena']">
-    ISO CERTIFIED
-  </span>
-</a>
-
-
-
+        {/* CAPABILITY TAGS */}
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-4 z-20">
-
-          <span className="border border-white/20 rounded-full px-4 py-1 text-sm">
-            Metal
-          </span>
-
-          <span className="border border-white/20 rounded-full px-4 py-1 text-sm">
-            SLS
-          </span>
-
-          <span className="border border-white/20 rounded-full px-4 py-1 text-sm">
-            FDM
-          </span>
-
+          {["Metal", "FDM"].map((tag) => (
+            <span key={tag} className="border border-white/20 rounded-full px-4 py-1 text-sm bg-black/10 backdrop-blur-sm">
+              {tag}
+            </span>
+          ))}
         </div>
 
-
-
+        {/* TEXT CONTENT */}
         <div className="absolute left-12 bottom-20 z-20 max-w-xl">
-
           <div className="text-xs tracking-widest text-red-300 uppercase font-['dena'] mb-4">
             Contract Manufacturing
           </div>
 
           <h1 className="font-['test'] text-[clamp(3rem,6vw,5.5rem)] leading-[0.95]">
-
-            Engineering your
-            <br />
-
-            <span className="text-red-400">
-              Concept to Creation
-            </span>
-
+            Engineering your <br />
+            <span className="text-red-400">Concept to Creation</span>
           </h1>
 
           <p className="text-lg text-white/80 font-['scrib'] mt-6 mb-8">
             with Additive Manufacturing
           </p>
 
-          <a
-            href="/contact"
-            className="inline-block bg-primary hover:bg-secondary px-7 py-3 rounded-md font-['dena']"
-          >
-            Get a Quote
-          </a>
-
+          
         </div>
 
-
-
-        
+        {/* VIDEO PROGRESS BARS */}
+        <div className="absolute bottom-10 left-12 z-30 flex gap-2">
+          {videos.map((_, idx) => (
+            <div
+              key={idx}
+              className={`h-1 transition-all duration-500 rounded-full ${idx === activeVideo ? "bg-red-500 w-12" : "bg-white/20 w-8"}`}
+            />
+          ))}
+        </div>
 
       </section>
       <section className="relative py-36 bg-black text-white overflow-hidden">
@@ -285,7 +285,7 @@ export default function Home() {
         </div>
       </section>
 
-      
+
       <div className="container mx-auto px-6 mb-20">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-5xl font-['test'] mb-4">
@@ -300,7 +300,7 @@ export default function Home() {
 
 
 
-      
+
 
       <section className="relative py-28 overflow-hidden">
 
@@ -319,14 +319,13 @@ export default function Home() {
         </div>
 
         {/* OVERLAY */}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/80 via-black/70 to-black/90" />
 
-        <div className="container mx-auto px-6 max-w-6xl">
+        <div className=" container mx-auto px-6 max-w-6xl">
 
-          {/* BENTO GRID */}
-          <div className="grid md:grid-cols-4 auto-rows-[180px] gap-6">
 
-            {/* HERO TILE */}
+          {/* <div className="grid md:grid-cols-4 auto-rows-[180px] gap-6">
+
+            
             <div className="col-span-4 md:col-span-2 row-span-2 bg-white/5 border border-white/10 rounded-xl backdrop-blur-xl p-8 flex flex-col justify-center hover:bg-white/10 transition">
 
               <div className="inline-flex items-center gap-3 mb-6 bg-blue-500/10 border border-blue-500/30 rounded-full px-5 py-2 backdrop-blur-md w-fit">
@@ -350,7 +349,7 @@ export default function Home() {
 
             </div>
 
-            {/* SCHOOL PROGRAM */}
+          
             <div className="col-span-2 md:col-span-1 row-span-2 bg-white/5 border border-white/10 rounded-xl backdrop-blur-xl p-6 flex flex-col justify-between hover:bg-white/10 hover:border-blue-400/30 transition">
 
               <AcademicCapIcon className="w-8 h-8 text-blue-400" />
@@ -365,7 +364,7 @@ export default function Home() {
 
             </div>
 
-            {/* INSTITUTION */}
+        
             <div className="col-span-2 md:col-span-1 row-span-1 bg-white/5 border border-white/10 rounded-xl backdrop-blur-xl p-6 flex flex-col justify-between hover:bg-white/10 hover:border-purple-400/30 transition">
 
               <BuildingLibraryIcon className="w-8 h-8 text-purple-400" />
@@ -379,7 +378,7 @@ export default function Home() {
 
             </div>
 
-            {/* INDUSTRY */}
+            
             <div className="col-span-2 md:col-span-1 row-span-1 bg-white/5 border border-white/10 rounded-xl backdrop-blur-xl p-6 flex flex-col justify-between hover:bg-white/10 hover:border-red-400/30 transition">
 
               <Cog6ToothIcon className="w-8 h-8 text-red-400" />
@@ -394,10 +393,10 @@ export default function Home() {
 
             </div>
 
-            {/* STATS + CTA TILE */}
+        
             <div className="col-span-4 relative flex flex-col md:flex-row items-center justify-center gap-6 py-10">
 
-              {/* PIECE 1 */}
+          
               <div
                 className="relative bg-white/5 border border-white/10 backdrop-blur-xl p-8 text-center hover:bg-white/10 transition"
                 style={{
@@ -413,7 +412,7 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* PIECE 2 */}
+        
               <div
                 className="relative bg-white/5 border border-white/10 backdrop-blur-xl p-8 flex flex-col items-center justify-center hover:bg-white/10 transition"
                 style={{
@@ -436,7 +435,7 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* PIECE 3 */}
+          
               <div
                 className="relative bg-white/5 border border-white/10 backdrop-blur-xl p-8 flex flex-col items-center justify-center hover:bg-white/10 transition"
                 style={{
@@ -464,11 +463,17 @@ export default function Home() {
 
             </div>
 
-          </div>
+
+            
+
+          </div> */}
+
+          <TrainingBento />
 
         </div>
 
       </section>
+
 
 
 
@@ -595,11 +600,11 @@ export default function Home() {
       </section>
 
 
-     
 
-      <section className="relative py-24 bg-black text-white overflow-hidden">
 
-        {/* subtle grid background */}
+      {/* <section className="relative py-24 bg-black text-white overflow-hidden">
+
+        
         <div className="absolute inset-0 opacity-[0.04] 
       bg-[linear-gradient(to_right,#fff_1px,transparent_1px),
       linear-gradient(to_bottom,#fff_1px,transparent_1px)] 
@@ -619,18 +624,18 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 gap-8">
 
-            {/* METAL */}
+          
             <div className="relative overflow-hidden rounded-2xl border border-white/15 
           bg-white/[0.06] backdrop-blur-xl p-8 shadow-[0_14px_40px_rgba(0,0,0,0.35)]">
 
-              {/* glass highlight */}
+             
               <div className="absolute inset-0 rounded-2xl 
             bg-gradient-to-br from-white/10 via-transparent to-transparent 
             opacity-40 pointer-events-none" />
 
               <div className="relative">
 
-                {/* header */}
+             
                 <div className="flex items-center justify-between mb-8">
 
                   <div className="flex items-center gap-4">
@@ -659,7 +664,7 @@ export default function Home() {
 
                 </div>
 
-                {/* materials grid */}
+        
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
                   {[
@@ -708,7 +713,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* POLYMER */}
+      
             <div className="relative overflow-hidden rounded-2xl border border-white/15 
           bg-white/[0.06] backdrop-blur-xl p-8 shadow-[0_14px_40px_rgba(0,0,0,0.35)]">
 
@@ -718,7 +723,7 @@ export default function Home() {
 
               <div className="relative">
 
-                {/* header */}
+              
                 <div className="flex items-center justify-between mb-8">
 
                   <div className="flex items-center gap-4">
@@ -797,76 +802,78 @@ export default function Home() {
 
           </div>
         </div>
-      </section>
+      </section> */}
+
+      <MS/>
 
       <TeamCarousel />
 
-      
-         <section className="relative  bg-black text-white overflow-hidden pb-[5vw]">
 
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_60%)]" />
+      <section className="relative  bg-black text-white overflow-hidden pb-[5vw]">
 
-      <div className="relative max-w-4xl mx-auto px-6 text-center">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_60%)]" />
 
-        <h2 className="text-5xl md:text-6xl font-['test'] mb-6 tracking-tight">
-          Start a Conversation
-        </h2>
+        <div className="relative max-w-4xl mx-auto px-6 text-center">
 
-        <p className="text-gray-400 font-['scrib'] mb-16 max-w-xl mx-auto">
-          Have a project in mind? Share a few details and our team will
-          get back to you within 24 hours.
-        </p>
+          <h2 className="text-5xl md:text-6xl font-['test'] mb-6 tracking-tight">
+            Start a Conversation
+          </h2>
 
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="relative p-10 rounded-2xl 
+          <p className="text-gray-400 font-['scrib'] mb-16 max-w-xl mx-auto">
+            Have a project in mind? Share a few details and our team will
+            get back to you within 24 hours.
+          </p>
+
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="relative p-10 rounded-2xl 
           bg-white/[0.04] backdrop-blur-xl 
           border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
-        >
+          >
 
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 to-transparent opacity-40 pointer-events-none" />
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 to-transparent opacity-40 pointer-events-none" />
 
-          <div className="relative grid md:grid-cols-2 gap-6">
+            <div className="relative grid md:grid-cols-2 gap-6">
 
-            <input
-              type="text"
-              placeholder="Name"
-              required
-              className="bg-transparent border-b border-white/20 px-2 py-3 
+              <input
+                type="text"
+                placeholder="Name"
+                required
+                className="bg-transparent border-b border-white/20 px-2 py-3 
               focus:outline-none focus:border-white transition"
-            />
+              />
 
-            <input
-              type="email"
-              placeholder="Email"
-              required
-              className="bg-transparent border-b border-white/20 px-2 py-3 
+              <input
+                type="email"
+                placeholder="Email"
+                required
+                className="bg-transparent border-b border-white/20 px-2 py-3 
               focus:outline-none focus:border-white transition"
-            />
+              />
 
-            <textarea
-              rows={4}
-              placeholder="Tell us about your project"
-              className="md:col-span-2 bg-transparent border-b border-white/20 px-2 py-3 
+              <textarea
+                rows={4}
+                placeholder="Tell us about your project"
+                className="md:col-span-2 bg-transparent border-b border-white/20 px-2 py-3 
               focus:outline-none focus:border-white transition"
-            />
+              />
 
-            <div className="md:col-span-2 pt-6 flex justify-center">
-              <button
-                type="submit"
-                className="border border-white/20 px-8 py-3 rounded-full 
+              <div className="md:col-span-2 pt-6 flex justify-center">
+                <button
+                  type="submit"
+                  className="border border-white/20 px-8 py-3 rounded-full 
                 hover:bg-white hover:text-black transition"
-              >
-                Send Message
-              </button>
+                >
+                  Send Message
+                </button>
+              </div>
+
             </div>
 
-          </div>
+          </form>
 
-        </form>
-
-      </div>
-    </section>
+        </div>
+      </section>
 
     </div>
   );

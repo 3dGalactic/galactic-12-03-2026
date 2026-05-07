@@ -15,7 +15,7 @@ const INTERNS = [
   },
   {
     id: 2,
-    name: "Deabsis Maharana",
+    name: "Debasis Maharana",
     role: "Software Intern",
     img: "/debasis.jpeg",
     bio: "Developing front-end components and data visualization for the team portal."

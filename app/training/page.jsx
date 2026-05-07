@@ -525,7 +525,7 @@ export default function TrainingPage() {
       >
 
         <img
-          src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1600&auto=format&fit=crop"
+          src="/Training/mentorship.jpg"
           className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700"
         />
 
@@ -552,7 +552,7 @@ export default function TrainingPage() {
       >
 
         <img
-          src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=1600&auto=format&fit=crop"
+          src="/Training/competence.png"
           className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700"
         />
 
@@ -579,7 +579,7 @@ export default function TrainingPage() {
       >
 
         <img
-          src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1600&auto=format&fit=crop"
+          src="/aboutgrp.jpg"
           className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700"
         />
 
@@ -794,7 +794,7 @@ export default function TrainingPage() {
       >
 
         <img
-          src="https://images.unsplash.com/photo-1581092918484-8313e1f7e8d8?q=80&w=1600&auto=format&fit=crop"
+          src="/Training/facility.png"
           className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700"
         />
 
@@ -824,7 +824,7 @@ export default function TrainingPage() {
       >
 
         <img
-          src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1600&auto=format&fit=crop"
+          src="/Training/curriculum.png"
           className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700"
         />
 
@@ -854,7 +854,7 @@ export default function TrainingPage() {
       >
 
         <img
-          src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?q=80&w=1600&auto=format&fit=crop"
+          src="/Training/experts.png"
           className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700"
         />
 
@@ -879,7 +879,7 @@ export default function TrainingPage() {
       >
 
         <img
-          src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=1600&auto=format&fit=crop"
+          src="/Training/room.png"
           className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700"
         />
 
@@ -1063,7 +1063,7 @@ export default function TrainingPage() {
           level:"Level 1",
           title:"3D Printing Designer",
           description:"Students learn fundamental 3D design skills to create functional everyday objects.",
-          image:"https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1600&auto=format&fit=crop",
+          image:"/dragon.png",
           size:"large"
         },
         {

@@ -13,6 +13,7 @@
     "@phosphor-icons/react": "^2.1.10",
     "@react-three/drei": "^9.75.0",
     "@react-three/fiber": "^8.13.3",
+    "@studio-freight/lenis": "^1.0.42",
     "@supabase/auth-helpers-nextjs": "^0.15.0",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.95.3",

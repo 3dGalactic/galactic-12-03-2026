@@ -571,7 +571,7 @@ answer: "Absolutely. If you're unsure which technology to use, our engineers wil
               </p>
 
               <p className="text-lg font-['dena'] group-hover:text-primary transition">
-                +91 89390 58575
+                +91 97403 31995
               </p>
             </div>
           </a>
@@ -634,15 +634,15 @@ answer: "Absolutely. If you're unsure which technology to use, our engineers wil
         {/* SOCIALS */}
         <div className="flex gap-4 pt-2">
 
-          <a
+          {/* <a
             href="#"
             className="w-11 h-11 flex items-center justify-center rounded-full border border-white/10 hover:bg-white/10 transition"
           >
             <FaXTwitter className="text-white text-sm" />
-          </a>
+          </a> */}
 
           <a
-            href="https://www.linkedin.com/"
+            href="https://www.linkedin.com/company/galactic-3d/posts/?feedView=all"
             target="_blank"
             className="w-11 h-11 flex items-center justify-center rounded-full border border-white/10 hover:bg-white/10 transition"
           >
@@ -1047,7 +1047,7 @@ ${activeAccordion === index ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
       {/* ACTIONS */}
       <div className="flex gap-4">
 
-        <Link
+        {/* <Link
           href="/services"
           className="group px-6 py-3 rounded-full border border-white/20 bg-white/[0.05] hover:bg-white/[0.1] transition-all duration-300"
         >
@@ -1055,7 +1055,7 @@ ${activeAccordion === index ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
             Explore
             <span className="group-hover:translate-x-1 transition">→</span>
           </span>
-        </Link>
+        </Link> */}
 
         <a
           href="#contact-form"

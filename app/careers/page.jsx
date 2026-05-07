@@ -313,7 +313,7 @@ export default function CareersPage() {
 
           <p className="text-white/60 max-w-xl leading-relaxed">
             We are always looking for talented engineers, designers,
-            and innovators passionate about advanced manufacturing.
+            and innovators passionate about additive manufacturing.
             Submit your application below.
           </p>
         </div>

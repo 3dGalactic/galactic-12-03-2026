@@ -454,9 +454,10 @@ export default function Footer() {
 
               {[
                 {name:"Home",href:"/"},
-                {name:"Marketplace",href:"/marketplace"},
-                {name:"Resources",href:"/resources"},
-                {name:"About",href:"/about"},
+                {name:"Upload",href:"/upload"},
+                {name:"Careers",href:"/careers"},
+                {name:"Training",href:"/training"},
+                {name:"Team",href:"/team"},
                 {name:"Contact",href:"/contact"}
               ].map((item,i)=>(
                 <Link
@@ -470,34 +471,9 @@ export default function Footer() {
 
             </div>
 
-            {/* NEWSLETTER */}
-            <form
-              onSubmit={handleSubscribe}
-              className="flex items-center gap-2"
-            >
+            
 
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e)=>setEmail(e.target.value)}
-                className="flex-1 bg-white/5 border border-white/10 rounded-md px-3 py-1.5 text-xs outline-none focus:border-primary transition"
-              />
-
-              <button
-                type="submit"
-                className="bg-primary hover:bg-primary/80 px-3 py-1.5 text-xs rounded-md transition"
-              >
-                Subscribe
-              </button>
-
-            </form>
-
-            {status==="success" &&
-              <p className="text-green-400 text-[10px]">
-                Subscribed!
-              </p>
-            }
+            
 
           </div>
 
@@ -539,7 +515,7 @@ export default function Footer() {
                 {icon:Linkedin,href:"https://www.linkedin.com/company/galactic-3d/posts/?feedView=all"},
                 {icon:Instagram,href:"https://www.instagram.com/galactic.3d/?hl=en"},
               
-                {icon:Youtube,href:"#"}
+                // {icon:Youtube,href:"#"}
               ].map(({icon:Icon,href},i)=>(
                 <a
                   key={i}
@@ -583,3 +559,120 @@ export default function Footer() {
     </footer>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// "use client";
+
+// import React, { useRef } from "react";
+// import Link from "next/link";
+// import { motion, useScroll, useTransform } from "framer-motion";
+
+// export default function GalacticVoidFooter() {
+//   const targetRef = useRef(null);
+//   const { scrollYProgress } = useScroll({
+//     target: targetRef,
+//     offset: ["start end", "end end"],
+//   });
+
+//   // Dramatic tracking expansion for that "High-End" look
+//   const tracking = useTransform(scrollYProgress, [0, 1], ["-0.1em", "0.5em"]);
+//   const opacity = useTransform(scrollYProgress, [0, 0.8, 1], [0, 0.3, 1]);
+
+//   return (
+//     <footer 
+//       ref={targetRef} 
+//       className="relative h-[120vh] bg-[#000] text-white flex flex-col justify-between p-[4vw] overflow-hidden font-sans"
+//     >
+//       {/* 01. THE KINETIC ANCHOR (Framer Motion) */}
+//       <div className="flex-1 flex flex-col justify-center">
+//         <motion.div style={{ opacity }} className="space-y-4">
+//           <span className="text-[10px] uppercase tracking-[1em] text-white/40 block ml-2">
+//             Initiate Project
+//           </span>
+//           <Link href="/contact" className="group block">
+//             <motion.h2 
+//               style={{ letterSpacing: tracking }}
+//               className="text-[12vw] font-black uppercase leading-none font-monument transition-all duration-1000 group-hover:italic"
+//             >
+//               Contact
+//             </motion.h2>
+//           </Link>
+//         </motion.div>
+//       </div>
+
+//       {/* 02. THE "SWISS-OS" DATA GRID */}
+//       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-white/10 pt-12">
+        
+//         {/* COL 1: SYSTEM INFO */}
+//         <div className="md:col-span-4 space-y-8">
+//           <div className="flex items-center gap-4">
+//             <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+//             <span className="text-[10px] uppercase tracking-widest font-bold">Galactic_Core_Active</span>
+//           </div>
+//           <p className="text-sm font-light text-white/60 max-w-xs leading-tight">
+//             Specializing in high-end, immersive web experiences and additive manufacturing logic.
+//           </p>
+//         </div>
+
+//         {/* COL 2: NAV (STRICT ALIGNMENT) */}
+//         <div className="md:col-span-4 grid grid-cols-2 gap-4">
+//           <div className="flex flex-col gap-3">
+//             <span className="text-[10px] uppercase text-white/30 tracking-widest mb-2">INDEX</span>
+//             {["Upload", "Training", "Team"].map((item) => (
+//               <Link key={item} href={`/${item.toLowerCase()}`} className="text-xs uppercase hover:text-primary transition-colors tracking-tighter">
+//                 {item}
+//               </Link>
+//             ))}
+//           </div>
+//           <div className="flex flex-col gap-3">
+//             <span className="text-[10px] uppercase text-white/30 tracking-widest mb-2">SOCIAL</span>
+//             {["LinkedIn", "Instagram", "GitHub"].map((item) => (
+//               <a key={item} href="#" className="text-xs uppercase hover:italic transition-all tracking-tighter">
+//                 {item}
+//               </a>
+//             ))}
+//           </div>
+//         </div>
+
+//         {/* COL 3: METRICS */}
+//         <div className="md:col-span-4 flex flex-col justify-between items-end text-right">
+//           <div className="font-mono text-[10px] text-white/20 uppercase tracking-widest">
+//             <p>Loc: 13.0113° N, 77.7126° E</p>
+//             <p>Node: BENGALURU_KA</p>
+//           </div>
+//           <div className="text-[8vw] font-black leading-none opacity-5 select-none">
+//             2026
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* 03. THE SIGNATURE */}
+//       <div className="mt-20 flex justify-between items-end border-t border-white/5 pt-6">
+//         <div className="text-[9px] uppercase tracking-[0.5em] text-white/30">
+//           Built for the Future of Fabrication
+//         </div>
+//         <div className="text-[9px] uppercase tracking-[0.5em] text-white/30 italic">
+//           Design & Dev by Jayaditya
+//         </div>
+//       </div>
+
+//       {/* 🌫️ THE "GRAIN" OVERLAY */}
+//       <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+//     </footer>
+//   );
+// }

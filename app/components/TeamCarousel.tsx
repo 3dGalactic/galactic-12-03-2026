@@ -151,75 +151,107 @@
 
 "use client";
 
+import React from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
-const IMAGES = [
-  "/nithin.jpg",
-  "/abid.jpg",
-  "/dipak.jpg",
-  "/slvm.jpeg",
-  "/bhskrn.jpeg",
-  "/brth.png",
+const TEAM = [
+  // Top Row (3 People)
+  { name: "Nithin Yadav Mohan", role: "Director & CEO", img: "/nithin.jpg" },
+  { name: "Abid Husen Hakeem", role: "Head Of Business Development", img: "/abid.jpg" },
+  { name: "Dipak Cumar", role: "Head of Training", img: "/dipak.jpg" },
+  // Bottom Row (4 People)
+  { name: "Selva Kyumar S", role: "Head of Production", img: "/slvm.jpeg" },
+  { name: "Bhaskaran", role: "Application Engineer", img: "/bhskrn.jpeg" },
+  { name: "Bharath Kumar S", role: "Business Development Executive", img: "/brth.png" },
+  { name: "Bhramanandan", role: "Finance Officer", img: "/me.jpg" }, 
 ];
 
-export default function TeamTeaser() {
+export default function StaggeredTeam() {
   return (
-    <section className="relative py-32 bg-black text-white overflow-hidden">
-
-      <div className="max-w-7xl mx-auto px-6">
-
-        {/* HEADER */}
-        <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold tracking-tight">
-            The Minds Behind Galactic
+    <section className="relative py-32 bg-[#050505] text-white overflow-hidden">
+      <div className="max-w-[1400px] mx-auto px-6">
+        
+        {/* HEADER SECTION */}
+        <div className="mb-24 flex flex-col md:flex-row items-end justify-between border-b border-white/10 pb-12">
+          <h2 className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.8]">
+            THE <br /> <span className="text-white/20">COLLECTIVE.</span>
           </h2>
-
-          <p className="text-gray-400 mt-4 max-w-xl mx-auto">
-            Engineers, designers and innovators shaping the future of
-            additive manufacturing.
+          <p className="max-w-xs text-sm text-white/40 uppercase tracking-widest leading-relaxed mt-8 md:mt-0">
+            Meet the minds behind additive manufacturing.
           </p>
         </div>
 
-        {/* COLLAGE */}
-        <div className="relative h-[520px] flex items-center justify-center">
+        {/* GRID SYSTEM */}
+        <div className="flex flex-col gap-12">
+          
+          {/* TOP ROW: 3 PEOPLE (Wider slots) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {TEAM.slice(0, 3).map((member, i) => (
+              <TeamMemberCard key={i} member={member} index={i} />
+            ))}
+          </div>
 
-          {IMAGES.map((img, i) => (
-            <div
-              key={i}
-              className="absolute w-[180px] h-[220px] md:w-[220px] md:h-[260px]
-              rounded-xl overflow-hidden shadow-2xl border border-white/10
-              hover:scale-105 transition duration-500"
-              style={{
-                transform: `
-                  translate(${(i % 4) * 220 - 330}px, ${Math.floor(i / 4) * 180 - 120}px)
-                  rotate(${(i % 2 === 0 ? -1 : 1) * (i + 3)}deg)
-                `
-              }}
-            >
-              <Image
-                src={`${img}?w=400`}
-                alt="Team member"
-                fill
-                className="object-cover"
-              />
-            </div>
-          ))}
+          {/* BOTTOM ROW: 4 PEOPLE (Narrower, tighter slots) */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {TEAM.slice(3, 7).map((member, i) => (
+              <TeamMemberCard key={i + 3} member={member} index={i} isSmall />
+            ))}
+          </div>
 
         </div>
 
-        {/* CTA */}
-        <div className="text-center mt-20">
-          <Link
-            href="/team"
-            className="inline-flex items-center gap-2 border border-white/20
-            px-8 py-3 rounded-full hover:bg-white/10 transition"
-          >
-            Meet the Full Team →
+        {/* FOOTER CTA */}
+        <div className="mt-24 text-center">
+          <Link href="/team">
+           <motion.button 
+             whileHover={{ scale: 1.05 }}
+             className="px-10 py-4 rounded-full border border-white/20 text-xs uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-colors duration-500"
+             >
+             View the Whole Team
+           </motion.button>
           </Link>
         </div>
-
       </div>
     </section>
+  );
+}
+
+function TeamMemberCard({ member, index, isSmall = false }: { member: any, index: number, isSmall?: boolean }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      className="group relative"
+    >
+      <div className={`relative overflow-hidden rounded-xl bg-[#111] border border-white/5 
+        ${isSmall ? 'aspect-[3/4]' : 'aspect-[4/5]'}`}>
+        
+        <Image
+          src={member.img}
+          alt={member.name}
+          fill
+          className="object-cover  transition-all duration-700 group-hover:scale-110 group-hover:grayscale-0"
+        />
+
+        {/* OVERLAY ON HOVER */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
+          <p className="text-[10px] text-white/50 uppercase tracking-[0.2em] mb-1">{member.role}</p>
+          <h4 className="text-xl font-bold tracking-tighter uppercase">{member.name}</h4>
+        </div>
+      </div>
+
+      {/* STATIC LABEL (BELOW) */}
+      <div className="mt-4 flex items-center justify-between group-hover:opacity-0 transition-opacity duration-300">
+        <div>
+           <h4 className="text-sm font-bold uppercase tracking-tighter">{member.name}</h4>
+           <p className="text-[9px] text-white/30 uppercase tracking-widest">{member.role}</p>
+        </div>
+        <div className="h-[1px] w-4 bg-white/10" />
+      </div>
+    </motion.div>
   );
 }
