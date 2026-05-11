@@ -401,164 +401,196 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { Linkedin, Instagram, Twitter, Youtube } from "lucide-react";
+import { ArrowUpRight, Instagram, Linkedin, Mail, Phone } from "lucide-react";
+
+const navLinks = [
+  { name: "Home", href: "/" },
+  { name: "Upload", href: "/upload" },
+  { name: "Careers", href: "/careers" },
+  { name: "Training", href: "/training" },
+  { name: "Team", href: "/team" },
+  { name: "Contact", href: "/contact" },
+];
+
+const socialLinks = [
+  {
+    name: "LinkedIn",
+    icon: Linkedin,
+    href: "https://www.linkedin.com/company/galactic-3d/posts/?feedView=all",
+  },
+  {
+    name: "Instagram",
+    icon: Instagram,
+    href: "https://www.instagram.com/galactic.3d/?hl=en",
+  },
+];
 
 export default function Footer() {
-
-  const [email,setEmail]=useState("");
-  const [status,setStatus]=useState(null);
-
-  const handleSubscribe=(e)=>{
-    e.preventDefault();
-
-    const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if(!emailRegex.test(email)){
-      setStatus("error");
-      return;
-    }
-
-    setStatus("success");
-    setEmail("");
-  };
-
   return (
-    <footer className="text-white w-full">
-
-      {/* GLASS STRIP */}
-      <div className="w-full border-t border-white/10 bg-white/[0.04] backdrop-blur-md px-[5vw] py-6">
-
-        {/* GRID */}
-        <div className="grid lg:grid-cols-3 gap-6 items-start">
-
-          {/* BRAND */}
-          <div className="space-y-2">
-
-            <h3 className="font-monument text-xl">
-              GALACTIC 3D
-            </h3>
-
-            <p className="text-gray-400 text-xs max-w-xs">
-              Shaping the future with additive manufacturing.
-            </p>
-
-          </div>
-
-
-          {/* NAV + NEWSLETTER */}
-          <div className="space-y-4">
-
-            {/* NAVIGATION */}
-            <div className="flex flex-wrap gap-2">
-
-              {[
-                {name:"Home",href:"/"},
-                {name:"Upload",href:"/upload"},
-                {name:"Careers",href:"/careers"},
-                {name:"Training",href:"/training"},
-                {name:"Team",href:"/team"},
-                {name:"Contact",href:"/contact"}
-              ].map((item,i)=>(
-                <Link
-                  key={i}
-                  href={item.href}
-                  className="text-xs px-3 py-1 rounded-full border border-white/10 text-gray-300 hover:text-white hover:border-primary transition"
-                >
-                  {item.name}
-                </Link>
-              ))}
-
-            </div>
-
-            
-
-            
-
-          </div>
-
-
-          {/* CONTACT + SOCIAL */}
-          <div className="space-y-4">
-
-            {/* ADDRESS */}
-            <div className="text-gray-400 text-xs leading-relaxed">
-
-              Cambridge Institute of Technology <br/>
-              Krishnarajapuram, Bengaluru
-
-            </div>
-
-            {/* CONTACT CHIPS */}
-            <div className="flex flex-wrap gap-2 text-[11px]">
-
-              <a
-                href="tel:+919740331995"
-                className="px-2.5 py-1 border border-white/10 rounded-full text-gray-300 hover:text-white hover:border-primary transition"
-              >
-                +91 97403 31995
-              </a>
-
-              <a
-                href="mailto:aabid@galactic-3d.com"
-                className="px-2.5 py-1 border border-white/10 rounded-full text-gray-300 hover:text-white hover:border-primary transition"
-              >
-                aabid@galactic-3d.com
-              </a>
-
-            </div>
-
-            {/* SOCIAL ICONS */}
-            <div className="flex gap-2">
-
-              {[
-                {icon:Linkedin,href:"https://www.linkedin.com/company/galactic-3d/posts/?feedView=all"},
-                {icon:Instagram,href:"https://www.instagram.com/galactic.3d/?hl=en"},
-              
-                // {icon:Youtube,href:"#"}
-              ].map(({icon:Icon,href},i)=>(
-                <a
-                  key={i}
-                  href={href}
-                  className="w-8 h-8 flex items-center justify-center rounded-md bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-primary hover:bg-primary/10 transition"
-                >
-                  <Icon size={16}/>
-                </a>
-              ))}
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        {/* LEGAL */}
-        <div className="flex flex-col md:flex-row justify-between items-center text-[11px] text-gray-500 border-t border-white/10 mt-6 pt-3">
-
-          <span>
-            © {new Date().getFullYear()} Galactic 3D
-          </span>
-
-          <div className="flex gap-4 mt-1 md:mt-0">
-
-            <Link href="/terms" className="hover:text-white transition">
-              Terms
-            </Link>
-
-            <Link href="/privacy" className="hover:text-white transition">
-              Privacy
-            </Link>
-
-          </div>
-
-        </div>
-
+    <footer className="relative overflow-hidden bg-[#050505] px-4 py-5 text-white sm:px-6 lg:px-8">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 top-0 h-[480px] w-[70vw] -translate-x-1/2 rounded-full bg-red-600/12 blur-[160px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.045)_1px,transparent_1px)] bg-[size:12.5vw_100%] opacity-20" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,transparent,rgba(0,0,0,0.9))]" />
       </div>
 
+      <div className="relative mx-auto  overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0d0d0d]">
+        <section className="grid border-b border-white/10 lg:grid-cols-[0.8fr_1.2fr]">
+
+  {/* LEFT */}
+  <div className="flex items-center border-b border-white/10 p-5 sm:p-8 lg:border-b-0 lg:border-r lg:border-white/10 lg:p-10">
+
+    {/* LOGO */}
+    <img
+      src="/navbar/logo.svg"
+      alt="Galactic 3D"
+      className="h-14 w-auto object-contain sm:h-16"
+    />
+
+  </div>
+
+  {/* RIGHT */}
+  <div className="flex flex-col justify-between p-5 sm:p-8 lg:p-10">
+
+    {/* TEXT ON LEFT */}
+    <div className="max-w-md">
+
+      <p className="text-sm leading-6 text-white/50">
+        Advanced additive manufacturing for aerospace,
+        medical, defence, research, and production-grade
+        engineering teams.
+      </p>
+
+    </div>
+
+    {/* BUTTON */}
+    <div className="mt-10 flex justify-start">
+
+      <Link
+        href="/contact"
+        className="group flex items-center gap-3 rounded-full bg-red-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-400"
+      >
+
+        Get a Quote
+
+        <ArrowUpRight
+          size={17}
+          className="transition group-hover:rotate-45"
+        />
+
+      </Link>
+
+    </div>
+
+  </div>
+
+</section>
+
+        <section className="grid gap-px bg-white/10 lg:grid-cols-[1fr_0.9fr_0.75fr]">
+          <div className="bg-[#0d0d0d] p-5 sm:p-8">
+            <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.28em] text-white/35">
+              Navigate
+            </p>
+
+            <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10">
+              {navLinks.map((item, index) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="group flex items-center justify-between bg-[#0d0d0d] px-4 py-4 text-sm text-white/62 transition hover:bg-red-500 hover:text-black"
+                >
+                  <span>{item.name}</span>
+                  <span className="font-mono text-[10px] opacity-40">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-[#0d0d0d] p-5 sm:p-8">
+            <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.28em] text-white/35">
+              Reach
+            </p>
+
+            <div className="space-y-6 text-sm leading-6 text-white/55">
+              <p>
+                Cambridge Institute of Technology
+                <br />
+                Krishnarajapuram, Bengaluru
+              </p>
+
+              <div className="space-y-3">
+                <a
+                  href="tel:+919740331995"
+                  className="group flex items-center gap-3 transition hover:text-white"
+                >
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-red-400 transition group-hover:border-red-500/40 group-hover:bg-red-500 group-hover:text-white">
+                    <Phone size={15} />
+                  </span>
+                  +91 97403 31995
+                </a>
+
+                <a
+                  href="mailto:aabid@galactic-3d.com"
+                  className="group flex items-center gap-3 transition hover:text-white"
+                >
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-red-400 transition group-hover:border-red-500/40 group-hover:bg-red-500 group-hover:text-white">
+                    <Mail size={15} />
+                  </span>
+                  aabid@galactic-3d.com
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#0d0d0d] p-5 sm:p-8">
+            <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.28em] text-white/35">
+              Social
+            </p>
+
+            <div className="divide-y divide-white/10">
+              {socialLinks.map(({ name, href, icon: Icon }) => (
+                <a
+                  key={name}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex items-center justify-between py-4 text-sm text-white/62 transition hover:text-white"
+                >
+                  <span className="flex items-center gap-3">
+                    <Icon size={17} className="text-red-400" />
+                    {name}
+                  </span>
+
+                  <ArrowUpRight
+                    size={16}
+                    className="text-white/25 transition group-hover:rotate-45 group-hover:text-red-400"
+                  />
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="flex flex-col gap-4 border-t border-white/10 px-5 py-5 font-mono text-[10px] uppercase tracking-[0.22em] text-white/35 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-10">
+          <span>© {new Date().getFullYear()} Galactic 3D</span>
+
+          <div className="flex gap-5">
+            <Link href="/terms" className="transition hover:text-white">
+              Terms
+            </Link>
+            <Link href="/privacy" className="transition hover:text-white">
+              Privacy
+            </Link>
+          </div>
+        </section>
+      </div>
     </footer>
   );
 }
+
+
 
 
 

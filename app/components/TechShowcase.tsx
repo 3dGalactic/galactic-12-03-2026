@@ -270,116 +270,295 @@
 
 
 
+// "use client";
+
+// import { useState } from "react";
+// import { motion, AnimatePresence } from "framer-motion";
+
+// const technologies = [
+//   {
+//     id: "01",
+//     title: "DMLS",
+//     subtitle: "Direct Metal Laser Sintering",
+//     description: "The peak of additive metallurgy. 400W lasers fusing micro-layers of titanium and super-alloys into monolithic structures.",
+//     image: "https://www.mechdaily.com/wp-content/uploads/2024/09/What-is-Direct-Metal-Laser-Sintering.webp",
+//     color: "#ff0000",
+//   },
+//   {
+//     id: "02",
+//     title: "FDM",
+//     subtitle: "Fused Deposition Modeling",
+//     description: "Industrial thermoplastic extrusion. High-performance polymers like ULTEM and Carbon-Fiber ABS for end-use production.",
+//     image: "https://makerly.eu/wp-content/uploads/2023/05/5-i.jpg",
+//     color: "#00ff66",
+//   },
+// ];
+
+// export default function TechShowcase() {
+//   const [active, setActive] = useState(0);
+
+//   return (
+//     <div className="w-full h-screen  flex items-center justify-center overflow-hidden font-sans select-none px-6">
+//       <div className="w-full max-w-7xl h-[80vh] flex flex-col lg:flex-row relative">
+        
+//         {/* --- LEFT: THE KINETIC NUMBERS --- */}
+//         <div className="flex lg:flex-col justify-between lg:justify-center gap-12 lg:gap-24 z-30 mb-8 lg:mb-0">
+//           {technologies.map((tech, i) => (
+//             <button
+//               key={tech.id}
+//               onMouseEnter={() => setActive(i)}
+//               onClick={() => setActive(i)}
+//               className="relative group outline-none"
+//             >
+//               <motion.span
+//                 animate={{
+//                   color: active === i ? "white" : "transparent",
+//                 } as any}
+//                 style={{
+//                   WebkitTextStroke: active === i ? "0px white" : "1px rgba(255,255,255,0.3)",
+//                 }}
+//                 className="text-6xl md:text-9xl font-black italic tracking-tighter transition-all duration-500"
+//               >
+//                 {tech.id}
+//               </motion.span>
+//               {active === i && (
+//                 <motion.div
+//                   layoutId="dot"
+//                   className="absolute -right-4 lg:-right-8 top-1/2 w-2 h-2 md:w-4 md:h-4 rounded-full bg-white shadow-[0_0_20px_white]"
+//                 />
+//               )}
+//             </button>
+//           ))}
+//         </div>
+
+//         {/* --- CENTER: THE BLADE (Image Portal) --- */}
+//         <div className="flex-grow relative h-full lg:ml-20">
+//           <AnimatePresence mode="wait">
+//             <motion.div
+//               key={active}
+//               initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
+//               animate={{ clipPath: "inset(0 0% 0 0)", opacity: 1 }}
+//               exit={{ clipPath: "inset(0 0 0 100%)", opacity: 0 }}
+//               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+//               className="absolute inset-0 rounded-[2rem] lg:rounded-[4rem] overflow-hidden border border-white/10"
+//             >
+//               <motion.img
+//                 initial={{ scale: 1.2 }}
+//                 animate={{ scale: 1 }}
+//                 src={technologies[active].image}
+//                 className="w-full h-full object-cover grayscale-[0.5] hover:grayscale-0 transition-all duration-1000"
+//               />
+//               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
+              
+//               {/* Internal Content Reveal */}
+//               <div className="absolute bottom-10 left-10 right-10 flex flex-col md:flex-row items-end justify-between gap-6">
+//                 <div className="max-w-md">
+//                   <motion.h2 
+//                     initial={{ y: 20, opacity: 0 }}
+//                     animate={{ y: 0, opacity: 1 }}
+//                     className="text-4xl md:text-6xl font-black text-white italic tracking-tighter leading-none mb-4"
+//                   >
+//                     {technologies[active].title}
+//                   </motion.h2>
+//                   <p className="text-gray-400 text-sm md:text-lg font-light leading-tight">
+//                     {technologies[active].description}
+//                   </p>
+//                 </div>
+//                 <div className="hidden md:block text-right">
+//                   <div className="text-[10px] uppercase tracking-[0.5em] text-white/40 mb-2">Process_Standard</div>
+//                   <div className="text-xl font-mono text-white">{technologies[active].subtitle}</div>
+//                 </div>
+//               </div>
+//             </motion.div>
+//           </AnimatePresence>
+//         </div>
+
+//         {/* --- BACKGROUND DECORATION --- */}
+//         <div className="absolute -bottom-20 -left-20 text-[30vh] font-black text-white/[0.02] pointer-events-none italic select-none">
+//           {technologies[active].title}
+//         </div>
+//       </div>
+
+      
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
 "use client";
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  ArrowRightIcon,
+  CpuChipIcon,
+  CubeTransparentIcon,
+} from "@heroicons/react/24/outline";
 
 const technologies = [
   {
     id: "01",
     title: "DMLS",
     subtitle: "Direct Metal Laser Sintering",
-    description: "The peak of additive metallurgy. 400W lasers fusing micro-layers of titanium and super-alloys into monolithic structures.",
-    image: "https://www.mechdaily.com/wp-content/uploads/2024/09/What-is-Direct-Metal-Laser-Sintering.webp",
-    color: "#ff0000",
+    description:
+      "High-power laser fusion for titanium, stainless steel, and super-alloys, built for dense production-grade metal parts.",
+    image:
+      "https://www.mechdaily.com/wp-content/uploads/2024/09/What-is-Direct-Metal-Laser-Sintering.webp",
+    icon: CpuChipIcon,
+    tone: "text-red-400",
   },
   {
     id: "02",
     title: "FDM",
     subtitle: "Fused Deposition Modeling",
-    description: "Industrial thermoplastic extrusion. High-performance polymers like ULTEM and Carbon-Fiber ABS for end-use production.",
+    description:
+      "Industrial thermoplastic extrusion for prototypes, fixtures, tooling, and functional polymer production parts.",
     image: "https://makerly.eu/wp-content/uploads/2023/05/5-i.jpg",
-    color: "#00ff66",
+    icon: CubeTransparentIcon,
+    tone: "text-white",
   },
 ];
 
 export default function TechShowcase() {
   const [active, setActive] = useState(0);
+  const tech = technologies[active];
 
   return (
-    <div className="w-full h-screen  flex items-center justify-center overflow-hidden font-sans select-none px-6">
-      <div className="w-full max-w-7xl h-[80vh] flex flex-col lg:flex-row relative">
-        
-        {/* --- LEFT: THE KINETIC NUMBERS --- */}
-        <div className="flex lg:flex-col justify-between lg:justify-center gap-12 lg:gap-24 z-30 mb-8 lg:mb-0">
-          {technologies.map((tech, i) => (
-            <button
-              key={tech.id}
-              onMouseEnter={() => setActive(i)}
-              onClick={() => setActive(i)}
-              className="relative group outline-none"
-            >
-              <motion.span
-                animate={{
-                  color: active === i ? "white" : "transparent",
-                } as any}
-                style={{
-                  WebkitTextStroke: active === i ? "0px white" : "1px rgba(255,255,255,0.3)",
-                }}
-                className="text-6xl md:text-9xl font-black italic tracking-tighter transition-all duration-500"
-              >
-                {tech.id}
-              </motion.span>
-              {active === i && (
-                <motion.div
-                  layoutId="dot"
-                  className="absolute -right-4 lg:-right-8 top-1/2 w-2 h-2 md:w-4 md:h-4 rounded-full bg-white shadow-[0_0_20px_white]"
-                />
-              )}
-            </button>
-          ))}
-        </div>
+    <section className="relative min-h-screen w-full overflow-hidden  px-4 py-5 text-white sm:px-6 ">
+      <div className="mx-auto grid min-h-[calc(100vh-2.5rem)] max-w-[1500px] grid-rows-[auto_1fr_auto]">
+        <header className="flex items-center justify-between border-b border-white/10 pb-5 font-mono text-[10px] uppercase tracking-[0.28em]">
+          <p className="text-white/40">Technology Library</p>
+          <p className="text-red-400">DMLS / FDM</p>
+        </header>
 
-        {/* --- CENTER: THE BLADE (Image Portal) --- */}
-        <div className="flex-grow relative h-full lg:ml-20">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={active}
-              initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
-              animate={{ clipPath: "inset(0 0% 0 0)", opacity: 1 }}
-              exit={{ clipPath: "inset(0 0 0 100%)", opacity: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute inset-0 rounded-[2rem] lg:rounded-[4rem] overflow-hidden border border-white/10"
-            >
-              <motion.img
-                initial={{ scale: 1.2 }}
-                animate={{ scale: 1 }}
-                src={technologies[active].image}
-                className="w-full h-full object-cover grayscale-[0.5] hover:grayscale-0 transition-all duration-1000"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
-              
-              {/* Internal Content Reveal */}
-              <div className="absolute bottom-10 left-10 right-10 flex flex-col md:flex-row items-end justify-between gap-6">
-                <div className="max-w-md">
-                  <motion.h2 
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    className="text-4xl md:text-6xl font-black text-white italic tracking-tighter leading-none mb-4"
+        <main className="grid gap-4 py-4 lg:grid-cols-[360px_1fr]">
+          <aside className="grid content-start gap-3">
+            {technologies.map((item, index) => {
+              const Icon = item.icon;
+              const selected = active === index;
+
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onMouseEnter={() => setActive(index)}
+                  onClick={() => setActive(index)}
+                  className={`group grid grid-cols-[52px_1fr_auto] items-center gap-4 rounded-2xl border p-4 text-left transition duration-300 ${
+                    selected
+                      ? "border-white/18 bg-white/[0.075]"
+                      : "border-white/10 bg-white/[0.035] hover:bg-white/[0.055]"
+                  }`}
+                >
+                  <span
+                    className={`font-mono text-[10px] uppercase tracking-[0.22em] ${
+                      selected ? "text-red-400" : "text-white/32"
+                    }`}
                   >
-                    {technologies[active].title}
-                  </motion.h2>
-                  <p className="text-gray-400 text-sm md:text-lg font-light leading-tight">
-                    {technologies[active].description}
-                  </p>
-                </div>
-                <div className="hidden md:block text-right">
-                  <div className="text-[10px] uppercase tracking-[0.5em] text-white/40 mb-2">Process_Standard</div>
-                  <div className="text-xl font-mono text-white">{technologies[active].subtitle}</div>
-                </div>
+                    {item.id}
+                  </span>
+
+                  <div>
+                    <h2 className="text-2xl font-semibold uppercase leading-none tracking-[-0.04em]">
+                      {item.title}
+                    </h2>
+                    <p className="mt-2 text-xs text-white/38">
+                      {item.subtitle}
+                    </p>
+                  </div>
+
+                  <Icon
+                    className={`h-5 w-5 transition ${
+                      selected ? item.tone : "text-white/25"
+                    }`}
+                  />
+                </button>
+              );
+            })}
+          </aside>
+
+          <section className="grid min-h-[620px] overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.035] lg:grid-cols-[1fr_420px]">
+            <div className="relative min-h-[420px] overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={tech.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.45 }}
+                  className="absolute inset-0"
+                >
+                  <motion.img
+                    src={tech.image}
+                    alt={tech.title}
+                    initial={{ scale: 1.04 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 1 }}
+                    className="h-full w-full object-cover grayscale-[0.35]"
+                  />
+                  <div className="absolute inset-0 bg-black/28" />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <div className="flex flex-col justify-between border-t border-white/10 p-5 sm:p-7 lg:border-l lg:border-t-0">
+              <div>
+                <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.28em] text-red-400">
+                  Process {tech.id}
+                </p>
+
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={tech.id}
+                    initial={{ y: 16, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -16, opacity: 0 }}
+                    transition={{ duration: 0.35 }}
+                  >
+                    <h3 className="text-6xl font-semibold uppercase leading-[0.82] tracking-[-0.07em] sm:text-7xl">
+                      {tech.title}
+                    </h3>
+
+                    <p className="mt-5 text-sm leading-6 text-white/45">
+                      {tech.subtitle}
+                    </p>
+
+                    <p className="mt-8 text-base leading-7 text-white/68">
+                      {tech.description}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
               </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
 
-        {/* --- BACKGROUND DECORATION --- */}
-        <div className="absolute -bottom-20 -left-20 text-[30vh] font-black text-white/[0.02] pointer-events-none italic select-none">
-          {technologies[active].title}
-        </div>
+              <div className="mt-10 flex items-center justify-between border-t border-white/10 pt-5">
+                <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/35">
+                  Production Process
+                </span>
+
+                <a
+                  href="/capabilities"
+                  className="flex h-11 w-11 items-center justify-center rounded-full bg-red-500 text-white transition hover:bg-red-400"
+                  aria-label="Explore capability"
+                >
+                  <ArrowRightIcon className="h-5 w-5" />
+                </a>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer className="flex items-center justify-between border-t border-white/10 pt-5 font-mono text-[10px] uppercase tracking-[0.28em] text-white/35">
+          <span>Industrial AM</span>
+          <span className="text-red-400">Process Focused</span>
+        </footer>
       </div>
-
-      
-    </div>
+    </section>
   );
 }

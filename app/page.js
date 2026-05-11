@@ -19,8 +19,10 @@ import TeamCarousel from "../app/components/TeamCarousel";
 import MS from './components/MaterialShowcase'
 import ServiceTabs from "../app/components/ServiceTabs";
 import TechShowcase from "./components/TechShowcase";
+import WhyGalactic from "./components/whygalactic";
 import AdvancedProcess from "../app/components/AdvancedProcess";
 import TrainingBento from "./components/TrainingBento";
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,247 +58,275 @@ export default function Home() {
     // bg-gradient-to-br from-black via-[#0f0b0b] to-[#b91c1c] 
     "
     >
-      <section className="relative min-h-screen bg-black text-white overflow-hidden">
+      <section className="relative min-h-screen overflow-hidden bg-black text-white">
+  {/* VIDEO BACKGROUND */}
+  <div className="absolute inset-0 z-0">
+    <AnimatePresence mode="wait">
+      <motion.video
+        ref={videoRef}
+        key={activeVideo}
+        initial={{ opacity: 0, scale: 1.02 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1 }}
+        className="h-full w-full object-cover"
+        autoPlay
+        muted
+        playsInline
+        onPlay={handleVideoLoad}
+        onLoadedMetadata={handleVideoLoad}
+        onEnded={() => setActiveVideo((prev) => (prev + 1) % videos.length)}
+      >
+        <source src={videos[activeVideo]} type="video/mp4" />
+      </motion.video>
+    </AnimatePresence>
 
-        {/* VIDEO BACKGROUND */}
-        <div className="absolute inset-0 z-0">
-          <AnimatePresence mode="wait">
-            <motion.video
-              ref={videoRef}
-              key={activeVideo}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1 }}
-              className="w-full h-full object-cover"
-              autoPlay
-              muted
-              playsInline
-              onPlay={handleVideoLoad}
-              // CRITICAL: This fires every time the 'key' changes and a new video loads
-              onLoadedMetadata={handleVideoLoad}
-              onEnded={() => setActiveVideo((prev) => (prev + 1) % videos.length)}
-            >
-              <source src={videos[activeVideo]} type="video/mp4" />
-            </motion.video>
-          </AnimatePresence>
-          <div className="absolute inset-0 bg-black/55"></div>
+    <div className="absolute inset-0 bg-black/62" />
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_45%,transparent,rgba(0,0,0,0.9))]" />
+  </div>
+
+  <div className="pointer-events-none absolute inset-4 z-10 border border-white/10" />
+
+  
+
+  <div className="relative z-20 flex min-h-screen items-end pb-24 pt-28 sm:px-10 ">
+    <div className="grid w-full gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
+      <div className="sm:pl-12">
+        <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.32em] text-white/45">
+          Additive Manufacturing / India
+        </p>
+
+        <h1 className="max-w-6xl font-['test'] text-[clamp(3.2rem,8vw,8rem)] leading-[0.82] tracking-normal">
+          Concept
+          <span className="block text-white/28">Engineered Into</span>
+          <span className="block text-red-500">Production</span>
+        </h1>
+      </div>
+
+      <div className="rounded-[1.5rem] border border-white/10 bg-black/35 p-5 backdrop-blur-xl">
+        <p className="font-['scrib'] text-sm leading-6 text-white/62">
+          High-performance additive manufacturing for prototypes, tooling, and
+          production-grade industrial parts.
+        </p>
+
+        <div className="mt-6 grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 font-mono text-[9px] uppercase tracking-[0.18em] text-white/45">
+          <span className="bg-black/55 p-3">Metal</span>
+          <span className="bg-black/55 p-3 text-center text-red-400">FDM</span>
+          <span className="bg-black/55 p-3 text-right">DMLS</span>
         </div>
 
-        {/* ARCHITECTURAL FRAME */}
-        <div className="absolute inset-5 border border-white/10 pointer-events-none z-10"></div>
-
-        {/* ISO BADGE */}
         <a
           href="/iso.pdf"
           target="_blank"
           rel="noopener noreferrer"
-          className="absolute bottom-10 right-10 z-20 flex items-center gap-2 border border-white/20 px-4 py-2 rounded-full backdrop-blur-xl transition-all hover:bg-white/10"
+          className="mt-6 inline-flex items-center gap-3 rounded-full border border-white/15 bg-black/30 px-4 py-2 backdrop-blur-xl transition hover:bg-white/10"
         >
-          <img src="/ios.webp" className="w-6 h-6" alt="ISO Logo" />
-          <span className="text-xs tracking-widest text-white/80 font-['dena']">
+          <img src="/ios.webp" className="h-6 w-6" alt="ISO Logo" />
+          <span className="font-['dena'] text-xs tracking-widest text-white/75">
             ISO CERTIFIED
           </span>
         </a>
+      </div>
+    </div>
+  </div>
 
-        {/* CAPABILITY TAGS */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-4 z-20">
-          {["Metal", "FDM"].map((tag) => (
-            <span key={tag} className="border border-white/20 rounded-full px-4 py-1 text-sm bg-black/10 backdrop-blur-sm">
-              {tag}
-            </span>
-          ))}
-        </div>
+  <div className="absolute bottom-6 left-6 z-30 flex gap-2 sm:left-10 lg:left-16">
+    {videos.map((_, idx) => (
+      <div
+        key={idx}
+        className={`h-1 rounded-full transition-all duration-500 ${
+          idx === activeVideo ? "w-14 bg-red-500" : "w-8 bg-white/20"
+        }`}
+      />
+    ))}
+  </div>
+</section>
 
-        {/* TEXT CONTENT */}
-        <div className="absolute left-12 bottom-20 z-20 max-w-xl">
-          <div className="text-xs tracking-widest text-red-300 uppercase font-['dena'] mb-4">
-            Contract Manufacturing
-          </div>
-
-          <h1 className="font-['test'] text-[clamp(3rem,6vw,5.5rem)] leading-[0.95]">
-            Engineering your <br />
-            <span className="text-red-400">Concept to Creation</span>
-          </h1>
-
-          <p className="text-lg text-white/80 font-['scrib'] mt-6 mb-8">
-            with Additive Manufacturing
-          </p>
-
-          
-        </div>
-
-        {/* VIDEO PROGRESS BARS */}
-        <div className="absolute bottom-10 left-12 z-30 flex gap-2">
-          {videos.map((_, idx) => (
-            <div
-              key={idx}
-              className={`h-1 transition-all duration-500 rounded-full ${idx === activeVideo ? "bg-red-500 w-12" : "bg-white/20 w-8"}`}
-            />
-          ))}
-        </div>
-
-      </section>
-      <section className="relative py-36 bg-black text-white overflow-hidden">
+      <section className="relative py-36  text-white overflow-hidden">
 
         {/* ambient background */}
         <div className="absolute inset-0 -z-10">
-          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-red-500/20 blur-[180px] rounded-full"></div>
-          <div className="absolute bottom-[-200px] right-[-200px] w-[600px] h-[600px] bg-blue-500/20 blur-[180px] rounded-full"></div>
+          <div className="absolute -top-40 -left-40  h-[600px] bg-red-500/20 blur-[180px] rounded-full"></div>
+          <div className="absolute bottom-[-200px] right-[-200px] w-[600px] h-[600px]  blur-[180px] rounded-full"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6">
-
-          <div className="grid lg:grid-cols-[1.2fr_1fr] gap-24">
-
-            {/* LEFT CONTENT */}
-            <div className="relative max-w-xl">
-
-              {/* Section kicker */}
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-[2px] bg-red-400"></div>
-                <span className="text-sm uppercase tracking-wider text-red-300 font-medium">
-                  Additive Manufacturing
-                </span>
-              </div>
-
-              {/* Headline */}
-              <h2 className="text-4xl md:text-6xl font-['test'] leading-[1.05] mb-8">
-                Your One-Stop Destination
-                <br />
-                for Additive Manufacturing
-              </h2>
-
-              {/* Description */}
-              <p className="text-gray-300 text-lg font-['scrib'] leading-relaxed mb-12">
-                Galactic 3D is your one-stop destination for additive manufacturing
-                services. As pioneers in the field, we bridge the gap to the future
-                with cutting-edge technology and expert support. We offer customized,
-                efficient, and high-precision solutions across industries, delivering
-                unmatched performance and innovation with every project.
-              </p>
-
-              {/* Services container */}
-              <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-2xl p-8">
-
-                <h3 className="text-lg font-['dena'] text-red-300 mb-6">
-                  Our services span across four key verticals
-                </h3>
-
-                <div className="grid sm:grid-cols-2 gap-x-8 gap-y-5 text-gray-300 font-['scrib']">
-
-                  <div className="flex items-start gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-red-400 mt-1" />
-                    <span>Design, DFAM & Data Preparation</span>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-red-400 mt-1" />
-                    <span>Contract Manufacturing & Part Printing</span>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-red-400 mt-1" />
-                    <span>Training, Skill & Entrepreneurship Development</span>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-red-400 mt-1" />
-                    <span>Capital Equipment Manufacturing</span>
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* RIGHT SIDE */}
-            <div className="grid gap-10">
-
-              {/* CARD 1 */}
-              <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-2xl p-8 hover:border-red-400/40 transition">
-
-                <CursorArrowRaysIcon className="w-10 h-10 text-red-400 mb-6" />
-
-                <h3 className="text-2xl font-['dena'] mb-3">
-                  Precision
-                </h3>
-
-                <p className="text-gray-300 font-['scrib']">
-                  Delivering high-accuracy parts with rigorous testing and traceability at every step.
-                </p>
-
-              </div>
-
-              {/* CARD 2 */}
-              <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-2xl p-8 hover:border-blue-400/40 transition lg:ml-12">
-
-                <LightBulbIcon className="w-10 h-10 text-blue-400 mb-6" />
-
-                <h3 className="text-2xl font-['dena'] mb-3">
-                  Innovation
-                </h3>
-
-                <p className="text-gray-300 font-['scrib']">
-                  Leveraging cutting-edge additive manufacturing technology and expertise.
-                </p>
-
-              </div>
-
-              {/* CARD 3 */}
-              <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-2xl p-8 hover:border-green-400/40 transition">
-
-                <GlobeAltIcon className="w-10 h-10 text-green-400 mb-6" />
-
-                <h3 className="text-2xl font-['dena'] mb-3">
-                  Sustainability
-                </h3>
-
-                <p className="text-gray-300 font-['scrib']">
-                  Reducing waste and energy consumption through additive processes.
-                </p>
-
-              </div>
-
-            </div>
-
+        <div className="relative w-full overflow-hidden  px-4 py-20 text-white sm:px-6 ">
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute left-1/2 top-0 h-[560px] w-[72vw] -translate-x-1/2 rounded-full  blur-[170px]" />
+            <div className="absolute inset-0  opacity-20" />
+            <div className="absolute inset-0 " />
           </div>
 
+          <div className="relative mx-auto ">
+            <div className="mb-10 flex items-center justify-between border-b border-white/10 pb-5 font-mono text-[10px] uppercase tracking-[0.28em]">
+              <span className="text-red-400">Additive Manufacturing</span>
+              <span className="text-white/35">Galactic 3D / Industrial AM</span>
+            </div>
+
+            <div className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
+              <section className="flex min-h-[680px] flex-col justify-between rounded-[1.5rem] border border-white/10 bg-[#0d0d0d] p-5 sm:p-8">
+                <div>
+                  <p className="mb-8 max-w-md text-sm leading-6 text-white/45">
+                    Galactic 3D bridges the gap to the future with customized,
+                    efficient, high-precision additive manufacturing solutions across
+                    industries.
+                  </p>
+
+                  <h2 className="max-w-5xl text-[15vw] font-semibold uppercase leading-[0.78] tracking-[-0.08em] sm:text-[7rem] lg:text-[4.7vw]">
+                    
+                    <span className="block text-white/22">Additive</span>
+                    <span className="block text-red-500">Manufacturing</span>
+                  </h2>
+                </div>
+
+                <div className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 font-['scrib'] text-sm text-white/62">
+                  <div className="bg-[#0d0d0d] p-5">
+                    <CheckCircleIcon className="mb-4 h-5 w-5 text-red-400" />
+                    Design, DFAM & Data Preparation
+                  </div>
+
+                  <div className="bg-[#0d0d0d] p-5">
+                    <CheckCircleIcon className="mb-4 h-5 w-5 text-red-400" />
+                    Contract Manufacturing & Part Printing
+                  </div>
+
+                  <div className="bg-[#0d0d0d] p-5">
+                    <CheckCircleIcon className="mb-4 h-5 w-5 text-red-400" />
+                    Training, Skill & Entrepreneurship Development
+                  </div>
+
+                  <div className="bg-[#0d0d0d] p-5">
+                    <CheckCircleIcon className="mb-4 h-5 w-5 text-red-400" />
+                    Capital Equipment Manufacturing
+                  </div>
+                </div>
+              </section>
+
+              <section className="grid gap-4">
+                <article className="group grid min-h-[215px] overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0d0d0d] transition duration-500 hover:border-red-500/50 hover:bg-[#111111] sm:grid-cols-[180px_1fr]">
+                  <div className="flex flex-col justify-between border-b border-white/10 p-5 sm:border-b-0 sm:border-r">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-red-400">
+                      01
+                    </span>
+                    <CursorArrowRaysIcon className="h-8 w-8 text-red-400" />
+                  </div>
+
+                  <div className="flex flex-col justify-end p-5 sm:p-7">
+                    <h3 className="text-4xl font-semibold uppercase leading-none tracking-[-0.06em]">
+                      Precision
+                    </h3>
+                    <p className="mt-4 max-w-xl font-['scrib'] text-sm leading-6 text-white/48">
+                      Delivering high-accuracy parts with rigorous testing and
+                      traceability at every step.
+                    </p>
+                  </div>
+                </article>
+
+                <article className="group grid min-h-[215px] overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0d0d0d] transition duration-500 hover:border-red-500/50 hover:bg-[#111111] sm:grid-cols-[180px_1fr] lg:ml-12">
+                  <div className="flex flex-col justify-between border-b border-white/10 p-5 sm:border-b-0 sm:border-r">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-red-400">
+                      02
+                    </span>
+                    <LightBulbIcon className="h-8 w-8 text-red-400" />
+                  </div>
+
+                  <div className="flex flex-col justify-end p-5 sm:p-7">
+                    <h3 className="text-4xl font-semibold uppercase leading-none tracking-[-0.06em]">
+                      Innovation
+                    </h3>
+                    <p className="mt-4 max-w-xl font-['scrib'] text-sm leading-6 text-white/48">
+                      Leveraging cutting-edge additive manufacturing technology and
+                      expertise.
+                    </p>
+                  </div>
+                </article>
+
+                <article className="group grid min-h-[215px] overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0d0d0d] transition duration-500 hover:border-red-500/50 hover:bg-[#111111] sm:grid-cols-[180px_1fr]">
+                  <div className="flex flex-col justify-between border-b border-white/10 p-5 sm:border-b-0 sm:border-r">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-red-400">
+                      03
+                    </span>
+                    <GlobeAltIcon className="h-8 w-8 text-red-400" />
+                  </div>
+
+                  <div className="flex flex-col justify-end p-5 sm:p-7">
+                    <h3 className="text-4xl font-semibold uppercase leading-none tracking-[-0.06em]">
+                      Sustainability
+                    </h3>
+                    <p className="mt-4 max-w-xl font-['scrib'] text-sm leading-6 text-white/48">
+                      Reducing waste and energy consumption through additive processes.
+                    </p>
+                  </div>
+                </article>
+              </section>
+            </div>
+          </div>
         </div>
 
+
       </section>
-      <section className="py-20 bg-gradient-to-b from-transparent to-red-950/20">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-['test'] mb-4">
-              Transform Your Ideas into Reality
-            </h2>
-            <p className="text-gray-300 font-['scrib'] text-lg max-w-3xl mx-auto">
-              Leveraging our cutting-edge additive manufacturing facilities, we
-              deliver customized, high-performance parts with unmatched speed and
-              precision.
+      <section className="relative w-full overflow-hidden   py-20 text-white sm:px-6 ">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-1/2 top-0 h-[520px] w-[72vw] -translate-x-1/2 rounded-full bg-red-600/14 blur-[160px]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.055)_1px,transparent_1px)] bg-[size:12.5vw_100%] opacity-20" />
+          <div className="absolute inset-0 " />
+        </div>
+
+        <div className="relative mx-auto ">
+          <div className="mb-10 grid gap-8 border-y border-white/10 py-8 lg:grid-cols-[1fr_520px] lg:items-end">
+            <div>
+              <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.32em] text-red-400">
+                Manufacturing Services
+              </p>
+
+              <h2 className="max-w-5xl font-['test'] text-5xl leading-[0.88] tracking-normal md:text-7xl lg:text-8xl">
+                Transform Your Ideas
+                <span className="block text-white/30">Into Reality</span>
+              </h2>
+            </div>
+
+            <p className="max-w-xl font-['scrib'] text-sm leading-6 text-white/52 lg:text-right">
+              Leveraging cutting-edge additive manufacturing facilities, we deliver
+              customized high-performance parts with speed, precision, and production
+              confidence.
             </p>
           </div>
 
-
           <ServiceTabs />
-
         </div>
       </section>
 
 
-      <div className="container mx-auto px-6 mb-20">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-5xl font-['test'] mb-4">
-            Advanced Technology
-          </h2>
-          <p className="text-gray-300 font-['scrib'] text-lg">
-            We utilize state-of-the-art additive manufacturing processes.
-          </p>
+
+      <div className="relative mx-auto w-full overflow-hidden  px-4 py-20 text-white sm:px-6 lg:px-8">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-1/2 top-0 h-[420px] w-[70vw] -translate-x-1/2 rounded-full  blur-[150px]" />
+          <div className="absolute inset-x-0 top-0 h-px " />
         </div>
-        <TechShowcase />
+
+        <div className="relative mx-auto ">
+          <div className="mb-10 grid gap-6 border-y border-white/10 py-8 md:grid-cols-[1fr_auto] md:items-end">
+            <div>
+              <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.32em] text-red-400">
+                Technology Stack
+              </p>
+
+              <h2 className="max-w-4xl font-['test'] text-5xl leading-[0.9] tracking-normal md:text-7xl">
+                Advanced
+                <span className="block text-white/35">Technology</span>
+              </h2>
+            </div>
+
+            <p className="max-w-md font-['scrib'] text-sm leading-6 text-white/50 md:text-right">
+              We utilize state-of-the-art additive manufacturing processes for
+              production-grade outcomes.
+            </p>
+          </div>
+
+          <TechShowcase />
+        </div>
       </div>
+
 
 
 
@@ -320,7 +350,7 @@ export default function Home() {
 
         {/* OVERLAY */}
 
-        <div className=" container mx-auto px-6 max-w-6xl">
+        <div className=" mx-auto">
 
 
           {/* <div className="grid md:grid-cols-4 auto-rows-[180px] gap-6">
@@ -481,123 +511,148 @@ export default function Home() {
       <AdvancedProcess />
 
 
-      <section className="py-20 bg-black text-white">
-        <div className="max-w-7xl mx-auto px-6">
+      {/* <section className="relative overflow-hidden bg-black py-24 text-white md:py-32">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-blue-500/20 blur-[140px]" />
+          <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-red-500/10 blur-[130px]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:72px_72px] opacity-20" />
+        </div>
 
-          <h2 className="text-4xl md:text-5xl font-['test'] mb-10">
-            Why Choose Galactic
-          </h2>
+        <div className="relative mx-auto max-w-7xl px-6">
+          <div className="mb-16 grid gap-8 md:grid-cols-12 md:items-end">
+            <div className="md:col-span-8">
+              <p className="mb-4 font-['scrib'] text-xs uppercase tracking-[0.35em] text-blue-300">
+                Why Galactic
+              </p>
 
-          <div className="grid md:grid-cols-12 gap-4 auto-rows-[160px]">
+              <h2 className="max-w-4xl font-['test'] text-5xl leading-[0.95] tracking-normal md:text-7xl">
+                Built in India.
+                <span className="block text-white/45">Engineered for orbit-grade ambition.</span>
+              </h2>
+            </div>
 
-            {/* MAIN PANEL */}
-            <div className="md:col-span-7 row-span-2 p-6 rounded-2xl 
-      bg-white/5 backdrop-blur-xl border border-white/10 
-      shadow-[0_0_40px_rgba(255,0,0,0.15)] flex flex-col justify-between">
+            <p className="font-['scrib'] text-sm leading-6 text-white/55 md:col-span-4 md:text-right">
+              Advanced manufacturing for teams that need precision, certification,
+              material confidence, and speed without compromise.
+            </p>
+          </div>
 
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                  <GlobeAltIcon className="w-6 h-6 text-blue-400" />
+          <div className="grid auto-rows-[180px] gap-4 md:grid-cols-12">
+            <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur-xl transition duration-500 hover:border-blue-300/40 md:col-span-7 md:row-span-2 md:p-9">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.22),transparent_38%)] opacity-80" />
+              <div className="absolute bottom-0 right-0 text-[10rem] font-black leading-none text-white/[0.03] md:text-[14rem]">
+                01
+              </div>
+
+              <div className="relative flex h-full flex-col justify-between">
+                <div>
+                  <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/10">
+                    <GlobeAltIcon className="h-6 w-6 text-blue-300" />
+                  </div>
+
+                  <h3 className="max-w-xl font-['dena'] text-3xl leading-tight md:text-5xl">
+                    Building in India for the globe
+                  </h3>
                 </div>
-                <h3 className="text-xl font-['dena']">
-                  Building in India for the globe
-                </h3>
+
+                <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
+                  <p className="max-w-md font-['scrib'] text-sm leading-6 text-white/55">
+                    Trusted by aerospace, medical, and defence teams for high-performance
+                    parts, validated processes, and dependable production timelines.
+                  </p>
+
+                  <div className="flex flex-wrap gap-3 text-xs text-white/70">
+                    <span className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-2">
+                      <CubeTransparentIcon className="h-4 w-4 text-blue-300" />
+                      Aerospace
+                    </span>
+
+                    <span className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-2">
+                      <BeakerIcon className="h-4 w-4 text-blue-300" />
+                      Medical
+                    </span>
+
+                    <span className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-2">
+                      <TruckIcon className="h-4 w-4 text-blue-300" />
+                      Fast Logistics
+                    </span>
+                  </div>
+                </div>
               </div>
-
-              <p className="text-gray-400 font-['scrib'] text-sm max-w-md">
-                Trusted by teams across aerospace, medical, and defence industries
-                for performance, reliability and speed.
-              </p>
-
-              <div className="flex gap-4 text-sm text-gray-300">
-                <span className="flex items-center gap-2">
-                  <CubeTransparentIcon className="w-4 h-4 text-blue-400" />
-                  Aerospace
-                </span>
-
-                <span className="flex items-center gap-2">
-                  <BeakerIcon className="w-4 h-4 text-blue-400" />
-                  Medical
-                </span>
-
-                <span className="flex items-center gap-2">
-                  <TruckIcon className="w-4 h-4 text-blue-400" />
-                  Fast Logistics
-                </span>
-              </div>
-
             </div>
 
-            {/* METAL PRINTING */}
-            <div className="md:col-span-5 p-6 rounded-2xl 
-      bg-white/5 backdrop-blur-xl border border-white/10">
+            <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 transition duration-500 hover:-translate-y-1 hover:border-white/25 md:col-span-5">
+              <span className="absolute right-6 top-5 font-['test'] text-5xl text-white/[0.04]">
+                02
+              </span>
 
-              <div className="flex items-center gap-3 mb-3">
-                <CubeTransparentIcon className="w-6 h-6 text-blue-400" />
-                <h3 className="font-['dena']">
-                  Metal 3D Printing / DMLS / LPBF
-                </h3>
-              </div>
+              <CubeTransparentIcon className="mb-5 h-7 w-7 text-blue-300" />
 
-              <p className="text-gray-400 text-sm font-['scrib']">
-                Multiple technologies under one roof for the right process per part.
+              <h3 className="mb-3 font-['dena'] text-xl leading-tight">
+                Metal 3D Printing / DMLS / LPBF
+              </h3>
+
+              <p className="max-w-sm font-['scrib'] text-sm leading-6 text-white/50">
+                Multiple production technologies under one roof, matched to the right
+                process for every critical part.
               </p>
-
             </div>
 
-            {/* CERTIFIED MATERIALS */}
-            <div className="md:col-span-3 p-6 rounded-2xl 
-      bg-white/5 backdrop-blur-xl border border-white/10">
+            <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 transition duration-500 hover:-translate-y-1 hover:border-white/25 md:col-span-3">
+              <span className="absolute right-6 top-5 font-['test'] text-5xl text-white/[0.04]">
+                03
+              </span>
 
-              <CheckBadgeIcon className="w-6 h-6 text-blue-400 mb-2" />
+              <CheckBadgeIcon className="mb-5 h-7 w-7 text-blue-300" />
 
-              <h4 className="font-['dena'] text-sm">
+              <h4 className="mb-3 font-['dena'] text-lg">
                 Certified Materials
               </h4>
 
-              <p className="text-gray-400 text-xs font-['scrib']">
+              <p className="font-['scrib'] text-sm leading-6 text-white/50">
                 Verified parameters for production-grade parts.
               </p>
-
             </div>
 
-            {/* TESTING */}
-            <div className="md:col-span-4 p-6 rounded-2xl 
-      bg-white/5 backdrop-blur-xl border border-white/10">
+            <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 transition duration-500 hover:-translate-y-1 hover:border-white/25 md:col-span-4">
+              <span className="absolute right-6 top-5 font-['test'] text-5xl text-white/[0.04]">
+                04
+              </span>
 
-              <BeakerIcon className="w-6 h-6 text-blue-400 mb-2" />
+              <BeakerIcon className="mb-5 h-7 w-7 text-blue-300" />
 
-              <h4 className="font-['dena'] text-sm">
+              <h4 className="mb-3 font-['dena'] text-lg">
                 Material Testing
               </h4>
 
-              <p className="text-gray-400 text-xs font-['scrib']">
-                Mechanical validation and analysis available.
+              <p className="font-['scrib'] text-sm leading-6 text-white/50">
+                Mechanical validation and analysis for demanding applications.
               </p>
-
             </div>
 
-            {/* RESEARCH */}
-            <div className="md:col-span-5 p-6 rounded-2xl 
-      bg-white/5 backdrop-blur-xl border border-white/10">
+            <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 transition duration-500 hover:-translate-y-1 hover:border-blue-300/40 md:col-span-5">
+              <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-blue-300/70 to-transparent" />
+              <span className="absolute right-6 top-5 font-['test'] text-5xl text-white/[0.04]">
+                05
+              </span>
 
-              <div className="flex items-center gap-3 mb-3">
-                <WrenchScrewdriverIcon className="w-6 h-6 text-blue-400" />
-                <h3 className="font-['dena']">
-                  Research & Collaboration
-                </h3>
-              </div>
+              <WrenchScrewdriverIcon className="mb-5 h-7 w-7 text-blue-300" />
 
-              <p className="text-gray-400 text-sm font-['scrib']">
-                Design, manufacturing, post-processing and inspection
-                handled seamlessly.
+              <h3 className="mb-3 font-['dena'] text-xl">
+                Research & Collaboration
+              </h3>
+
+              <p className="max-w-sm font-['scrib'] text-sm leading-6 text-white/50">
+                Design, manufacturing, post-processing, and inspection handled as one
+                connected workflow.
               </p>
-
             </div>
-
           </div>
         </div>
-      </section>
+      </section> */}
+
+      <WhyGalactic />
+
 
 
 
@@ -804,76 +859,98 @@ export default function Home() {
         </div>
       </section> */}
 
-      <MS/>
+      <MS />
 
       <TeamCarousel />
 
 
-      <section className="relative  bg-black text-white overflow-hidden pb-[5vw]">
+      <section className="relative w-full overflow-hidden bg-[#050505] px-4 py-20 text-white sm:px-6 lg:px-8">
+  <div className="pointer-events-none absolute inset-0">
+    <div className="absolute left-1/2 top-0 h-[520px] w-[70vw] -translate-x-1/2 rounded-full bg-red-600/12 blur-[160px]" />
+    <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:12.5vw_100%] opacity-20" />
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,transparent,rgba(0,0,0,0.9))]" />
+  </div>
 
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_60%)]" />
-
-        <div className="relative max-w-4xl mx-auto px-6 text-center">
-
-          <h2 className="text-5xl md:text-6xl font-['test'] mb-6 tracking-tight">
-            Start a Conversation
-          </h2>
-
-          <p className="text-gray-400 font-['scrib'] mb-16 max-w-xl mx-auto">
-            Have a project in mind? Share a few details and our team will
-            get back to you within 24 hours.
+  <div className="relative mx-auto max-w-[1500px]">
+    <div className="grid overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.025] backdrop-blur-xl lg:grid-cols-[0.92fr_1.08fr]">
+      <aside className="flex min-h-[560px] flex-col justify-between border-b border-white/10 p-5 sm:p-8 lg:border-b-0 lg:border-r">
+        <div>
+          <p className="mb-6 font-mono text-[10px] uppercase tracking-[0.32em] text-red-400">
+            Contact
           </p>
 
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="relative p-10 rounded-2xl 
-          bg-white/[0.04] backdrop-blur-xl 
-          border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
-          >
-
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 to-transparent opacity-40 pointer-events-none" />
-
-            <div className="relative grid md:grid-cols-2 gap-6">
-
-              <input
-                type="text"
-                placeholder="Name"
-                required
-                className="bg-transparent border-b border-white/20 px-2 py-3 
-              focus:outline-none focus:border-white transition"
-              />
-
-              <input
-                type="email"
-                placeholder="Email"
-                required
-                className="bg-transparent border-b border-white/20 px-2 py-3 
-              focus:outline-none focus:border-white transition"
-              />
-
-              <textarea
-                rows={4}
-                placeholder="Tell us about your project"
-                className="md:col-span-2 bg-transparent border-b border-white/20 px-2 py-3 
-              focus:outline-none focus:border-white transition"
-              />
-
-              <div className="md:col-span-2 pt-6 flex justify-center">
-                <button
-                  type="submit"
-                  className="border border-white/20 px-8 py-3 rounded-full 
-                hover:bg-white hover:text-black transition"
-                >
-                  Send Message
-                </button>
-              </div>
-
-            </div>
-
-          </form>
-
+          <h2 className="max-w-3xl font-['test'] text-5xl leading-[0.88] tracking-normal sm:text-7xl lg:text-8xl">
+            Start a
+            <span className="block text-white/25">conversation.</span>
+          </h2>
         </div>
-      </section>
+
+        <div className="mt-12 grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 font-mono text-[10px] uppercase tracking-[0.18em] text-white/42">
+          <span className="bg-black/45 p-4">Project</span>
+          <span className="bg-black/45 p-4 text-center text-red-400">
+            Quote
+          </span>
+          <span className="bg-black/45 p-4 text-right">Build</span>
+        </div>
+      </aside>
+
+      <main className="p-5 sm:p-8 lg:p-10">
+        <p className="mb-10 max-w-xl font-['scrib'] text-sm leading-6 text-white/48">
+          Have a project in mind? Share a few details and our team will get back
+          to you within 24 hours.
+        </p>
+
+        <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
+          <label className="block">
+            <span className="mb-3 block font-mono text-[10px] uppercase tracking-[0.24em] text-white/35">
+              Name
+            </span>
+            <input
+              type="text"
+              required
+              placeholder="Your name"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.035] px-4 py-4 text-base text-white outline-none transition placeholder:text-white/25 focus:border-red-500/50 focus:bg-white/[0.055]"
+            />
+          </label>
+
+          <label className="block">
+            <span className="mb-3 block font-mono text-[10px] uppercase tracking-[0.24em] text-white/35">
+              Email
+            </span>
+            <input
+              type="email"
+              required
+              placeholder="you@company.com"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.035] px-4 py-4 text-base text-white outline-none transition placeholder:text-white/25 focus:border-red-500/50 focus:bg-white/[0.055]"
+            />
+          </label>
+
+          <label className="block">
+            <span className="mb-3 block font-mono text-[10px] uppercase tracking-[0.24em] text-white/35">
+              Project
+            </span>
+            <textarea
+              rows={5}
+              placeholder="Tell us about your part, material, timeline, or application"
+              className="w-full resize-none rounded-xl border border-white/10 bg-white/[0.035] px-4 py-4 text-base text-white outline-none transition placeholder:text-white/25 focus:border-red-500/50 focus:bg-white/[0.055]"
+            />
+          </label>
+
+          <div className="flex justify-end border-t border-white/10 pt-6">
+            <button
+              type="submit"
+              className="rounded-full bg-red-500 px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-white transition hover:bg-red-400"
+            >
+              Send Message
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+  </div>
+</section>
+
+
 
     </div>
   );

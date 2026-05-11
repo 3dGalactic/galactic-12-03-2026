@@ -168,7 +168,7 @@ const steps = [
     description:
       "We collaborate closely with your engineering teams to optimize designs for additive manufacturing and ensure cost-efficient builds.",
     image:
-      "/consult.png",
+      "https://ik.imagekit.io/0s6dxbeae/landscape.png",
   },
   {
     id: "02",
@@ -200,7 +200,7 @@ const steps = [
     description:
       "Parts are post-processed, inspected and shipped worldwide with reliable logistics.",
     image:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1600&auto=format&fit=crop",
+      "https://ik.imagekit.io/0s6dxbeae/delivery1.png",
   },
 ];
 
@@ -332,6 +332,203 @@ export default function AdvancedProcess() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// "use client";
+
+// import { useLayoutEffect, useRef } from "react";
+// import gsap from "gsap";
+// import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// gsap.registerPlugin(ScrollTrigger);
+
+// const steps = [
+//   {
+//     id: "01",
+//     eyebrow: "Discover",
+//     title: "Consultation & Design",
+//     description:
+//       "We collaborate with engineering teams to optimize geometry, material selection, tolerances, and cost before anything reaches the machine.",
+//     image: "/consult.png",
+//   },
+//   {
+//     id: "02",
+//     eyebrow: "Prototype",
+//     title: "Rapid Prototyping",
+//     description:
+//       "Functional prototypes validate form, fit, and mechanical performance quickly, so production decisions are made with confidence.",
+//     image: "/dragon.png",
+//   },
+//   {
+//     id: "03",
+//     eyebrow: "Validate",
+//     title: "Process Assurance",
+//     description:
+//       "Build simulation, material validation, and inspection workflows help ensure repeatability and structural integrity.",
+//     image: "/PA.jpg",
+//   },
+//   {
+//     id: "04",
+//     eyebrow: "Manufacture",
+//     title: "Production",
+//     description:
+//       "Industrial SLS, DMLS, and FDM systems deliver production-grade components at scale with dependable process control.",
+//     image: "/production.png",
+//   },
+//   {
+//     id: "05",
+//     eyebrow: "Deliver",
+//     title: "Delivery",
+//     description:
+//       "Finished parts are post-processed, inspected, documented, and shipped worldwide through reliable logistics.",
+//     image:
+//       "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1600&auto=format&fit=crop",
+//   },
+// ];
+
+// export default function AdvancedProcess() {
+//   const containerRef = useRef(null);
+//   const sliderRef = useRef(null);
+//   const progressRef = useRef(null);
+//   const imageRefs = useRef([]);
+//   const copyRefs = useRef([]);
+
+//   useLayoutEffect(() => {
+//     const ctx = gsap.context(() => {
+//       const totalSlides = steps.length;
+
+//       const scrollTween = gsap.to(sliderRef.current, {
+//         xPercent: -100 * (totalSlides - 1),
+//         ease: "none",
+//         scrollTrigger: {
+//           trigger: containerRef.current,
+//           pin: true,
+//           scrub: 0.8,
+//           start: "top top",
+//           end: () => `+=${window.innerWidth * (totalSlides - 1)}`,
+//           invalidateOnRefresh: true,
+//           onUpdate: (self) => {
+//             gsap.set(progressRef.current, {
+//               scaleX: self.progress,
+//               transformOrigin: "left center",
+//             });
+//           },
+//         },
+//       });
+
+//       imageRefs.current.forEach((image) => {
+//         gsap.fromTo(
+//           image,
+//           { scale: 1.18, xPercent: -4 },
+//           {
+//             scale: 1,
+//             xPercent: 4,
+//             ease: "none",
+//             scrollTrigger: {
+//               trigger: image,
+//               containerAnimation: scrollTween,
+//               start: "left right",
+//               end: "right left",
+//               scrub: true,
+//             },
+//           },
+//         );
+//       });
+
+//       copyRefs.current.forEach((copy) => {
+//         gsap.from(copy.children, {
+//           y: 80,
+//           opacity: 0,
+//           stagger: 0.12,
+//           duration: 0.9,
+//           ease: "power3.out",
+//           scrollTrigger: {
+//             trigger: copy,
+//             containerAnimation: scrollTween,
+//             start: "left 70%",
+//           },
+//         });
+//       });
+
+//       ScrollTrigger.refresh();
+//     }, containerRef);
+
+//     return () => ctx.revert();
+//   }, []);
+
+//   return (
+//     <section
+//       ref={containerRef}
+//       className="relative h-screen w-full overflow-hidden bg-[#050505] text-white"
+//     >
+//       <div ref={sliderRef} className="flex h-full">
+//         {steps.map((step, index) => (
+//           <article
+//             key={step.id}
+//             className="relative h-screen w-screen shrink-0 overflow-hidden"
+//           >
+//             <div
+//               ref={(el) => {
+//                 if (el) imageRefs.current[index] = el;
+//               }}
+//               className="absolute inset-0 bg-cover bg-center"
+//               style={{ backgroundImage: `url(${step.image})` }}
+//             />
+
+//             <div className="absolute inset-0 bg-black/62" />
+//             <div className="absolute inset-0 bg-[radial-gradient(circle_at_24%_28%,rgba(239,68,68,0.22),transparent_34%)]" />
+//             <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:20vw_100%] opacity-25" />
+
+//             <div className="absolute left-5 right-5 top-5 z-10 flex items-center justify-between border-b border-white/15 pb-5 font-['scrib'] text-[10px] uppercase tracking-[0.3em] text-white/45 sm:left-8 sm:right-8 lg:left-12 lg:right-12">
+//               <span>Galactic Process</span>
+//               <span className="text-red-400">{step.eyebrow}</span>
+//             </div>
+
+//             <span className="pointer-events-none absolute right-4 top-20 font-['test'] text-[32vw] leading-none text-white/[0.07] sm:right-8 sm:text-[22vw] lg:right-12 lg:text-[15rem]">
+//               {step.id}
+//             </span>
+
+//             <div
+//               ref={(el) => {
+//                 if (el) copyRefs.current[index] = el;
+//               }}
+//               className="absolute bottom-20 left-5 right-5 z-10 max-w-5xl sm:bottom-24 sm:left-8 sm:right-8 lg:bottom-28 lg:left-12 lg:right-auto"
+//             >
+//               <p className="mb-5 font-['scrib'] text-[10px] uppercase tracking-[0.32em] text-red-400">
+//                 Step {step.id}
+//               </p>
+
+//               <h2 className="max-w-4xl font-['test'] text-5xl leading-[0.88] tracking-normal sm:text-7xl lg:text-8xl">
+//                 {step.title}
+//               </h2>
+
+//               <p className="mt-7 max-w-xl font-['scrib'] text-base leading-7 text-white/62 sm:text-lg">
+//                 {step.description}
+//               </p>
+//             </div>
+//           </article>
+//         ))}
+//       </div>
+
+//       <div className="absolute bottom-0 left-0 z-20 h-1 w-full bg-white/15">
+//         <div
+//           ref={progressRef}
+//           className="h-full w-full origin-left scale-x-0 bg-red-500"
+//         />
+//       </div>
+//     </section>
+//   );
+// }
 
 
 

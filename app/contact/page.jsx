@@ -54,97 +54,97 @@ export default function Contact() {
 
   const faqData = [
 
-{
-question: "What additive manufacturing technologies do you offer?",
-answer: "We offer multiple additive manufacturing technologies depending on the application requirements. These include FDM (Fused Deposition Modeling) for functional prototypes and cost-efficient parts, SLA (Stereolithography) for high-resolution components and smooth surface finishes, and SLS (Selective Laser Sintering) for strong nylon production parts. Each technology has different strengths in terms of accuracy, mechanical performance, and surface finish, and our engineering team helps select the best process for your part."
-},
+    {
+      question: "What additive manufacturing technologies do you offer?",
+      answer: "We offer multiple additive manufacturing technologies depending on the application requirements. These include FDM (Fused Deposition Modeling) for functional prototypes and cost-efficient parts, SLA (Stereolithography) for high-resolution components and smooth surface finishes, and SLS (Selective Laser Sintering) for strong nylon production parts. Each technology has different strengths in terms of accuracy, mechanical performance, and surface finish, and our engineering team helps select the best process for your part."
+    },
 
-{
-question: "What materials can you print with?",
-answer: "We support a wide range of engineering-grade materials. For polymer printing we commonly use PLA, ABS, PETG, Nylon (PA12), TPU, and high-performance resins. For advanced applications we also work with reinforced composites such as carbon-fiber infused filaments. Depending on project needs we can also produce metal parts through partner networks using aluminum, stainless steel, or titanium additive manufacturing systems."
-},
+    {
+      question: "What materials can you print with?",
+      answer: "We support a wide range of engineering-grade materials. For polymer printing we commonly use PLA, ABS, PETG, Nylon (PA12), TPU, and high-performance resins. For advanced applications we also work with reinforced composites such as carbon-fiber infused filaments. Depending on project needs we can also produce metal parts through partner networks using aluminum, stainless steel, or titanium additive manufacturing systems."
+    },
 
-{
-question: "What is the maximum build volume you support?",
-answer: "Build volume depends on the printing technology used. Typical build plate sizes include: FDM printers up to approximately 300 x 300 x 400 mm, SLA printers around 145 x 145 x 175 mm for high resolution resin parts, and larger industrial machines up to 500 mm in one dimension for batch production. For parts larger than the build plate, we can segment the model and assemble it after printing."
-},
+    {
+      question: "What is the maximum build volume you support?",
+      answer: "Build volume depends on the printing technology used. Typical build plate sizes include: FDM printers up to approximately 300 x 300 x 400 mm, SLA printers around 145 x 145 x 175 mm for high resolution resin parts, and larger industrial machines up to 500 mm in one dimension for batch production. For parts larger than the build plate, we can segment the model and assemble it after printing."
+    },
 
-{
-question: "What tolerances can you achieve?",
-answer: "Dimensional tolerances vary depending on technology and part geometry. Typical tolerances are ±0.2 mm or ±0.5% of the dimension for FDM prints, and ±0.1–0.15 mm for SLA parts due to the higher resolution of resin printing. For precision mechanical parts, we recommend post-processing or secondary machining to achieve tighter tolerances."
-},
+    {
+      question: "What tolerances can you achieve?",
+      answer: "Dimensional tolerances vary depending on technology and part geometry. Typical tolerances are ±0.2 mm or ±0.5% of the dimension for FDM prints, and ±0.1–0.15 mm for SLA parts due to the higher resolution of resin printing. For precision mechanical parts, we recommend post-processing or secondary machining to achieve tighter tolerances."
+    },
 
-{
-question: "How long does 3D printing take?",
-answer: "Print times depend on part size, layer height, infill density, and technology used. Small prototypes can often be printed within 12–24 hours. Medium sized parts typically require 1–3 days including post-processing. Larger components or production batches may take 3–10 days depending on the queue and finishing requirements."
-},
+    {
+      question: "How long does 3D printing take?",
+      answer: "Print times depend on part size, layer height, infill density, and technology used. Small prototypes can often be printed within 12–24 hours. Medium sized parts typically require 1–3 days including post-processing. Larger components or production batches may take 3–10 days depending on the queue and finishing requirements."
+    },
 
-{
-question: "What file formats do you accept?",
-answer: "We accept most standard CAD and mesh formats including STL, STEP (.step/.stp), IGES (.igs/.iges), OBJ, and 3MF. Native CAD formats such as SolidWorks (.sldprt) or Fusion 360 exports can also be used. For best results we recommend exporting files as STL or STEP with high resolution settings."
-},
+    {
+      question: "What file formats do you accept?",
+      answer: "We accept most standard CAD and mesh formats including STL, STEP (.step/.stp), IGES (.igs/.iges), OBJ, and 3MF. Native CAD formats such as SolidWorks (.sldprt) or Fusion 360 exports can also be used. For best results we recommend exporting files as STL or STEP with high resolution settings."
+    },
 
-{
-question: "How should I prepare my 3D model before sending it?",
-answer: "Your model should be watertight (no holes or non-manifold edges), correctly scaled, and exported at high mesh resolution. Wall thickness should generally be at least 1–1.5 mm for structural parts depending on the material used. Overhangs greater than 45 degrees may require supports, and thin features should be reinforced to prevent breakage."
-},
+    {
+      question: "How should I prepare my 3D model before sending it?",
+      answer: "Your model should be watertight (no holes or non-manifold edges), correctly scaled, and exported at high mesh resolution. Wall thickness should generally be at least 1–1.5 mm for structural parts depending on the material used. Overhangs greater than 45 degrees may require supports, and thin features should be reinforced to prevent breakage."
+    },
 
-{
-question: "Do you offer CAD design or design optimization services?",
-answer: "Yes. Our engineering team provides full CAD modeling, design optimization for additive manufacturing (DfAM), topology optimization, and manufacturability consulting. If you only have a sketch or concept, we can create a printable CAD model and optimize it for strength, weight reduction, and print efficiency."
-},
+    {
+      question: "Do you offer CAD design or design optimization services?",
+      answer: "Yes. Our engineering team provides full CAD modeling, design optimization for additive manufacturing (DfAM), topology optimization, and manufacturability consulting. If you only have a sketch or concept, we can create a printable CAD model and optimize it for strength, weight reduction, and print efficiency."
+    },
 
-{
-question: "What surface finish can I expect?",
-answer: "Surface finish depends on the printing technology and layer height. FDM parts typically have visible layer lines with layer heights ranging from 0.1–0.3 mm. SLA prints offer smoother surfaces with layer heights as fine as 25–50 microns. Additional finishing processes such as sanding, vapor smoothing, painting, or resin coating can significantly improve the final appearance."
-},
+    {
+      question: "What surface finish can I expect?",
+      answer: "Surface finish depends on the printing technology and layer height. FDM parts typically have visible layer lines with layer heights ranging from 0.1–0.3 mm. SLA prints offer smoother surfaces with layer heights as fine as 25–50 microns. Additional finishing processes such as sanding, vapor smoothing, painting, or resin coating can significantly improve the final appearance."
+    },
 
-{
-question: "Do you provide post-processing and finishing services?",
-answer: "Yes. We offer several finishing options including sanding, polishing, primer coating, painting, threaded inserts, mechanical assembly, and basic CNC finishing for precision features. These finishing steps improve both aesthetics and functional performance depending on the application."
-},
+    {
+      question: "Do you provide post-processing and finishing services?",
+      answer: "Yes. We offer several finishing options including sanding, polishing, primer coating, painting, threaded inserts, mechanical assembly, and basic CNC finishing for precision features. These finishing steps improve both aesthetics and functional performance depending on the application."
+    },
 
-{
-question: "Can you handle production runs or only prototypes?",
-answer: "We support both rapid prototyping and small to medium scale production. For batch manufacturing we can run multiple machines simultaneously and optimize part nesting on the build plate to maximize throughput. For higher volumes we can also recommend transitioning from additive manufacturing to injection molding when appropriate."
-},
+    {
+      question: "Can you handle production runs or only prototypes?",
+      answer: "We support both rapid prototyping and small to medium scale production. For batch manufacturing we can run multiple machines simultaneously and optimize part nesting on the build plate to maximize throughput. For higher volumes we can also recommend transitioning from additive manufacturing to injection molding when appropriate."
+    },
 
-{
-question: "How strong are 3D printed parts?",
-answer: "The strength of printed parts depends heavily on the material and printing orientation. Nylon and engineering resins can produce strong functional parts suitable for mechanical use. However, due to the layered manufacturing process, parts may have anisotropic strength (weaker along layer lines). Our team optimizes orientation and infill patterns to improve structural performance."
-},
+    {
+      question: "How strong are 3D printed parts?",
+      answer: "The strength of printed parts depends heavily on the material and printing orientation. Nylon and engineering resins can produce strong functional parts suitable for mechanical use. However, due to the layered manufacturing process, parts may have anisotropic strength (weaker along layer lines). Our team optimizes orientation and infill patterns to improve structural performance."
+    },
 
-{
-question: "What infill options are available?",
-answer: "For FDM prints we can adjust internal infill structures to balance strength and material usage. Common infill densities range from 10% for lightweight prototypes up to 80–100% for structural components. Patterns such as gyroid, grid, and cubic infill provide different mechanical characteristics."
-},
+    {
+      question: "What infill options are available?",
+      answer: "For FDM prints we can adjust internal infill structures to balance strength and material usage. Common infill densities range from 10% for lightweight prototypes up to 80–100% for structural components. Patterns such as gyroid, grid, and cubic infill provide different mechanical characteristics."
+    },
 
-{
-question: "Can you print functional mechanical parts?",
-answer: "Yes. Many of our customers use additive manufacturing for brackets, enclosures, fixtures, jigs, and functional prototypes. With proper material selection and print orientation, printed parts can withstand significant mechanical loads."
-},
+    {
+      question: "Can you print functional mechanical parts?",
+      answer: "Yes. Many of our customers use additive manufacturing for brackets, enclosures, fixtures, jigs, and functional prototypes. With proper material selection and print orientation, printed parts can withstand significant mechanical loads."
+    },
 
-{
-question: "Do you offer confidentiality or NDAs?",
-answer: "Yes. We understand that many projects involve proprietary designs. We are happy to sign non-disclosure agreements (NDAs) before reviewing files and ensure that all submitted models remain confidential."
-},
+    {
+      question: "Do you offer confidentiality or NDAs?",
+      answer: "Yes. We understand that many projects involve proprietary designs. We are happy to sign non-disclosure agreements (NDAs) before reviewing files and ensure that all submitted models remain confidential."
+    },
 
-{
-question: "How do I request a quote?",
-answer: "To request a quote simply upload your 3D model along with material preferences, quantity, and any finishing requirements. Our team will analyze the file, estimate print time, material usage, and provide a detailed quotation."
-},
+    {
+      question: "How do I request a quote?",
+      answer: "To request a quote simply upload your 3D model along with material preferences, quantity, and any finishing requirements. Our team will analyze the file, estimate print time, material usage, and provide a detailed quotation."
+    },
 
-{
-question: "What industries do you work with?",
-answer: "Our additive manufacturing services support a wide range of industries including product design, robotics, automotive prototyping, aerospace components, academic research, medical device development, and industrial tooling."
-},
+    {
+      question: "What industries do you work with?",
+      answer: "Our additive manufacturing services support a wide range of industries including product design, robotics, automotive prototyping, aerospace components, academic research, medical device development, and industrial tooling."
+    },
 
-{
-question: "Can you help choose the right printing technology?",
-answer: "Absolutely. If you're unsure which technology to use, our engineers will evaluate your design, required mechanical properties, surface finish, and production quantity to recommend the most suitable additive manufacturing process."
-}
+    {
+      question: "Can you help choose the right printing technology?",
+      answer: "Absolutely. If you're unsure which technology to use, our engineers will evaluate your design, required mechanical properties, surface finish, and production quantity to recommend the most suitable additive manufacturing process."
+    }
 
-];
+  ];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
@@ -186,272 +186,268 @@ answer: "Absolutely. If you're unsure which technology to use, our engineers wil
       {/* Hero Section */}
       <section className="relative min-h-[85vh] flex items-center pt-28 pb-24 overflow-hidden">
 
-  {/* BIG BACKGROUND WORD */}
-  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-    <span className="text-[18vw] font-['test'] text-white/5 tracking-wider">
-      CONTACT
-    </span>
-  </div>
-
-  <div className="container mx-auto px-8 relative z-20">
-
-    <div className="max-w-4xl mx-auto text-center">
-
-      {/* SMALL LABEL */}
-      <div className="flex items-center justify-center gap-3 mb-8">
-        <div className="h-[1px] w-12 bg-red-500"></div>
-
-        <span className="text-xs md:text-sm tracking-[0.25em] text-red-400 uppercase">
-          Contact Us
-        </span>
-
-        <div className="h-[1px] w-12 bg-red-500"></div>
-      </div>
-
-      {/* HEADLINE */}
-      <h1 className="text-5xl md:text-7xl font-['test'] leading-tight mb-6">
-        Let's Build Something
-        <br />
-        <span className="text-red-400">Extraordinary Together</span>
-      </h1>
-
-      {/* DESCRIPTION */}
-      <p className="text-gray-300 font-['scrib'] text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-12">
-        From concept to creation, our team is ready to help you bring your
-        ideas to life with precision additive manufacturing solutions.
-      </p>
-
-      {/* TRUST CAPSULES */}
-      <div className="flex flex-wrap justify-center gap-4">
-
-        <div className="px-5 py-2 rounded-full 
-        bg-white/[0.05] border border-white/15 backdrop-blur-md">
-          <span className="text-sm font-['scrib'] text-gray-200">
-            24–48 Hour Response
+        {/* BIG BACKGROUND WORD */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <span className="text-[18vw] font-['test'] text-white/5 tracking-wider">
+            CONTACT
           </span>
         </div>
 
-        <div className="px-5 py-2 rounded-full 
+        <div className="container mx-auto px-8 relative z-20">
+
+          <div className="max-w-4xl mx-auto text-center">
+
+            {/* SMALL LABEL */}
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <div className="h-[1px] w-12 bg-red-500"></div>
+
+              <span className="text-xs md:text-sm tracking-[0.25em] text-red-400 uppercase">
+                Contact Us
+              </span>
+
+              <div className="h-[1px] w-12 bg-red-500"></div>
+            </div>
+
+            {/* HEADLINE */}
+            <h1 className="text-5xl md:text-7xl font-['test'] leading-tight mb-6">
+              Let's Build Something
+              <br />
+              <span className="text-red-400">Extraordinary Together</span>
+            </h1>
+
+            {/* DESCRIPTION */}
+            <p className="text-gray-300 font-['scrib'] text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-12">
+              From concept to creation, our team is ready to help you bring your
+              ideas to life with precision additive manufacturing solutions.
+            </p>
+
+            {/* TRUST CAPSULES */}
+            <div className="flex flex-wrap justify-center gap-4">
+
+              <div className="px-5 py-2 rounded-full 
         bg-white/[0.05] border border-white/15 backdrop-blur-md">
-          <span className="text-sm font-['scrib'] text-gray-200">
-            Expert Consultation
-          </span>
+                <span className="text-sm font-['scrib'] text-gray-200">
+                  24–48 Hour Response
+                </span>
+              </div>
+
+              <div className="px-5 py-2 rounded-full 
+        bg-white/[0.05] border border-white/15 backdrop-blur-md">
+                <span className="text-sm font-['scrib'] text-gray-200">
+                  Expert Consultation
+                </span>
+              </div>
+
+
+
+            </div>
+
+          </div>
+
         </div>
-
-        
-
-      </div>
-
-    </div>
-
-  </div>
-</section>
+      </section>
 
       {/* Main Content Layout */}
       <div className="container mx-auto px-6 mb-20 grid grid-cols-1 lg:grid-cols-3 gap-12">
         {/* Contact Form Card */}
         <main
-  id="contact-form"
-  ref={formRef}
-  className="order-2 lg:order-1 lg:col-span-2 flex flex-col gap-24"
->
-  <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6 }}
-    className="max-w-3xl"
-  >
-    <h2 className="text-4xl md:text-6xl font-['test'] mb-16">
-      Send Us a Message
-    </h2>
-
-    {status === "success" ? (
-      <div className="border border-white/10 p-10">
-        <h3 className="text-2xl font-['dena'] mb-4">
-          Message Sent Successfully
-        </h3>
-
-        <p className="text-gray-400 font-['scrib'] mb-8">
-          Thank you for reaching out. Our team will get back to you within
-          24–48 hours.
-        </p>
-
-        <button
-          onClick={() => setStatus("idle")}
-          className="border border-white/20 px-8 py-3 rounded-full hover:bg-white hover:text-black transition"
+          id="contact-form"
+          ref={formRef}
+          className="order-2 lg:order-1 lg:col-span-2 flex flex-col gap-24"
         >
-          Send Another Message
-        </button>
-      </div>
-    ) : (
-      <form
-        className="space-y-12 font-['scrib']"
-        onSubmit={handleSubmit}
-        noValidate
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div>
-            <label className="block text-sm text-gray-400 mb-2">
-              Your Name *
-            </label>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-3xl"
+          >
+            <h2 className="text-4xl md:text-6xl font-['test'] mb-16">
+              Send Us a Message
+            </h2>
 
-            <input
-              type="text"
-              id="name"
-              className={`w-full bg-transparent border-b ${
-                errors.name ? "border-red-500" : "border-white/20"
-              } py-3 focus:outline-none focus:border-primary`}
-              placeholder="John Doe"
-              value={form.name}
-              onChange={handleChange}
-            />
+            {status === "success" ? (
+              <div className="border border-white/10 p-10">
+                <h3 className="text-2xl font-['dena'] mb-4">
+                  Message Sent Successfully
+                </h3>
 
-            {errors.name && (
-              <p className="text-red-500 text-xs mt-2">
-                {errors.name}
-              </p>
+                <p className="text-gray-400 font-['scrib'] mb-8">
+                  Thank you for reaching out. Our team will get back to you within
+                  24–48 hours.
+                </p>
+
+                <button
+                  onClick={() => setStatus("idle")}
+                  className="border border-white/20 px-8 py-3 rounded-full hover:bg-white hover:text-black transition"
+                >
+                  Send Another Message
+                </button>
+              </div>
+            ) : (
+              <form
+                className="space-y-12 font-['scrib']"
+                onSubmit={handleSubmit}
+                noValidate
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-2">
+                      Your Name *
+                    </label>
+
+                    <input
+                      type="text"
+                      id="name"
+                      className={`w-full bg-transparent border-b ${errors.name ? "border-red-500" : "border-white/20"
+                        } py-3 focus:outline-none focus:border-primary`}
+                      placeholder="John Doe"
+                      value={form.name}
+                      onChange={handleChange}
+                    />
+
+                    {errors.name && (
+                      <p className="text-red-500 text-xs mt-2">
+                        {errors.name}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-2">
+                      Your Email *
+                    </label>
+
+                    <input
+                      type="email"
+                      id="email"
+                      className={`w-full bg-transparent border-b ${errors.email ? "border-red-500" : "border-white/20"
+                        } py-3 focus:outline-none focus:border-primary`}
+                      placeholder="john@example.com"
+                      value={form.email}
+                      onChange={handleChange}
+                    />
+
+                    {errors.email && (
+                      <p className="text-red-500 text-xs mt-2">
+                        {errors.email}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-2">
+                      Company
+                    </label>
+
+                    <input
+                      type="text"
+                      id="company"
+                      className="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-primary"
+                      placeholder="Your Company"
+                      value={form.company}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-2">
+                      Phone
+                    </label>
+
+                    <input
+                      type="tel"
+                      id="phone"
+                      className="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-primary"
+                      placeholder="+91 98765 43210"
+                      value={form.phone}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">
+                    Subject *
+                  </label>
+
+                  <input
+                    type="text"
+                    id="subject"
+                    className={`w-full bg-transparent border-b ${errors.subject ? "border-red-500" : "border-white/20"
+                      } py-3 focus:outline-none focus:border-primary`}
+                    placeholder="How can we help you?"
+                    value={form.subject}
+                    onChange={handleChange}
+                  />
+
+                  {errors.subject && (
+                    <p className="text-red-500 text-xs mt-2">
+                      {errors.subject}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">
+                    Message *
+                  </label>
+
+                  <textarea
+                    id="message"
+                    rows="4"
+                    className={`w-full bg-transparent border-b ${errors.message ? "border-red-500" : "border-white/20"
+                      } py-3 resize-none focus:outline-none focus:border-primary`}
+                    placeholder="Tell us about your project..."
+                    value={form.message}
+                    onChange={handleChange}
+                  />
+
+                  {errors.message && (
+                    <p className="text-red-500 text-xs mt-2">
+                      {errors.message}
+                    </p>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="mt-8 border border-white/20 px-10 py-3 rounded-full hover:bg-white hover:text-black transition flex items-center gap-3"
+                >
+                  {status === "loading" ? (
+                    <>
+                      <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></span>
+                      Sending...
+                    </>
+                  ) : (
+                    "Send Message →"
+                  )}
+                </button>
+              </form>
             )}
-          </div>
+          </motion.div>
 
-          <div>
-            <label className="block text-sm text-gray-400 mb-2">
-              Your Email *
-            </label>
+          {/* Response Guarantee */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="max-w-xl border-t border-white/10 pt-10"
+          >
+            <h3 className="text-xl font-['dena'] mb-3">
+              Quick Response Guarantee
+            </h3>
 
-            <input
-              type="email"
-              id="email"
-              className={`w-full bg-transparent border-b ${
-                errors.email ? "border-red-500" : "border-white/20"
-              } py-3 focus:outline-none focus:border-primary`}
-              placeholder="john@example.com"
-              value={form.email}
-              onChange={handleChange}
-            />
-
-            {errors.email && (
-              <p className="text-red-500 text-xs mt-2">
-                {errors.email}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div>
-            <label className="block text-sm text-gray-400 mb-2">
-              Company
-            </label>
-
-            <input
-              type="text"
-              id="company"
-              className="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-primary"
-              placeholder="Your Company"
-              value={form.company}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm text-gray-400 mb-2">
-              Phone
-            </label>
-
-            <input
-              type="tel"
-              id="phone"
-              className="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-primary"
-              placeholder="+91 98765 43210"
-              value={form.phone}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm text-gray-400 mb-2">
-            Subject *
-          </label>
-
-          <input
-            type="text"
-            id="subject"
-            className={`w-full bg-transparent border-b ${
-              errors.subject ? "border-red-500" : "border-white/20"
-            } py-3 focus:outline-none focus:border-primary`}
-            placeholder="How can we help you?"
-            value={form.subject}
-            onChange={handleChange}
-          />
-
-          {errors.subject && (
-            <p className="text-red-500 text-xs mt-2">
-              {errors.subject}
+            <p className="text-gray-400 font-['scrib'] leading-relaxed">
+              We typically respond to all inquiries within 24–48 hours during
+              business days. For urgent matters please call us directly.
             </p>
-          )}
-        </div>
+          </motion.div>
 
-        <div>
-          <label className="block text-sm text-gray-400 mb-2">
-            Message *
-          </label>
-
-          <textarea
-            id="message"
-            rows="4"
-            className={`w-full bg-transparent border-b ${
-              errors.message ? "border-red-500" : "border-white/20"
-            } py-3 resize-none focus:outline-none focus:border-primary`}
-            placeholder="Tell us about your project..."
-            value={form.message}
-            onChange={handleChange}
-          />
-
-          {errors.message && (
-            <p className="text-red-500 text-xs mt-2">
-              {errors.message}
-            </p>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          disabled={status === "loading"}
-          className="mt-8 border border-white/20 px-10 py-3 rounded-full hover:bg-white hover:text-black transition flex items-center gap-3"
-        >
-          {status === "loading" ? (
-            <>
-              <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></span>
-              Sending...
-            </>
-          ) : (
-            "Send Message →"
-          )}
-        </button>
-      </form>
-    )}
-  </motion.div>
-
-  {/* Response Guarantee */}
-  <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6, delay: 0.2 }}
-    className="max-w-xl border-t border-white/10 pt-10"
-  >
-    <h3 className="text-xl font-['dena'] mb-3">
-      Quick Response Guarantee
-    </h3>
-
-    <p className="text-gray-400 font-['scrib'] leading-relaxed">
-      We typically respond to all inquiries within 24–48 hours during
-      business days. For urgent matters please call us directly.
-    </p>
-  </motion.div>
-
-  {/* Map Section */}
-  {/* <motion.div
+          {/* Map Section */}
+          {/* <motion.div
     initial={{ opacity: 0, y: 40 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6, delay: 0.3 }}
@@ -465,202 +461,202 @@ answer: "Absolutely. If you're unsure which technology to use, our engineers wil
     />
   </motion.div> */}
 
-  <motion.section
-  initial={{ opacity: 0, y: 40 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.6, delay: 0.3 }}
-  className="relative w-full h-[480px] overflow-hidden rounded-2xl border border-white/10"
->
+          <motion.section
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="relative w-full h-[480px] overflow-hidden rounded-2xl border border-white/10"
+          >
 
-  {/* MAP */}
-  <iframe
-    title="Galactic 3D Location"
-    src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d62198.617989690334!2d77.60654333821292!3d13.00931143128238!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e6!4m3!3m2!1d13.0242069!2d77.6025813!4m5!1s0x3bae11a915ab800d%3A0x7b9df0b7c02a0008!2sGalactic-3D%2C%20Cambridge%20Institute%20of%20Technology%2C%20Jai%20Bhuvaneshwari%20Layout%20Road%2C%20SR%20Layout%2C%20Chikkabasavanapura%2C%20Krishnarajapuram%2C%20Bengaluru%2C%20Karnataka!3m2!1d13.0135513!2d77.7036341!5e0!3m2!1sen!2sin!4v1750678240914!5m2!1sen!2sin"
-    className="absolute inset-0 w-full h-full border-0 grayscale contrast-125"
-    loading="lazy"
-  />
+            {/* MAP */}
+            <iframe
+              title="Galactic 3D Location"
+              src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d62198.617989690334!2d77.60654333821292!3d13.00931143128238!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e6!4m3!3m2!1d13.0242069!2d77.6025813!4m5!1s0x3bae11a915ab800d%3A0x7b9df0b7c02a0008!2sGalactic-3D%2C%20Cambridge%20Institute%20of%20Technology%2C%20Jai%20Bhuvaneshwari%20Layout%20Road%2C%20SR%20Layout%2C%20Chikkabasavanapura%2C%20Krishnarajapuram%2C%20Bengaluru%2C%20Karnataka!3m2!1d13.0135513!2d77.7036341!5e0!3m2!1sen!2sin!4v1750678240914!5m2!1sen!2sin"
+              className="absolute inset-0 w-full h-full border-0 grayscale contrast-125"
+              loading="lazy"
+            />
 
-  {/* FADE OVERLAY */}
-  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"/>
+            {/* FADE OVERLAY */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
-  {/* FLOATING LOCATION CARD */}
-  <div className="absolute bottom-8 left-8 max-w-sm rounded-xl border border-white/10 bg-white/[0.06] backdrop-blur-xl p-6">
+            {/* FLOATING LOCATION CARD */}
+            <div className="absolute bottom-8 left-8 max-w-sm rounded-xl border border-white/10 bg-white/[0.06] backdrop-blur-xl p-6">
 
-    <p className="text-xs tracking-[0.35em] uppercase text-gray-400 mb-2 font-['dena']">
-      Visit Us
-    </p>
+              <p className="text-xs tracking-[0.35em] uppercase text-gray-400 mb-2 font-['dena']">
+                Visit Us
+              </p>
 
-    <h3 className="text-xl font-['dena'] mb-2">
-      Galactic 3D
-    </h3>
+              <h3 className="text-xl font-['dena'] mb-2">
+                Galactic 3D
+              </h3>
 
-    <p className="text-sm text-gray-300 font-['scrib'] leading-relaxed mb-4">
-      Cambridge Institute of Technology  
-      Krishnarajapuram, Bengaluru
-    </p>
+              <p className="text-sm text-gray-300 font-['scrib'] leading-relaxed mb-4">
+                Cambridge Institute of Technology
+                Krishnarajapuram, Bengaluru
+              </p>
 
-    <a
-      href="https://www.google.com/maps/dir/?api=1&destination=Galactic-3D,+Bengaluru"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/20 bg-white/[0.08] hover:bg-white/[0.15] transition text-sm font-['dena']"
-    >
-      Get Directions →
-    </a>
+              <a
+                href="https://www.google.com/maps/dir/?api=1&destination=Galactic-3D,+Bengaluru"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/20 bg-white/[0.08] hover:bg-white/[0.15] transition text-sm font-['dena']"
+              >
+                Get Directions →
+              </a>
 
-  </div>
+            </div>
 
-</motion.section>
-</main>
+          </motion.section>
+        </main>
 
         {/* Contact Info Sidebar */}
-      <aside className="order-1 lg:order-2 lg:col-span-1 lg:sticky lg:top-32 lg:self-start">
+        <aside className="order-1 lg:order-2 lg:col-span-1 lg:sticky lg:top-32 lg:self-start">
 
-      <motion.div
-        initial={{ opacity: 0, x: 40 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative rounded-3xl border border-white/10 bg-white/[0.05] backdrop-blur-2xl p-10 flex flex-col gap-10 shadow-[0_20px_80px_rgba(0,0,0,0.4)]"
-      >
-
-        {/* heading */}
-        <div>
-          <h2 className="text-2xl font-['test'] tracking-wide">
-            Contact
-          </h2>
-
-          <p className="text-gray-400 text-sm font-['scrib'] mt-2">
-            Prefer reaching out directly? Here are other ways to connect.
-          </p>
-        </div>
-
-
-        {/* CONTACT ITEMS */}
-        <div className="flex flex-col divide-y divide-white/10">
-
-          {/* Location */}
-          <a
-            href="https://maps.google.com"
-            target="_blank"
-            className="group flex items-start gap-4 py-6"
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="relative rounded-3xl border border-white/10 bg-white/[0.05] backdrop-blur-2xl p-10 flex flex-col gap-10 shadow-[0_20px_80px_rgba(0,0,0,0.4)]"
           >
-            <MapPinIcon className="w-5 h-5 text-primary mt-1 group-hover:scale-110 transition" />
 
+            {/* heading */}
             <div>
-              <p className="text-xs uppercase tracking-[0.35em] text-gray-400 mb-1">
-                Location
-              </p>
+              <h2 className="text-2xl font-['test'] tracking-wide">
+                Contact
+              </h2>
 
-              <p className="text-sm text-gray-300 font-['scrib']">
-                Bengaluru, India
+              <p className="text-gray-400 text-sm font-['scrib'] mt-2">
+                Prefer reaching out directly? Here are other ways to connect.
               </p>
             </div>
-          </a>
 
 
-          {/* Phone */}
-          <a
-            href="tel:8939058575"
-            className="group flex items-start gap-4 py-6"
-          >
-            <PhoneIcon className="w-5 h-5 text-primary mt-1 group-hover:scale-110 transition" />
+            {/* CONTACT ITEMS */}
+            <div className="flex flex-col divide-y divide-white/10">
 
-            <div>
-              <p className="text-xs uppercase tracking-[0.35em] text-gray-400 mb-1">
-                Phone
-              </p>
+              {/* Location */}
+              <a
+                href="https://maps.google.com"
+                target="_blank"
+                className="group flex items-start gap-4 py-6"
+              >
+                <MapPinIcon className="w-5 h-5 text-primary mt-1 group-hover:scale-110 transition" />
 
-              <p className="text-lg font-['dena'] group-hover:text-primary transition">
-                +91 97403 31995
-              </p>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.35em] text-gray-400 mb-1">
+                    Location
+                  </p>
+
+                  <p className="text-sm text-gray-300 font-['scrib']">
+                    Bengaluru, India
+                  </p>
+                </div>
+              </a>
+
+
+              {/* Phone */}
+              <a
+                href="tel:8939058575"
+                className="group flex items-start gap-4 py-6"
+              >
+                <PhoneIcon className="w-5 h-5 text-primary mt-1 group-hover:scale-110 transition" />
+
+                <div>
+                  <p className="text-xs uppercase tracking-[0.35em] text-gray-400 mb-1">
+                    Phone
+                  </p>
+
+                  <p className="text-lg font-['dena'] group-hover:text-primary transition">
+                    +91 97403 31995
+                  </p>
+                </div>
+              </a>
+
+
+              {/* Email */}
+              <a
+                href="mailto:admin@galactic-3d.com"
+                className="group flex items-start gap-4 py-6"
+              >
+                <EnvelopeIcon className="w-5 h-5 text-primary mt-1 group-hover:scale-110 transition" />
+
+                <div>
+                  <p className="text-xs uppercase tracking-[0.35em] text-gray-400 mb-1">
+                    Email
+                  </p>
+
+                  <p className="text-sm font-['dena'] text-gray-300 group-hover:text-primary transition">
+                    admin@galactic-3d.com
+                  </p>
+                </div>
+              </a>
+
+
+              {/* Hours */}
+              <div className="flex items-start gap-4 py-6">
+                <ClockIcon className="w-5 h-5 text-primary mt-1" />
+
+                <div>
+                  <p className="text-xs uppercase tracking-[0.35em] text-gray-400 mb-1">
+                    Hours
+                  </p>
+
+                  <p className="text-sm text-gray-300 font-['scrib']">
+                    Mon – Fri · 9:00 — 18:00
+                  </p>
+                </div>
+              </div>
+
             </div>
-          </a>
 
 
-          {/* Email */}
-          <a
-            href="mailto:admin@galactic-3d.com"
-            className="group flex items-start gap-4 py-6"
-          >
-            <EnvelopeIcon className="w-5 h-5 text-primary mt-1 group-hover:scale-110 transition" />
+            {/* CTA */}
+            <a
+              href="tel:8939058575"
+              className="group flex items-center justify-between px-6 py-4 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] transition"
+            >
 
-            <div>
-              <p className="text-xs uppercase tracking-[0.35em] text-gray-400 mb-1">
-                Email
-              </p>
+              <span className="font-['dena'] tracking-wide">
+                Call Support
+              </span>
 
-              <p className="text-sm font-['dena'] text-gray-300 group-hover:text-primary transition">
-                admin@galactic-3d.com
-              </p>
-            </div>
-          </a>
+              <span className="group-hover:translate-x-1 transition">
+                →
+              </span>
+
+            </a>
 
 
-          {/* Hours */}
-          <div className="flex items-start gap-4 py-6">
-            <ClockIcon className="w-5 h-5 text-primary mt-1" />
+            {/* SOCIALS */}
+            <div className="flex gap-4 pt-2">
 
-            <div>
-              <p className="text-xs uppercase tracking-[0.35em] text-gray-400 mb-1">
-                Hours
-              </p>
-
-              <p className="text-sm text-gray-300 font-['scrib']">
-                Mon – Fri · 9:00 — 18:00
-              </p>
-            </div>
-          </div>
-
-        </div>
-
-
-        {/* CTA */}
-        <a
-          href="tel:8939058575"
-          className="group flex items-center justify-between px-6 py-4 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] transition"
-        >
-
-          <span className="font-['dena'] tracking-wide">
-            Call Support
-          </span>
-
-          <span className="group-hover:translate-x-1 transition">
-            →
-          </span>
-
-        </a>
-
-
-        {/* SOCIALS */}
-        <div className="flex gap-4 pt-2">
-
-          {/* <a
+              {/* <a
             href="#"
             className="w-11 h-11 flex items-center justify-center rounded-full border border-white/10 hover:bg-white/10 transition"
           >
             <FaXTwitter className="text-white text-sm" />
           </a> */}
 
-          <a
-            href="https://www.linkedin.com/company/galactic-3d/posts/?feedView=all"
-            target="_blank"
-            className="w-11 h-11 flex items-center justify-center rounded-full border border-white/10 hover:bg-white/10 transition"
-          >
-            <FaLinkedinIn className="text-white text-sm" />
-          </a>
+              <a
+                href="https://www.linkedin.com/company/galactic-3d/posts/?feedView=all"
+                target="_blank"
+                className="w-11 h-11 flex items-center justify-center rounded-full border border-white/10 hover:bg-white/10 transition"
+              >
+                <FaLinkedinIn className="text-white text-sm" />
+              </a>
 
-          <a
-            href="https://www.instagram.com/galactic.3d/"
-            target="_blank"
-            className="w-11 h-11 flex items-center justify-center rounded-full border border-white/10 hover:bg-white/10 transition"
-          >
-            <FaInstagram className="text-white text-sm" />
-          </a>
+              <a
+                href="https://www.instagram.com/galactic.3d/"
+                target="_blank"
+                className="w-11 h-11 flex items-center justify-center rounded-full border border-white/10 hover:bg-white/10 transition"
+              >
+                <FaInstagram className="text-white text-sm" />
+              </a>
 
-        </div>
+            </div>
 
-      </motion.div>
-    </aside>
+          </motion.div>
+        </aside>
       </div>
 
       {/* FAQ Section with Accordion */}
@@ -901,94 +897,94 @@ answer: "Absolutely. If you're unsure which technology to use, our engineers wil
 
       <div className="container mx-auto px-6 mb-28">
 
-{/* HEADER */}
-<motion.div
-initial={{ opacity: 0, y: 40 }}
-animate={{ opacity: 1, y: 0 }}
-transition={{ duration: 0.6 }}
-className="text-center mb-20"
->
+        {/* HEADER */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-20"
+        >
 
-<h2 className="text-4xl md:text-6xl font-['dena'] tracking-tight mb-6">
-Frequently Asked Questions
-</h2>
+          <h2 className="text-4xl md:text-6xl font-['dena'] tracking-tight mb-6">
+            Frequently Asked Questions
+          </h2>
 
-<p className="text-lg text-gray-400 font-['scrib'] max-w-2xl mx-auto">
-Everything you need to know about our additive manufacturing process.
-</p>
+          <p className="text-lg text-gray-400 font-['scrib'] max-w-2xl mx-auto">
+            Everything you need to know about our additive manufacturing process.
+          </p>
 
-</motion.div>
-
-
-{/* FAQ CONTAINER */}
-<motion.div
-initial={{ opacity: 0, y: 40 }}
-animate={{ opacity: 1, y: 0 }}
-transition={{ duration: 0.6, delay: 0.2 }}
-className="max-w-4xl mx-auto rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-xl overflow-hidden"
->
+        </motion.div>
 
 
-{/* FAQ ITEM */}
-{faqData.map((faq, index) => (
+        {/* FAQ CONTAINER */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="max-w-4xl mx-auto rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-xl overflow-hidden"
+        >
 
-<div key={index} className="border-b border-white/10 last:border-none">
 
-<button
-onClick={() => toggleAccordion(index)}
-className="w-full flex items-center justify-between px-8 py-7 text-left group"
->
+          {/* FAQ ITEM */}
+          {faqData.map((faq, index) => (
 
-<h3 className="text-xl md:text-2xl font-['dena'] tracking-tight group-hover:text-primary transition">
-{faq.question}
-</h3>
+            <div key={index} className="border-b border-white/10 last:border-none">
 
-<span
-className={`ml-6 flex items-center justify-center w-10 h-10 rounded-full border border-white/10 transition
+              <button
+                onClick={() => toggleAccordion(index)}
+                className="w-full flex items-center justify-between px-8 py-7 text-left group"
+              >
+
+                <h3 className="text-xl md:text-2xl font-['dena'] tracking-tight group-hover:text-primary transition">
+                  {faq.question}
+                </h3>
+
+                <span
+                  className={`ml-6 flex items-center justify-center w-10 h-10 rounded-full border border-white/10 transition
 ${activeAccordion === index ? "rotate-180 bg-white/10" : "group-hover:bg-white/5"}`}
->
+                >
 
-<svg
-className="w-5 h-5"
-fill="none"
-stroke="currentColor"
-viewBox="0 0 24 24"
->
-<path
-strokeLinecap="round"
-strokeLinejoin="round"
-strokeWidth="2"
-d="M19 9l-7 7-7-7"
-/>
-</svg>
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
 
-</span>
+                </span>
 
-</button>
+              </button>
 
 
-<div
-className={`grid transition-all duration-500 ease-in-out
+              <div
+                className={`grid transition-all duration-500 ease-in-out
 ${activeAccordion === index ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
->
+              >
 
-<div className="overflow-hidden">
+                <div className="overflow-hidden">
 
-<div className="px-8 pb-8 text-gray-400 font-['scrib'] leading-relaxed max-w-3xl">
-{faq.answer}
-</div>
+                  <div className="px-8 pb-8 text-gray-400 font-['scrib'] leading-relaxed max-w-3xl">
+                    {faq.answer}
+                  </div>
 
-</div>
+                </div>
 
-</div>
+              </div>
 
-</div>
+            </div>
 
-))}
+          ))}
 
-</motion.div>
+        </motion.div>
 
-</div>
+      </div>
 
       {/* CTA Section */}
       {/* <motion.div
@@ -1024,30 +1020,30 @@ ${activeAccordion === index ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
       </motion.div> */}
 
       <motion.section
-  initial={{ opacity: 0, y: 30 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.6 }}
-  className="py-16"
->
-  <div className="container mx-auto px-6">
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="py-16"
+      >
+        <div className="container mx-auto px-6">
 
-    <div className="max-w-4xl mx-auto rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl px-10 py-10 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="max-w-4xl mx-auto rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl px-10 py-10 flex flex-col md:flex-row items-center justify-between gap-8">
 
-      {/* TEXT */}
-      <div className="text-center md:text-left">
-        <h2 className="text-3xl md:text-4xl font-['test'] leading-tight mb-2">
-          Ready to start your project?
-        </h2>
+            {/* TEXT */}
+            <div className="text-center md:text-left">
+              <h2 className="text-3xl md:text-4xl font-['test'] leading-tight mb-2">
+                Ready to start your project?
+              </h2>
 
-        <p className="text-gray-400 font-['scrib'] text-sm md:text-base">
-          Let’s discuss your requirements and build something exceptional.
-        </p>
-      </div>
+              <p className="text-gray-400 font-['scrib'] text-sm md:text-base">
+                Let’s discuss your requirements and build something exceptional.
+              </p>
+            </div>
 
-      {/* ACTIONS */}
-      <div className="flex gap-4">
+            {/* ACTIONS */}
+            <div className="flex gap-4">
 
-        {/* <Link
+              {/* <Link
           href="/services"
           className="group px-6 py-3 rounded-full border border-white/20 bg-white/[0.05] hover:bg-white/[0.1] transition-all duration-300"
         >
@@ -1057,22 +1053,22 @@ ${activeAccordion === index ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
           </span>
         </Link> */}
 
-        <a
-          href="#contact-form"
-          className="group px-6 py-3 rounded-full bg-primary hover:bg-secondary text-white transition-all duration-300"
-        >
-          <span className="font-['dena'] text-sm flex items-center gap-2">
-            Contact
-            <span className="group-hover:translate-x-1 transition">→</span>
-          </span>
-        </a>
+              <a
+                href="#contact-form"
+                className="group px-6 py-3 rounded-full bg-primary hover:bg-secondary text-white transition-all duration-300"
+              >
+                <span className="font-['dena'] text-sm flex items-center gap-2">
+                  Contact
+                  <span className="group-hover:translate-x-1 transition">→</span>
+                </span>
+              </a>
 
-      </div>
+            </div>
 
-    </div>
+          </div>
 
-  </div>
-</motion.section>
+        </div>
+      </motion.section>
 
       {/* Animations */}
       <style jsx global>{`
