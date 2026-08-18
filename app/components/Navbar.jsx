@@ -7,7 +7,6 @@ import { ArrowRight } from "lucide-react";
 const LINKS = [
   { name: "Home", path: "/" },
   { name: "Industries", path: "/industries" },
-  { name: "Services", path: "/services" },
   { name: "Training", path: "/training" },
   { name: "Careers", path: "/careers" },
   { name: "Team", path: "/team" },

@@ -49,7 +49,7 @@ export default function Hero() {
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in-up">
             <AnimatedButton
-              href="/services"
+              href="/#services"
               css="bg-primary hover:bg-secondary text-white font-bold py-4 px-10 rounded-lg text-lg shadow-lg transition duration-100 group relative overflow-hidden hover:cursor-pointer"
               content="Explore Services"
             />

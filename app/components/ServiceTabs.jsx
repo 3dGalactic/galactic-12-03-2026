@@ -10,9 +10,8 @@ const SERVICES = [
     id: "srv-01",
     title: "RAPID PROTOTYPING",
     lines: [
-      "Accelerated functional prototyping and rapid design iteration for complex engineered components.",
-      "High-precision DMLS metal and FDM thermoplastic prototypes delivered in as fast as 24 to 48 hours.",
-      "Confidential DfAM design evaluation to mitigate development risks before full tooling investments."
+      "Accelerated functional prototyping and design iteration for complex engineered components.",
+      "High-precision DMLS metal and FDM thermoplastic prototypes delivered in 24 to 48 hours."
     ],
     features: [
       "Fast 24-48 hour turnaround",
@@ -26,8 +25,7 @@ const SERVICES = [
     title: "FULL-SCALE PRODUCTION",
     lines: [
       "High-volume metal additive manufacturing certified for aerospace, defense, and automotive standards.",
-      "Complete quality control with heat treatment, stress relief, and 100% CMM inspection reporting.",
-      "Scalable batch production workflows engineered for zero-defect end-use industrial applications."
+      "Complete quality control with parameter tracking, heat treatment, and 100% CMM inspection reporting."
     ],
     features: [
       "Certified alloy powder supply chain",
@@ -40,9 +38,8 @@ const SERVICES = [
     id: "srv-03",
     title: "CUSTOM MANUFACTURING",
     lines: [
-      "Tailored manufacturing solutions optimized for highly complex geometries and custom assemblies.",
-      "Multi-material engineering capabilities featuring titanium, inconel, aluminum, and superalloys.",
-      "End-to-end post-processing, precision CNC machining, and specialized surface finishing options."
+      "Tailored additive manufacturing solutions optimized for complex geometries and specialized assemblies.",
+      "Multi-material engineering in titanium, inconel, and aluminum with precision CNC post-processing."
     ],
     features: [
       "Complex geometry support",
@@ -55,9 +52,8 @@ const SERVICES = [
     id: "srv-04",
     title: "MANUFACTURING PATTERN",
     lines: [
-      "We will help you to design solution to validate and to build.",
-      "Research driven, collaborative, expert experience, and application development.",
-      "Scaling for tomorrow, India first approach, wide range of materials, DMLS/LPBF, and contract manufacturing."
+      "We help you design, validate, and build research-driven solutions with expert application development.",
+      "Scaling for tomorrow with an India-first approach across a wide range of materials and DMLS/LPBF contract manufacturing."
     ],
     features: [
       "Research Driven & Collaborative",
@@ -74,7 +70,7 @@ export default function ServiceTabs() {
   const activeService = SERVICES.find((s) => s.id === activeTabId) || SERVICES[3];
 
   return (
-    <section className="py-20 lg:py-28 bg-white text-[#111111] font-sans relative overflow-hidden border-t border-b border-[#EAEAEA]">
+    <section id="services" className="py-20 lg:py-28 bg-white text-[#111111] font-sans relative overflow-hidden border-t border-b border-[#EAEAEA]">
       
       {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY MATCHING THE WEBSITE */}
       <div 
@@ -152,7 +148,7 @@ export default function ServiceTabs() {
                     {activeService.title}
                   </h3>
 
-                  {/* EXACT 3-LINE DESCRIPTION ABOUT THE SELECTED SERVICE */}
+                  {/* EXACT 2-LINE DESCRIPTION ABOUT THE SELECTED SERVICE */}
                   <div className="space-y-2 mb-6 border-l-2 border-[#E53935] pl-4 py-1">
                     {activeService.lines.map((line, idx) => (
                       <p key={idx} className="text-xs sm:text-sm text-gray-600 font-medium leading-relaxed">

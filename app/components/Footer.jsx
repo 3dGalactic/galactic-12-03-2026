@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Phone, Mail, MapPin, ShieldCheck, ArrowUpRight } from "lucide-react";
+import { Phone, Mail, MapPin, ShieldCheck } from "lucide-react";
 
 export default function CorporateFooter() {
   return (
@@ -15,11 +15,11 @@ export default function CorporateFooter() {
               <img
                 src="/navbar/logo.svg"
                 alt="Galactic 3D"
-                className="h-8 w-auto filter brightness-0 invert"
+                className="h-9 w-auto"
               />
             </Link>
             <p className="text-zinc-400 text-xs leading-relaxed">
-              Galactic 3D is a premier industrial additive manufacturing & engineering organization specializing in DMLS metals, high-temp polymers, and DfAM solutions.
+              Galactic 3D is a premier industrial additive manufacturing &amp; engineering organization specializing in DMLS metals, high-temp polymers, and DfAM solutions.
             </p>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-zinc-900 border border-zinc-800 text-[#D32F2F] text-xs font-bold uppercase tracking-wider">
               <ShieldCheck size={14} /> Industrial Metal &amp; Polymer Additive Solutions
@@ -29,32 +29,32 @@ export default function CorporateFooter() {
           {/* COL 2: MANUFACTURING SERVICES */}
           <div>
             <h4 className="text-white text-xs font-bold uppercase tracking-wider mb-4 border-l-2 border-[#D32F2F] pl-3">
-              Capabilities & Services
+              Capabilities &amp; Services
             </h4>
             <ul className="space-y-2.5 text-xs text-zinc-400">
               <li>
-                <Link href="/services" className="hover:text-white transition">
+                <Link href="/#services" className="hover:text-white transition">
                   Direct Metal Laser Sintering (DMLS)
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="hover:text-white transition">
+                <Link href="/#services" className="hover:text-white transition">
                   Fused Deposition Modeling (FDM)
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="hover:text-white transition">
+                <Link href="/#services" className="hover:text-white transition">
                   Selective Laser Sintering (SLS)
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="hover:text-white transition">
+                <Link href="/#services" className="hover:text-white transition">
                   Design for Additive Manufacturing (DfAM)
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="hover:text-white transition">
-                  Precision Post-Processing & CNC
+                <Link href="/#services" className="hover:text-white transition">
+                  Precision Post-Processing &amp; CNC
                 </Link>
               </li>
             </ul>
@@ -107,7 +107,7 @@ export default function CorporateFooter() {
           {/* COL 4: INDUSTRIAL FACILITY & CONTACT */}
           <div>
             <h4 className="text-white text-xs font-bold uppercase tracking-wider mb-4 border-l-2 border-[#D32F2F] pl-3">
-              Facility & Contact
+              Facility &amp; Contact
             </h4>
             <div className="space-y-3 text-xs text-zinc-400">
               <div className="flex items-start gap-2.5">

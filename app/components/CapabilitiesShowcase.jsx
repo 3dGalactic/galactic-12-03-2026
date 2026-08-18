@@ -19,7 +19,7 @@ const CAPABILITIES = [
     tag: "DfAM & TOPOLOGY OPTIMIZATION",
     description: "DfAM consulting, topology optimization, reverse engineering, and product development support.",
     image: "/consult.png",
-    link: "/services",
+    link: "/#services",
   },
   {
     num: "03",

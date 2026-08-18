@@ -28,7 +28,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-[80vh] lg:min-h-[90vh] flex items-center overflow-hidden bg-[#0B0B0C] border-b border-[#EAEAEA] font-sans">
+    <section className="relative min-h-[85vh] lg:min-h-[92vh] flex items-center overflow-hidden bg-[#0B0B0C] border-b border-[#EAEAEA] font-sans">
       
       {/* DUAL-VIDEO HERO BACKGROUND SLIDER WITH SMOOTH FADE TRANSITION */}
       {HERO_VIDEOS.map((video, idx) => (
@@ -50,7 +50,7 @@ export default function HeroSection() {
 
       {/* GRADIENT OVERLAY FOR CRISP READABILITY & CINEMATIC CONTRAST */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30 z-[1]" />
-      <div className="absolute inset-0 bg-black/20 z-[1]" />
+      <div className="absolute inset-0 bg-black/25 z-[1]" />
 
       {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY */}
       <div 
@@ -61,16 +61,15 @@ export default function HeroSection() {
         }}
       />
 
-      {/* HERO CONTENT: COMPACT 2-LINE HEADLINE */}
+      {/* HERO CONTENT: EXACT INTER FONT, REGULAR WEIGHT, TIGHT LEADING */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 py-20 lg:py-28 w-full">
-        
         <div>
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] drop-shadow-2xl uppercase max-w-4xl">
-            <span className="block text-white">Transform Your Ideas</span>
-            <span className="block text-[#E53935]">Into Reality</span>
+          <h1 className="font-['Inter',-apple-system,BlinkMacSystemFont,sans-serif] text-6xl sm:text-8xl lg:text-[105px] font-normal tracking-[-0.035em] text-white leading-[0.88] drop-shadow-2xl max-w-6xl">
+            <span className="block">Concept</span>
+            <span className="block">Engineered Into</span>
+            <span className="block text-[#E53935]">Production</span>
           </h1>
         </div>
-
       </div>
 
     </section>

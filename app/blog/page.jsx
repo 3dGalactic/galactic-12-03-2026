@@ -424,7 +424,7 @@ export default function Blog() {
                 </svg>
               </span>
             </Link>
-            <Link href="/services" className="bg-transparent hover:bg-white/10 border-2 border-white text-white font-bold py-3 px-8 rounded-md transition-all duration-300 text-lg inline-block group relative overflow-hidden">
+            <Link href="/#services" className="bg-transparent hover:bg-white/10 border-2 border-white text-white font-bold py-3 px-8 rounded-md transition-all duration-300 text-lg inline-block group relative overflow-hidden">
               <span className="absolute inset-0 w-0 bg-white/10 transition-all duration-300 ease-out group-hover:w-full"></span>
               <span className="relative flex items-center justify-center">
                 Explore Our Services
