@@ -1,0 +1,124 @@
+.container {
+  padding: 90px 80px;
+  background: #2f1212;
+
+}
+
+.title {
+  text-align: center;
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #fff;
+}
+
+/* CAROUSEL WRAPPER */
+.carouselWrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+}
+
+.carousel {
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE & Edge */
+  flex: 1;
+  padding: 20px 0;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* NAVIGATION ARROWS */
+.arrowBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.arrowBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.1);
+}
+
+/* CARD LINK */
+.cardLink {
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* CARD */
+.card {
+  position: relative;
+  height: 420px;
+  width: 320px;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+/* IMAGE */
+.image {
+  object-fit: cover;
+}
+
+/* DARK GRADIENT OVERLAY */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.75),
+    rgba(0,0,0,0.2),
+    transparent
+  );
+}
+
+/* TEXT AREA */
+.info {
+  position: absolute;
+  bottom: 25px;
+  left: 25px;
+  color: white;
+}
+
+.role {
+  font-size: 14px;
+  opacity: 0.85;
+  margin: 0;
+}
+
+.name {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 8px 0 0 0;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 600;
+  margin: 60px 0 30px 0;
+  color: #fff;
+}

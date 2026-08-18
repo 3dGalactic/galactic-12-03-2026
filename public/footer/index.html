@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>footer</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <main class="content">
+        <div class="content__inner copy">
+            <h1>Scroll down</h1>
+            <p>
+                Lorem ipsum dolor, sit amet consectetur 
+                adipisicing elit. Quidem animi vel ullam tenetur
+                est itaque possimus ratione, mollitia ipsum 
+                delectus rerum nisi?
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing
+                 elit. Nihil doloribus sit unde ipsum architecto quam, 
+                 necessitatibus, error repellendus hic, quas officia 
+                 libero incidunt nesciunt? A sit consequatur quasi aut rerum 
+                 nisi rem. Perspiciatis ullam facilis tenetur eligendi accusantium 
+                 fugiat officia alias quas in deleniti explicabo ad asperiores sed, 
+                 fugit architecto?
+            </p>
+            <p>
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et, molestias!
+            </p>
+            <h1>Scroll down goddamit</h1>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing
+                 elit. Nihil doloribus sit unde ipsum architecto quam, 
+                 necessitatibus, error repellendus hic, quas officia 
+                 libero incidunt nesciunt? A sit consequatur quasi aut rerum 
+                 nisi rem. Perspiciatis ullam facilis tenetur eligendi accusantium 
+                 fugiat officia alias quas in deleniti explicabo ad asperiores sed, 
+                 fugit architecto?
+            </p>
+        </div>
+    </main>
+    <footer class="fixed_footer">
+        <div class="content">
+            <div class="content__inner">
+                <div class="nav">
+                    <div class="col">
+                        <li>Menu</li>
+                        <li>Home </li>
+                        <li>Projects</li>
+                        <li>about</li>
+                        <li>Contact</li>
+                    </div>
+                    <div class="col">
+                        <li>Menu</li>
+                        <li>Home </li>
+                        <li>Projects</li>
+                        <li>about</li>
+                        <li>Contact</li>
+                    </div>
+                </div>
+                <div class="copyright">
+                    <span>2025. All rights reserved.</span>
+                    <span>&copy;Galactic 3D</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+         gsap.from(".fixed_footer",{
+            y: -500,
+            scrollTrigger: {
+                trigger: ".content",
+                start: "bottom bottom",
+                scrub: true,
+            }
+         })
+    </script>
+</body>
+</html>
