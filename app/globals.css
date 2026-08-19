@@ -167,3 +167,21 @@ p {
 [class*="font-['new']"] {
   font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif !important;
 }
+
+/* Mobile Alignment & Responsiveness Utilities */
+@media (max-width: 640px) {
+  html, body {
+    font-size: 14px;
+    overflow-x: hidden !important;
+  }
+  
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  button, a {
+    min-height: 40px;
+  }
+}
+
