@@ -6,7 +6,6 @@ import {
   Layers,
   ShieldCheck,
   Compass,
-  TrendingUp,
   Check,
 } from "lucide-react";
 
@@ -59,13 +58,6 @@ const WHY_ITEMS = [
     subtitle: "Industrial DMLS and LPBF for demanding alloys, critical geometries, and rapid application development.",
     icon: Layers,
     pillarTag: "DMLS / LPBF"
-  },
-  {
-    num: "05",
-    title: "Scaling for Tomorrow",
-    subtitle: "Future-ready contract manufacturing workflows engineered for agile scaling and long-term production confidence.",
-    icon: TrendingUp,
-    pillarTag: "Scaling for Tomorrow"
   }
 ];
 
@@ -157,21 +149,6 @@ export default function WhyGalactic() {
                 <p className="text-xs text-gray-600 leading-relaxed font-medium">
                   {currentTabInfo.desc}
                 </p>
-              </div>
-            </div>
-
-            {/* BOTTOM LEFT BADGE (05 CAPABILITY PILLARS) */}
-            <div className="pt-8 mt-8 border-t border-gray-100 flex items-center gap-4">
-              <span className="text-4xl sm:text-5xl font-black text-[#D32F2F] tracking-tight">
-                05
-              </span>
-              <div>
-                <span className="text-xs font-mono font-extrabold uppercase tracking-widest text-[#111111] block">
-                  CAPABILITY PILLARS
-                </span>
-                <span className="text-[11px] text-gray-500 font-medium block">
-                  Research Driven &amp; Collaborative
-                </span>
               </div>
             </div>
 
