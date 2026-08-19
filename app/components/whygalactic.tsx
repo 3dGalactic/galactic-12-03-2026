@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   Globe,
   Layers,
@@ -58,7 +59,8 @@ const WHY_ITEMS = [
     title: "Metal AM (DMLS / LPBF)",
     subtitle: "Industrial DMLS and LPBF for demanding alloys, critical geometries, and rapid application development.",
     icon: Layers,
-    pillarTag: "DMLS / LPBF"
+    pillarTag: "DMLS / LPBF",
+    link: "/materials"
   },
   {
     num: "05",
@@ -183,16 +185,8 @@ export default function WhyGalactic() {
               const Icon = item.icon;
               const isSelected = activeItem === item.num;
 
-              return (
-                <div
-                  key={item.num}
-                  onClick={() => setActiveItem(item.num)}
-                  className={`p-5 rounded-2xl border-2 transition-all duration-300 flex items-center justify-between cursor-pointer group ${
-                    isSelected
-                      ? "bg-white border-[#D32F2F] shadow-md ring-1 ring-[#D32F2F]/20"
-                      : "bg-white border-[#EAEAEA] hover:border-gray-300"
-                  }`}
-                >
+              const cardContent = (
+                <>
                   <div className="flex items-center gap-5">
                     {/* NUMBER BADGE */}
                     <span className={`text-2xl sm:text-3xl font-black transition-colors ${
@@ -207,6 +201,11 @@ export default function WhyGalactic() {
                         isSelected ? "text-[#111111]" : "text-gray-800 group-hover:text-[#111111]"
                       }`}>
                         {item.title}
+                        {item.link && (
+                          <span className="ml-2 text-xs font-semibold text-[#D32F2F] align-middle">
+                            View →
+                          </span>
+                        )}
                       </h3>
                       <p className="text-xs text-gray-600 font-medium leading-relaxed max-w-lg">
                         {item.subtitle}
@@ -222,7 +221,35 @@ export default function WhyGalactic() {
                   }`}>
                     {isSelected ? <Check size={18} /> : <Icon size={18} />}
                   </div>
+                </>
+              );
 
+              const cardClasses = `p-5 rounded-2xl border-2 transition-all duration-300 flex items-center justify-between cursor-pointer group ${
+                isSelected
+                  ? "bg-white border-[#D32F2F] shadow-md ring-1 ring-[#D32F2F]/20"
+                  : "bg-white border-[#EAEAEA] hover:border-gray-300"
+              }`;
+
+              if (item.link) {
+                return (
+                  <Link
+                    key={item.num}
+                    href={item.link}
+                    onMouseEnter={() => setActiveItem(item.num)}
+                    className={cardClasses}
+                  >
+                    {cardContent}
+                  </Link>
+                );
+              }
+
+              return (
+                <div
+                  key={item.num}
+                  onClick={() => setActiveItem(item.num)}
+                  className={cardClasses}
+                >
+                  {cardContent}
                 </div>
               );
             })}

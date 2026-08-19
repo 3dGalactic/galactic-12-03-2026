@@ -11,6 +11,7 @@ import TrustCertifications from "./components/TrustCertifications";
 import IndustriesSection from "./components/IndustriesSection";
 import EmailTeamModal from "./components/EmailTeamModal";
 import WhyGalactic from "./components/whygalactic";
+import MetalProcessCard from "./components/MetalProcessCard";
 
 export default function Home() {
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
@@ -32,6 +33,9 @@ export default function Home() {
 
       {/* 5. TRAINING & INDUSTRY PROGRAMS NAVIGATION SHOWCASE (GATEWAY OVERVIEW) */}
       <TrainingProgramsNav />
+
+      {/* 5.5 METAL MATERIAL FAMILY CARD */}
+      <MetalProcessCard />
 
       {/* 6. WHY CHOOSE GALACTIC? CAPABILITY PILLARS SECTION (PLACED RIGHT ABOVE GALACTIC TEAM) */}
       <WhyGalactic />

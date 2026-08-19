@@ -57,7 +57,7 @@ export default function MaterialsPage() {
         {/* FAMILY SECTIONS */}
         <div className="space-y-10">
           {filteredFamilies.map((fam) => (
-            <div key={fam.family}>
+            <div key={fam.family} id={fam.family.toLowerCase().replace(/\s+/g, "-")} className="scroll-mt-24">
               <div className="flex items-center gap-2 mb-4">
                 <ShieldCheck className="w-4 h-4 text-[#D32F2F]" />
                 <h2 className="text-lg font-bold text-[#111111] uppercase tracking-wide">
