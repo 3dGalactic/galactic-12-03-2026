@@ -16,7 +16,7 @@ export default function Home() {
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-white text-[#222222] font-sans selection:bg-[#D32F2F] selection:text-white">
+    <div className="min-h-screen bg-transparent text-[#222222] font-sans selection:bg-[#D32F2F] selection:text-white">
       
       {/* 1. DUAL-VIDEO HERO SECTION */}
       <HeroSection />
