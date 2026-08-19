@@ -235,7 +235,7 @@ export default function TrainingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-[#222222] font-sans">
+    <div className="min-h-screen bg-transparent text-[#222222] font-sans">
       
       {/* 1. HERO SECTION - HOME THEME (EDS TECHNOLOGIES STYLE) */}
       <section className="bg-gradient-to-b from-[#F8F9FA] to-white py-16 lg:py-24 border-b border-[#EAEAEA]">

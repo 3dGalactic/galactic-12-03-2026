@@ -19,8 +19,17 @@ export default function TrainingProgramsNav() {
         <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
           
           {/* LEFT SIDE (4 COLUMNS): LARGE FEATURE CARD */}
-          <div className="lg:col-span-4 bg-white rounded-2xl border border-[#EAEAEA] p-7 sm:p-8 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+          <div className="lg:col-span-4 bg-white rounded-2xl border border-[#EAEAEA] p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
             <div className="space-y-4">
+              {/* FEATURED TRAINING PHOTO */}
+              <div className="h-44 w-full rounded-xl overflow-hidden border border-[#EAEAEA] shadow-xs">
+                <img
+                  src="/Training/mentorship.jpg"
+                  alt="Galactic 3D Additive Training Program"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+
               <h3 className="text-2xl sm:text-3xl font-extrabold text-[#111111] tracking-tight">
                 Training Programs
               </h3>

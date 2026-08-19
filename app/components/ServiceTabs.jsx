@@ -50,7 +50,7 @@ const SERVICES = [
   },
   {
     id: "srv-04",
-    title: "MANUFACTURING PATTERN",
+    title: "MANUFACTURING PARTNER",
     lines: [
       "We help you design, validate, and build research-driven solutions with expert application development.",
       "Scaling for tomorrow with an India-first approach across a wide range of materials and DMLS/LPBF contract manufacturing."

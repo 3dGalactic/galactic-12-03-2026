@@ -6,7 +6,7 @@ import IndustriesSection, { INDUSTRIES_DATA } from "../components/IndustriesSect
 
 export default function IndustriesPage() {
   return (
-    <div className="min-h-screen bg-white text-[#222222] font-sans">
+    <div className="min-h-screen bg-transparent text-[#222222] font-sans">
       
       {/* PAGE HERO HEADER */}
       <section className="bg-gradient-to-b from-[#F8F9FA] to-white py-16 lg:py-24 border-b border-[#EAEAEA]">
