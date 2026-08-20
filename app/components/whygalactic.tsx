@@ -7,7 +7,6 @@ import {
   Layers,
   ShieldCheck,
   Compass,
-  TrendingUp,
   Check,
 } from "lucide-react";
 
@@ -61,13 +60,6 @@ const WHY_ITEMS = [
     icon: Layers,
     pillarTag: "DMLS / LPBF",
     link: "/materials"
-  },
-  {
-    num: "05",
-    title: "Scaling for Tomorrow",
-    subtitle: "Future-ready contract manufacturing workflows engineered for agile scaling and long-term production confidence.",
-    icon: TrendingUp,
-    pillarTag: "Scaling for Tomorrow"
   }
 ];
 
