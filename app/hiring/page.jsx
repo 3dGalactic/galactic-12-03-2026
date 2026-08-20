@@ -1,8 +1,100 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import CTA from "../components/CTA";
 import styles from "./hiring.module.css";
 
 const HiringPage = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    linkedin: "",
+    portfolio: "",
+    github: "",
+    why: "",
+  });
+  const [resumeFile, setResumeFile] = useState(null);
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const validTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+      if (!validTypes.includes(file.type)) {
+        setErrorMessage("Please upload a PDF or DOC/DOCX file");
+        return;
+      }
+      setResumeFile(file);
+      setErrorMessage("");
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("loading");
+    setErrorMessage("");
+
+    // Validate required fields
+    if (!formData.name || !formData.email || !formData.linkedin || !formData.why) {
+      setErrorMessage("Please fill in all required fields (Name, Email, LinkedIn, and Why)");
+      setStatus("idle");
+      return;
+    }
+
+    try {
+      const form = new FormData();
+      form.append("name", formData.name);
+      form.append("email", formData.email);
+      form.append("role", "General Application");
+      form.append("about", `LinkedIn: ${formData.linkedin}\nPortfolio: ${formData.portfolio}\nGitHub: ${formData.github}\n\nWhy: ${formData.why}`);
+
+      if (resumeFile) {
+        form.append("resume", resumeFile);
+      }
+
+      const response = await fetch("/api/careers", {
+        method: "POST",
+        body: form,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Failed to submit application");
+      }
+
+      setStatus("success");
+      setFormData({
+        name: "",
+        email: "",
+        linkedin: "",
+        portfolio: "",
+        github: "",
+        why: "",
+      });
+      setResumeFile(null);
+      const fileInput = document.getElementById("resume");
+      if (fileInput) fileInput.value = "";
+
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setStatus("idle");
+      }, 5000);
+    } catch (error) {
+      console.error("Submission error:", error);
+      setErrorMessage(error.message || "Failed to submit application. Please try again.");
+      setStatus("error");
+    }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-400 via-black to-dark-500 text-white font-['NeueMontreal'] relative overflow-hidden pt-20">
       {/* Animated background elements */}
@@ -26,7 +118,17 @@ const HiringPage = () => {
             <h2 className="heading-2  drop-shadow-lg animate-slide-right mb-8">
               Apply <span className={styles.primaryColor}>Now</span>
             </h2>
-            <form className="space-y-8" noValidate>
+            <form className="space-y-8" noValidate onSubmit={handleSubmit}>
+              {status === "success" && (
+                <div className="bg-green-900/30 border border-green-600 rounded-lg p-4 text-green-200">
+                  ✓ Application submitted successfully! We'll review it and contact you soon.
+                </div>
+              )}
+              {status === "error" && (
+                <div className="bg-red-900/30 border border-red-600 rounded-lg p-4 text-red-200">
+                  ✗ {errorMessage}
+                </div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                   <label
@@ -40,6 +142,8 @@ const HiringPage = () => {
                     type="text"
                     id="name"
                     aria-required="true"
+                    value={formData.name}
+                    onChange={handleInputChange}
                     className={`w-full bg-black/80 border border-gray-700 rounded-lg py-4 px-5 text-lg text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-primary/10`}
                     placeholder="John Doe"
                   />
@@ -56,6 +160,8 @@ const HiringPage = () => {
                     type="email"
                     id="email"
                     aria-required="true"
+                    value={formData.email}
+                    onChange={handleInputChange}
                     className={`w-full bg-black/80 border border-gray-700 rounded-lg py-4 px-5 text-lg text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-primary/10`}
                     placeholder="john@example.com"
                   />
@@ -73,6 +179,8 @@ const HiringPage = () => {
                   type="url"
                   id="linkedin"
                   aria-required="true"
+                  value={formData.linkedin}
+                  onChange={handleInputChange}
                   className={`w-full bg-black/80 border border-gray-700 rounded-lg py-4 px-5 text-lg text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-primary/10`}
                   placeholder="https://linkedin.com/in/johndoe"
                 />
@@ -88,6 +196,8 @@ const HiringPage = () => {
                 <input
                   type="url"
                   id="portfolio"
+                  value={formData.portfolio}
+                  onChange={handleInputChange}
                   className="w-full bg-black/80 border border-gray-700 rounded-lg py-4 px-5 text-lg text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-primary/10"
                   placeholder="https://your-portfolio.com"
                 />
@@ -103,6 +213,8 @@ const HiringPage = () => {
                 <input
                   type="url"
                   id="github"
+                  value={formData.github}
+                  onChange={handleInputChange}
                   className="w-full bg-black/80 border border-gray-700 rounded-lg py-4 px-5 text-lg text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-primary/10"
                   placeholder="https://github.com/johndoe"
                 />
@@ -120,16 +232,40 @@ const HiringPage = () => {
                   id="why"
                   rows="6"
                   aria-required="true"
+                  value={formData.why}
+                  onChange={handleInputChange}
                   className={`w-full bg-black/80 border border-gray-700 rounded-lg py-4 px-5 text-lg text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-primary/10 resize-none`}
                   placeholder="Tell us why you're a great fit..."
                 ></textarea>
               </div>
               <div>
+                <label
+                  htmlFor="resume"
+                  className="block text-base font-semibold text-gray-300 mb-2"
+                  style={{ fontFamily: "NeueMontreal, new, sans-serif" }}
+                >
+                  Upload Resume (Optional)
+                </label>
+                <div className="relative">
+                  <input
+                    type="file"
+                    id="resume"
+                    accept=".pdf,.doc,.docx"
+                    onChange={handleFileChange}
+                    className="w-full bg-black/80 border border-gray-700 rounded-lg py-4 px-5 text-lg text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-primary/10 file:bg-primary file:border-0 file:text-white file:px-4 file:py-2 file:rounded file:cursor-pointer"
+                  />
+                  {resumeFile && (
+                    <p className="mt-2 text-sm text-green-400">✓ {resumeFile.name}</p>
+                  )}
+                </div>
+              </div>
+              <div>
                 <button
                   type="submit"
-                  className={`w-full bg-primary hover:bg-secondary text-white font-bold py-4 px-8 rounded-xl text-xl shadow-lg transition-all duration-300 flex items-center justify-center focus:ring-4 focus:ring-primary/40 focus:outline-none active:scale-95 hover:shadow-primary/40`}
+                  disabled={status === "loading"}
+                  className={`w-full ${status === "loading" ? "bg-gray-600 cursor-not-allowed" : "bg-primary hover:bg-secondary"} text-white font-bold py-4 px-8 rounded-xl text-xl shadow-lg transition-all duration-300 flex items-center justify-center focus:ring-4 focus:ring-primary/40 focus:outline-none active:scale-95 hover:shadow-primary/40`}
                 >
-                  Submit Application
+                  {status === "loading" ? "Submitting..." : "Submit Application"}
                 </button>
               </div>
             </form>

@@ -43,7 +43,7 @@ export default function IndustriesPage() {
             <div className="inline-block px-3 py-1 rounded bg-[#D32F2F] text-white text-xs font-bold uppercase tracking-wider">
               Quality Assurance & Compliance
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-black">
               Need Industry-Specific Material Certifications or Batch Reports?
             </h2>
             <p className="text-zinc-400 text-sm leading-relaxed">

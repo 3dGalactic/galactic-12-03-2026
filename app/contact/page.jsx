@@ -172,17 +172,6 @@ export default function Contact() {
         throw new Error(data.message || "Failed to send message");
       }
 
-      // Dispatch mailto fallback link to admin@galactic-3d.com
-      const mailtoUrl = `mailto:admin@galactic-3d.com?subject=${encodeURIComponent(
-        `Contact Inquiry: ${form.subject || form.name}`
-      )}&body=${encodeURIComponent(
-        `Name: ${form.name}\nEmail: ${form.email}\nCompany: ${form.company || "N/A"}\nPhone: ${form.phone || "N/A"}\n\nMessage:\n${form.message}\n`
-      )}`;
-
-      const link = document.createElement("a");
-      link.href = mailtoUrl;
-      link.click();
-
       setStatus("success");
       setForm({
         name: "",
