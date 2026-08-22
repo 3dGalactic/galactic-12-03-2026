@@ -72,7 +72,7 @@ export default function WhyGalactic() {
   return (
     <section className="py-20 lg:py-28 bg-white text-[#111111] font-sans relative overflow-hidden border-t border-b border-[#EAEAEA]">
       
-      {/* SUBTLE ENGINEERING GRID BACKGROUND OVERLAY MATCHING HOMEPAGE THEME */}
+      
       <div 
         className="absolute inset-0 opacity-40 pointer-events-none z-0"
         style={{
@@ -83,7 +83,7 @@ export default function WhyGalactic() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8">
         
-        {/* SECTION HEADER MATCHING SCREENSHOT */}
+        {/* SECTION HEADER */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-[#EAEAEA] pb-8 mb-12">
           
           <div className="space-y-3">

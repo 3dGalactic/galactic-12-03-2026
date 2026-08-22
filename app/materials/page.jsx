@@ -1,16 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, Download, ArrowLeft, ShieldCheck } from "lucide-react";
+import { Search, Download, Eye, ArrowLeft, ShieldCheck, ChevronDown } from "lucide-react";
 import { METAL_FAMILIES } from "./data";
+
+function familySlug(family) {
+  return family.toLowerCase().replace(/\s+/g, "-");
+}
 
 export default function MaterialsPage() {
   const [search, setSearch] = useState("");
+  const [openFamilies, setOpenFamilies] = useState({});
 
   const q = search.trim().toLowerCase();
 
-  // Filter materials within each family by search term (family or material name)
   const filteredFamilies = METAL_FAMILIES.map((fam) => {
     const familyMatches = fam.family.toLowerCase().includes(q);
     const materials = familyMatches
@@ -18,6 +22,32 @@ export default function MaterialsPage() {
       : fam.materials.filter((m) => m.name.toLowerCase().includes(q));
     return { ...fam, materials };
   }).filter((fam) => fam.materials.length > 0);
+
+  
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (!hash) return;
+    setOpenFamilies((prev) => ({ ...prev, [hash]: true }));
+    const el = document.getElementById(hash);
+    if (el) {
+      setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+    }
+  }, []);
+
+  // Typing a search term auto-expands every family so results are visible.
+  useEffect(() => {
+    if (q) {
+      const expanded = {};
+      filteredFamilies.forEach((fam) => {
+        expanded[familySlug(fam.family)] = true;
+      });
+      setOpenFamilies((prev) => ({ ...prev, ...expanded }));
+    }
+  }, [q]);
+
+  const toggleFamily = (slug) => {
+    setOpenFamilies((prev) => ({ ...prev, [slug]: !prev[slug] }));
+  };
 
   return (
     <div className="min-h-screen bg-white text-[#222222] font-sans py-16">
@@ -30,16 +60,9 @@ export default function MaterialsPage() {
         </Link>
 
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-red-50 text-[#D32F2F] text-xs font-bold uppercase tracking-wider mb-3">
-            Technical Catalog
-          </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-[#111111] tracking-tight">
             Metal Materials & Datasheets
           </h1>
-          <p className="mt-2 text-gray-600 text-sm max-w-2xl mx-auto">
-            Download technical datasheets for every DMLS metal alloy we work
-            with, grouped by material family.
-          </p>
         </div>
 
         {/* SEARCH */}
@@ -54,46 +77,75 @@ export default function MaterialsPage() {
           />
         </div>
 
-        {/* FAMILY SECTIONS */}
-        <div className="space-y-10">
-          {filteredFamilies.map((fam) => (
-            <div key={fam.family} id={fam.family.toLowerCase().replace(/\s+/g, "-")} className="scroll-mt-24">
-              <div className="flex items-center gap-2 mb-4">
-                <ShieldCheck className="w-4 h-4 text-[#D32F2F]" />
-                <h2 className="text-lg font-bold text-[#111111] uppercase tracking-wide">
-                  {fam.family}
-                </h2>
-                <span className="text-xs text-gray-400 font-medium">
-                  ({fam.materials.length})
-                </span>
-              </div>
+        {/* FAMILY ACCORDION SECTIONS */}
+        <div className="space-y-4">
+          {filteredFamilies.map((fam) => {
+            const slug = familySlug(fam.family);
+            const isOpen = !!openFamilies[slug];
 
-              <div className="overflow-hidden rounded-xl border border-[#EAEAEA]">
-                {fam.materials.map((mat, i) => (
-                  <div
-                    key={mat.name}
-                    className={`flex items-center justify-between px-5 py-4 ${
-                      i % 2 === 0 ? "bg-white" : "bg-gray-50"
-                    } ${i !== fam.materials.length - 1 ? "border-b border-[#EAEAEA]" : ""}`}
-                  >
-                    <span className="text-sm font-semibold text-[#111111]">
-                      {mat.name}
+            return (
+              <div
+                key={fam.family}
+                id={slug}
+                className="scroll-mt-24 rounded-xl border border-[#EAEAEA] overflow-hidden"
+              >
+                <button
+                  onClick={() => toggleFamily(slug)}
+                  className="w-full flex items-center justify-between px-5 py-4 bg-white hover:bg-gray-50 transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-[#D32F2F]" />
+                    <span className="text-base font-bold text-[#111111] uppercase tracking-wide">
+                      {fam.family}
                     </span>
+                    <span className="text-xs text-gray-400 font-medium">
+                      ({fam.materials.length})
+                    </span>
+                  </span>
+                  <ChevronDown
+                    className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
 
-                    <a
-                      href={`/datasheets/${encodeURIComponent(mat.file)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      download
-                      className="inline-flex items-center gap-2 rounded-lg bg-gray-50 border border-gray-200 px-3.5 py-2 text-xs font-bold text-[#111111] hover:bg-[#D32F2F] hover:text-white hover:border-[#D32F2F] transition"
-                    >
-                      <Download className="w-3.5 h-3.5" /> Download PDF
-                    </a>
+                {isOpen && (
+                  <div className="border-t border-[#EAEAEA]">
+                    {fam.materials.map((mat, i) => (
+                      <div
+                        key={mat.name}
+                        className={`flex items-center justify-between px-5 py-4 ${
+                          i % 2 === 0 ? "bg-white" : "bg-gray-50"
+                        } ${i !== fam.materials.length - 1 ? "border-b border-[#EAEAEA]" : ""}`}
+                      >
+                        <span className="text-sm font-semibold text-[#111111]">
+                          {mat.name}
+                        </span>
+
+                        <div className="flex items-center gap-2">
+                          <a
+                            href={`/datasheets/${encodeURIComponent(mat.file)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-gray-50 border border-gray-200 px-3 py-2 text-xs font-bold text-[#111111] hover:bg-gray-100 transition"
+                          >
+                            <Eye className="w-3.5 h-3.5" /> View
+                          </a>
+                          <a
+                            href={`/datasheets/${encodeURIComponent(mat.file)}`}
+                            download
+                            className="inline-flex items-center justify-center rounded-lg bg-gray-50 border border-gray-200 p-2 text-[#111111] hover:bg-[#D32F2F] hover:text-white hover:border-[#D32F2F] transition"
+                            aria-label={`Download ${mat.name} datasheet`}
+                            title="Download"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                          </a>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           {filteredFamilies.length === 0 && (
             <p className="text-center text-sm text-gray-400 py-16">
