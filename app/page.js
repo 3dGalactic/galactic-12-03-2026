@@ -25,6 +25,9 @@ export default function Home() {
       {/* 2. DEDICATED TRUST & CERTIFICATIONS SECTION */}
       <TrustCertifications />
 
+      {/* 2.5 METAL MATERIAL FAMILY CARD */}
+      <MetalProcessCard />
+
       {/* 3. MANUFACTURING SERVICES MATRIX */}
       <ServiceTabs />
 
@@ -33,9 +36,6 @@ export default function Home() {
 
       {/* 5. TRAINING & INDUSTRY PROGRAMS NAVIGATION SHOWCASE (GATEWAY OVERVIEW) */}
       <TrainingProgramsNav />
-
-      {/* 5.5 METAL MATERIAL FAMILY CARD */}
-      <MetalProcessCard />
 
       {/* 6. WHY CHOOSE GALACTIC? CAPABILITY PILLARS SECTION (PLACED RIGHT ABOVE GALACTIC TEAM) */}
       <WhyGalactic />
