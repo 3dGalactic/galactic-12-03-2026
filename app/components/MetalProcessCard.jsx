@@ -31,24 +31,27 @@ export default function MetalProcessCard() {
   const activeFamily = activeTag ? findFamily(activeTag.familyName) : null;
 
   return (
-    <section className="py-16 lg:py-20 bg-white font-sans">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8">
+    <section className="py-16 lg:py-20 font-sans relative overflow-hidden">
+     
+      <div
+        className="absolute inset-0 opacity-40 pointer-events-none z-0"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+          backgroundSize: '48px 48px'
+        }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8">
         <div className="rounded-2xl border border-[#EAEAEA] bg-white shadow-sm overflow-hidden grid md:grid-cols-2">
           {/* LEFT: INFO + TAGS + PROCESS */}
           <div className="p-8 sm:p-10 flex flex-col justify-between">
             <div>
               <div className="mb-6">
-                  <p className="text-xs font-bold text-[#D32F2F] tracking-widest mb-1">
-                    M290
-                  </p>
                 <h3 className="text-4xl sm:text-5xl font-extrabold text-[#111111] tracking-tight">
-                  METAL
+                  What We Can Print
                 </h3>
               </div>
 
-              <p className="text-xs font-bold text-gray-400 tracking-widest mb-3">
-                MATERIAL FAMILY
-              </p>
               <div className="flex flex-wrap gap-2 mb-8">
                 {METAL_TAGS.map((tag) => (
                   <button
@@ -91,7 +94,7 @@ export default function MetalProcessCard() {
           <div className="relative">
             <div className="relative min-h-[320px] sm:min-h-[420px] md:min-h-full md:h-full">
               <Image
-                src="/eos-m290.jpg"
+                src="/eos-m290.webp"
                 alt="EOS M290 metal 3D printing machine"
                 fill
                 className="object-cover"
