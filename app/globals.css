@@ -195,6 +195,6 @@ p {
 .animate-marquee-left {
   display: inline-flex;
   white-space: nowrap;
-  animation: marquee-left 12s linear infinite;
+  animation: marquee-left 32s linear infinite;
   will-change: transform;
 }

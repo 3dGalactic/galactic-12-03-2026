@@ -17,7 +17,7 @@ export default function Industries() {
             style={{ transformStyle: "preserve-3d" }}
           >
             <img
-              src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+              src="/images/aerospace-jet.jpg"
               alt="Aerospace"
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />

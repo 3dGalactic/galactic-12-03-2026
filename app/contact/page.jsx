@@ -148,12 +148,12 @@ export default function Contact() {
                     Direct Email Sent
                   </span>
                   <h3 className="text-2xl font-black mt-3 text-black">
-                    Message Sent Directly to sidhantkr4478@gmail.com
+                    Message Sent Directly to admin@galactic-3d.com
                   </h3>
                 </div>
 
                 <p className="text-black font-medium text-sm leading-relaxed">
-                  Your inquiry has been logged and sent directly to <strong className="text-emerald-700 font-bold">sidhantkr4478@gmail.com</strong>. Our engineering team will review your message and get back to you shortly.
+                  Your inquiry has been logged and sent directly to <strong className="text-emerald-700 font-bold">admin@galactic-3d.com</strong>. Our engineering team will review your message and get back to you shortly.
                 </p>
 
                 <div className="pt-2">

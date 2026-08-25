@@ -92,19 +92,6 @@ const FEATURED_WORKSHOP = {
 
 const PAST_WORKSHOPS = [
   {
-    id: "am-workshop-sep-2026",
-    date: "18 – 19 September 2026",
-    title: "Additive Manufacturing Workshop",
-    category: "Industrial Workshop",
-    description: "Hands-on industrial masterclass covering the complete metal additive manufacturing workflow from design to post-processing.",
-    highlights: [
-      "Hands-on workshop for students, engineers, researchers and industry professionals.",
-      "Practical exposure to the complete metal AM workflow.",
-      "Focus on Design for Additive Manufacturing (DfAM).",
-    ],
-    images: [],
-  },
-  {
     id: "am-workshop-july-2026",
     date: "3 – 4 July 2026",
     title: "Additive Manufacturing Workshop",
@@ -172,7 +159,12 @@ const PAST_FORUMS = [
       "Facility tour and faculty-led technical explanation.",
       "Students experienced 3D printing and gained ideas for future opportunities.",
     ],
-    images: [],
+    images: [
+      "/events/east-point-2026/east_point_1.jpg",
+      "/events/east-point-2026/east_point_2.jpg",
+      "/events/east-point-2026/east_point_3.jpg",
+      "/events/east-point-2026/east_point_4.jpg",
+    ],
   },
   {
     id: "additive-tech-2026",
@@ -185,7 +177,11 @@ const PAST_FORUMS = [
       "Brought attention to manufacturing ecosystem challenges.",
       "Focused on developing agile, localized and efficient supply chains.",
     ],
-    images: [],
+    images: [
+      "/events/additive-tech-2026/additive_tech_june_1.jpg",
+      "/events/additive-tech-2026/additive_tech_june_2.jpg",
+      "/events/additive-tech-2026/additive_tech_june_3.jpg",
+    ],
   },
   {
     id: "additive-tech-2025",
@@ -615,8 +611,8 @@ export default function WorkshopsEventsPage() {
 
           {/* PAST WORKSHOPS ARCHIVE */}
           <div className="space-y-4 pt-4 border-t border-gray-100">
-            <h3 className="text-xl font-extrabold text-[#111111] flex items-center gap-2">
-              <Wrench size={18} className="text-[#D32F2F]" /> Previous Workshop
+            <h3 className="text-xl sm:text-2xl font-extrabold text-[#111111] flex items-center gap-2">
+              <Wrench size={20} className="text-[#D32F2F]" /> Previous Workshop
             </h3>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -673,13 +669,10 @@ export default function WorkshopsEventsPage() {
       <section id="forums" className="scroll-mt-24 py-12 sm:py-16 bg-gray-50 border-t border-gray-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-8">
           
-          <div className="space-y-2">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#111111]">
-              Previous Forum
+          <div>
+            <h2 className="text-xl sm:text-2xl font-extrabold text-[#111111] flex items-center gap-2">
+              <MessageSquareText size={20} className="text-[#D32F2F]" /> Previous Forum
             </h2>
-            <p className="text-sm text-gray-600 font-medium max-w-3xl leading-relaxed">
-              Explore cross-sector technical forums, water innovation ecosystems, industry-academia networking events, and ecosystem conferences hosted and led by Galactic 3D.
-            </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

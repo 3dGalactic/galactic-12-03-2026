@@ -33,8 +33,93 @@ export default function TrainingPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [showEnrollModal, setShowEnrollModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const [selectedPartnerModal, setSelectedPartnerModal] = useState(null);
+  const [activePhoto, setActivePhoto] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  const PARTNER_DETAILS = {
+    nmit: {
+      name: "Nitte Meenakshi Institute of Technology (NMIT)",
+      location: "Bengaluru, Karnataka",
+      years: "2024 – 2025",
+      type: "Engineering UG/PG Training & DfAM Workshop",
+      description:
+        "Specialized additive manufacturing and DfAM training program conducted for engineering students and faculty at Nitte Meenakshi Institute of Technology (NMIT). The cohort completed intensive hands-on lab modules in CAD slicing, topology optimization, build preparation, and live EOS DMLS metal 3D printing workflow demonstrations.",
+      highlights: [
+        "Hands-on CAD design & 3D printing software training in NMIT computer lab",
+        "Live industrial EOS DMLS metal additive manufacturing & DfAM lectures",
+        "Student & faculty certification in digital manufacturing workflows",
+        "Real-world prototype data preparation and lattice structure optimization",
+      ],
+      images: [
+        {
+          src: "/events/nmit-2025/nmit_lab_1.png",
+          caption: "Students actively engaged in hands-on CAD & 3D printing software training at NMIT computer lab.",
+        },
+        {
+          src: "/events/nmit-2025/nmit_lab_2.png",
+          caption: "Galactic 3D specialist conducting industrial Additive Manufacturing & EOS DMLS technical presentation.",
+        },
+      ],
+    },
+    alliance: {
+      name: "Alliance University",
+      location: "Bengaluru, Karnataka",
+      years: "2024 – 2025",
+      type: "University Additive Manufacturing Track",
+      description:
+        "Advanced 3D printing technology exposure and build preparation lab training conducted for undergraduate engineering cohorts at Alliance University.",
+      highlights: [
+        "Build Preparation & Material Science Fundamentals",
+        "3D Printer Calibration & Machine Operation",
+        "Student Project Guidance & Prototyping Support",
+      ],
+      images: [],
+    },
+    cit: {
+      name: "Cambridge Institute of Technology (CIT)",
+      location: "Bengaluru, Karnataka",
+      years: "2024 – Present",
+      type: "Ongoing Academic Partner & Skill Center",
+      description:
+        "Ongoing collaborative skill development center offering Industry 4.0, DfAM, and additive manufacturing training for CIT engineering students and researchers.",
+      highlights: [
+        "Continuous Additive Manufacturing Curriculum Integration",
+        "Industrial Project Co-Supervision",
+        "Joint Research & Prototyping Initiatives",
+      ],
+      images: [],
+    },
+    cambridge_school: {
+      name: "Cambridge School",
+      location: "Bengaluru",
+      years: "2024 – 2025",
+      type: "K-12 STREAM 3D Printing & Spatial Design",
+      description:
+        "Interactive STEM program for school students covering 3D spatial thinking, introductory CAD modeling, and live 3D printing demonstrations.",
+      highlights: [
+        "STREAM-Based Spatial Thinking & Problem Solving",
+        "Introductory 3D CAD Modeling & Slicing",
+        "Live 3D Printer Operation & Model Creation",
+      ],
+      images: [],
+    },
+    imtma: {
+      name: "IMTMA (Indian Machine Tool Manufacturers' Association)",
+      location: "Bengaluru",
+      years: "March 2026",
+      type: "Industrial Metal AM & Executive Upskilling",
+      description:
+        "Specialized industrial metal additive manufacturing masterclass focusing on EOS DMLS production readiness, build preparation, and workforce upskilling.",
+      highlights: [
+        "Industrial Metal DMLS Production Readiness",
+        "Materialise Magics Slicing & Support Strategy",
+        "Enterprise AM Cost-per-Part Optimization",
+      ],
+      images: [],
+    },
+  };
 
   // AUTOMATIC SMOOTH SCROLL & BRIEF HIGHLIGHT FOR HASH TARGETS (#schools, #colleges, #industry)
   useEffect(() => {
@@ -527,6 +612,25 @@ export default function TrainingPage() {
                   </div>
                 ))}
               </div>
+
+              {/* SCHOOL TRAINING COLLABORATION BADGE */}
+              <div
+                onClick={() => setSelectedPartnerModal(PARTNER_DETAILS.cambridge_school)}
+                className="mt-6 p-4 rounded-xl bg-blue-50/70 border border-blue-200/80 hover:border-blue-400 hover:shadow-md transition-all cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                    <BookOpen size={16} />
+                  </div>
+                  <div>
+                    <span className="text-xs font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block">Training Conducted For:</span>
+                    <span className="text-xs font-bold text-blue-900">Cambridge School <span className="text-[#D32F2F] font-extrabold ml-1">(2024 – 2025)</span></span>
+                  </div>
+                </div>
+                <span className="text-[11px] font-bold text-gray-600 bg-white px-3 py-1 rounded-lg border border-gray-200 shadow-2xs group-hover:border-[#D32F2F] group-hover:text-[#D32F2F] transition-all self-start sm:self-auto flex items-center gap-1">
+                  STREAM 3D Design &amp; CAD Workshops &rarr;
+                </span>
+              </div>
             </div>
           )}
 
@@ -576,6 +680,74 @@ export default function TrainingPage() {
                   </div>
                 ))}
               </div>
+
+              {/* INSTITUTIONAL TRAINING COLLABORATIONS BADGE */}
+              <div className="mt-6 p-5 rounded-xl bg-red-50/50 border border-red-200/80 space-y-3">
+                <div className="flex items-center gap-2">
+                  <GraduationCap size={18} className="text-[#D32F2F]" />
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111]">
+                    Training Conducted Across Premier Engineering Institutions &amp; Universities:
+                  </h4>
+                </div>
+                <div className="grid sm:grid-cols-3 gap-3">
+                  {/* NMIT */}
+                  <div
+                    onClick={() => setSelectedPartnerModal(PARTNER_DETAILS.nmit)}
+                    className="p-3 bg-white rounded-lg border border-[#D32F2F]/40 hover:border-[#D32F2F] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+                  >
+                    <div>
+                      <span className="text-xs font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block mb-1">
+                        Nitte Meenakshi Institute of Technology (NMIT)
+                      </span>
+                      <p className="text-[10px] text-gray-500 line-clamp-1">Hands-on CAD &amp; DfAM lab sessions</p>
+                    </div>
+                    <div className="flex items-center justify-between text-[10px] text-gray-500 mt-2">
+                      <span className="font-extrabold text-[#D32F2F]">2024 – 2025</span>
+                      <span className="inline-flex items-center gap-1 font-bold text-[#D32F2F] bg-red-50 px-2 py-0.5 rounded-full border border-red-100 group-hover:bg-[#D32F2F] group-hover:text-white transition-colors">
+                        📸 2 Photos &amp; Details &rarr;
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* ALLIANCE UNIVERSITY */}
+                  <div
+                    onClick={() => setSelectedPartnerModal(PARTNER_DETAILS.alliance)}
+                    className="p-3 bg-white rounded-lg border border-gray-200 hover:border-[#D32F2F] hover:shadow-sm transition-all cursor-pointer group flex flex-col justify-between"
+                  >
+                    <div>
+                      <span className="text-xs font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block mb-1">
+                        Alliance University
+                      </span>
+                      <p className="text-[10px] text-gray-500 line-clamp-1">3D printing &amp; build preparation track</p>
+                    </div>
+                    <div className="flex items-center justify-between text-[10px] text-gray-500 mt-2">
+                      <span className="font-extrabold text-[#D32F2F]">2024 – 2025</span>
+                      <span className="font-bold text-gray-500 group-hover:text-[#D32F2F] transition-colors">
+                        View Details &rarr;
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* CAMBRIDGE INSTITUTE OF TECHNOLOGY (CIT) */}
+                  <div
+                    onClick={() => setSelectedPartnerModal(PARTNER_DETAILS.cit)}
+                    className="p-3 bg-white rounded-lg border border-gray-200 hover:border-[#D32F2F] hover:shadow-sm transition-all cursor-pointer group flex flex-col justify-between"
+                  >
+                    <div>
+                      <span className="text-xs font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block mb-1">
+                        Cambridge Institute of Technology (CIT)
+                      </span>
+                      <p className="text-[10px] text-gray-500 line-clamp-1">Industry 4.0 Skill Center Partner</p>
+                    </div>
+                    <div className="flex items-center justify-between text-[10px] text-gray-500 mt-2">
+                      <span className="font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">2024 – Present</span>
+                      <span className="font-bold text-gray-500 group-hover:text-[#D32F2F] transition-colors">
+                        View Details &rarr;
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
@@ -624,6 +796,25 @@ export default function TrainingPage() {
                     </button>
                   </div>
                 ))}
+              </div>
+
+              {/* INDUSTRY TRAINING COLLABORATION BADGE */}
+              <div
+                onClick={() => setSelectedPartnerModal(PARTNER_DETAILS.imtma)}
+                className="mt-6 p-4 rounded-xl bg-emerald-50/70 border border-emerald-200/80 hover:border-emerald-400 hover:shadow-md transition-all cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                    <Factory size={16} />
+                  </div>
+                  <div>
+                    <span className="text-xs font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block">Industrial Workforce Training Conducted For:</span>
+                    <span className="text-xs font-bold text-emerald-950">IMTMA (Indian Machine Tool Manufacturers&apos; Association) <span className="text-emerald-700 font-extrabold ml-1">(March 2026)</span></span>
+                  </div>
+                </div>
+                <span className="text-[11px] font-bold text-gray-600 bg-white px-3 py-1 rounded-lg border border-gray-200 shadow-2xs group-hover:border-[#D32F2F] group-hover:text-[#D32F2F] transition-all self-start sm:self-auto flex items-center gap-1">
+                  Metal Additive Masterclass &rarr;
+                </span>
               </div>
             </div>
           )}
@@ -739,6 +930,149 @@ export default function TrainingPage() {
               )}
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* PARTNER / INSTITUTION DETAILS MODAL POPUP WITH PHOTO GALLERY */}
+      {selectedPartnerModal && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-2xl w-full max-w-3xl overflow-hidden relative animate-fade-in-up my-8">
+            
+            {/* MODAL HEADER */}
+            <div className="bg-[#111111] text-white p-6 flex items-start justify-between">
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] bg-red-950/60 border border-red-900/60 px-2.5 py-0.5 rounded-full mb-2">
+                  <GraduationCap size={13} /> {selectedPartnerModal.type}
+                </span>
+                <h3 className="text-xl sm:text-2xl font-extrabold text-white">
+                  {selectedPartnerModal.name}
+                </h3>
+                <p className="text-xs text-gray-400 mt-1">
+                  📍 {selectedPartnerModal.location} &bull; <strong className="text-white">{selectedPartnerModal.years}</strong>
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setSelectedPartnerModal(null);
+                  setActivePhoto(null);
+                }}
+                className="w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:text-white hover:bg-white/20 flex items-center justify-center transition cursor-pointer shrink-0"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* MODAL BODY */}
+            <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
+              
+              {/* IMAGE GALLERY SHOWCASE */}
+              {selectedPartnerModal.images && selectedPartnerModal.images.length > 0 && (
+                <div>
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111] mb-3 flex items-center gap-2">
+                    <Sparkles size={16} className="text-[#D32F2F]" /> Training Lab Photos ({selectedPartnerModal.images.length})
+                  </h4>
+
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {selectedPartnerModal.images.map((img, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() => setActivePhoto(img.src)}
+                        className="group relative rounded-xl overflow-hidden border border-gray-200 shadow-sm cursor-pointer hover:border-[#D32F2F] transition-all bg-gray-900"
+                      >
+                        <img
+                          src={img.src}
+                          alt={img.caption}
+                          className="w-full h-48 sm:h-52 object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-end">
+                          <p className="text-[11px] text-white font-medium leading-tight drop-shadow-xs">
+                            {img.caption}
+                          </p>
+                          <span className="text-[10px] font-bold text-red-300 mt-1 flex items-center gap-1">
+                            Click to Enlarge 🔍
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* OVERVIEW & DESCRIPTION */}
+              <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-2">
+                <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111] flex items-center gap-2">
+                  <BookOpen size={15} className="text-[#D32F2F]" /> Program Overview
+                </h4>
+                <p className="text-xs text-gray-700 leading-relaxed">
+                  {selectedPartnerModal.description}
+                </p>
+              </div>
+
+              {/* KEY HIGHLIGHTS */}
+              {selectedPartnerModal.highlights && (
+                <div>
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111] mb-3 flex items-center gap-2">
+                    <CheckCircle2 size={16} className="text-[#D32F2F]" /> Program Highlights &amp; Outcomes
+                  </h4>
+                  <div className="space-y-2">
+                    {selectedPartnerModal.highlights.map((item, idx) => (
+                      <div key={idx} className="flex items-start gap-2 text-xs text-gray-700 bg-white p-2.5 rounded-lg border border-gray-200">
+                        <CheckCircle size={14} className="text-emerald-600 shrink-0 mt-0.5" />
+                        <span className="font-medium">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* FOOTER ACTIONS */}
+              <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-gray-200">
+                <button
+                  onClick={() => {
+                    const name = selectedPartnerModal.name;
+                    setSelectedPartnerModal(null);
+                    setSelectedCourse({ title: `Training Program for ${name}` });
+                    setShowEnrollModal(true);
+                  }}
+                  className="btn-corporate-primary flex items-center gap-2 text-xs py-2.5 px-4"
+                >
+                  <span>Enroll Similar Program for Your Institution</span>
+                  <ArrowRight size={14} />
+                </button>
+
+                <button
+                  onClick={() => setSelectedPartnerModal(null)}
+                  className="py-2 px-4 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold transition"
+                >
+                  Close
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* FULLSCREEN PHOTO LIGHTBOX ZOOM */}
+      {activePhoto && (
+        <div
+          className="fixed inset-0 z-60 bg-black/90 flex items-center justify-center p-4 cursor-zoom-out animate-fade-in"
+          onClick={() => setActivePhoto(null)}
+        >
+          <div className="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center">
+            <img
+              src={activePhoto}
+              alt="Enlarged Training Photo"
+              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl border border-gray-800"
+            />
+            <button
+              onClick={() => setActivePhoto(null)}
+              className="mt-3 px-4 py-1.5 rounded-full bg-white/20 text-white hover:bg-white/40 text-xs font-bold transition flex items-center gap-2 cursor-pointer"
+            >
+              <X size={14} /> Close Fullscreen
+            </button>
           </div>
         </div>
       )}

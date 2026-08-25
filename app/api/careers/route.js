@@ -18,7 +18,7 @@ export async function POST(req) {
       attachments.push({
         filename: resumeFile.name,
         content: buffer,
-        contentType: resumeFile.type,
+        contentType: resumeFile.type || "application/pdf",
       });
     }
 
@@ -30,6 +30,8 @@ export async function POST(req) {
         phone,
         position,
         coverLetter,
+        message: coverLetter,
+        subject: `Job Application: ${position} - ${name}`,
         sourcePage: "Careers Page",
       },
       attachments
@@ -37,14 +39,14 @@ export async function POST(req) {
 
     return NextResponse.json({
       success: true,
-      message: "Thank you! Your message has been sent successfully.",
+      message: "Thank you! Your job application and resume have been sent to admin@galactic-3d.com.",
       recipient: ADMIN_EMAIL,
-      smtpStatus: result.admin.success,
+      smtpStatus: result.admin ? result.admin.success : true,
     });
   } catch (error) {
     console.error("Careers API Error:", error);
     return NextResponse.json(
-      { success: false, message: "Failed to send message. Please try again.", recipient: ADMIN_EMAIL },
+      { success: false, message: "Failed to send application. Please try again.", recipient: ADMIN_EMAIL },
       { status: 500 }
     );
   }

@@ -33,6 +33,9 @@ const DESTINATION_PROGRAMS = [
       "Certified STEM Program Completion Certificate",
       "School STEM Lab Setup Support & Guidance"
     ],
+    partners: [
+      { name: "Cambridge School", years: "2024 – 2025" }
+    ],
   },
   {
     id: "college-training",
@@ -63,6 +66,11 @@ const DESTINATION_PROGRAMS = [
       "Direct internship placement pathways with AM leaders",
       "Co-authored research paper publication opportunities"
     ],
+    partners: [
+      { name: "Nitte Meenakshi Institute of Technology (NMIT)", years: "2024 – 2025" },
+      { name: "Alliance University", years: "2024 – 2025" },
+      { name: "Cambridge Institute of Technology (CIT)", years: "2024 – Present" }
+    ],
   },
   {
     id: "industry-training",
@@ -92,6 +100,9 @@ const DESTINATION_PROGRAMS = [
       "Mastery of EOS DMLS and Materialise Magics workflows",
       "Enterprise AM adoption roadmap and production readiness",
       "Direct technical consultation for active client projects"
+    ],
+    partners: [
+      { name: "IMTMA (Indian Machine Tool Manufacturers' Association)", years: "March 2026" }
     ],
   },
 ];
@@ -225,6 +236,23 @@ export default function TrainingBento() {
                         ))}
                       </ul>
                     </div>
+
+                    {/* VERIFIED TRAINING PARTNERS */}
+                    {program.partners && program.partners.length > 0 && (
+                      <div className="border-t border-gray-200 pt-4">
+                        <h4 className="text-[11px] font-extrabold uppercase tracking-wider text-[#111111] mb-2.5 flex items-center gap-1.5">
+                          <Building2 size={14} className="text-[#D32F2F]" /> Training Conducted For:
+                        </h4>
+                        <div className="space-y-1.5">
+                          {program.partners.map((partner, pIdx) => (
+                            <div key={pIdx} className="p-2 bg-white rounded-lg border border-gray-200 flex items-center justify-between text-xs">
+                              <span className="font-bold text-[#111111]">{partner.name}</span>
+                              <span className="text-[10px] font-extrabold text-[#D32F2F] shrink-0 ml-2">{partner.years}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     {/* CTA BUTTON: ENQUIRE NOW */}
                     <div className="pt-2">

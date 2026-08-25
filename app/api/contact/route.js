@@ -112,6 +112,7 @@ export async function POST(req) {
     // Process & send Nodemailer email to admin@galactic-3d.com
     const result = await processCentralizedSubmission(
       {
+        type: "production",
         ...payload,
         name,
         email,
