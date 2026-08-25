@@ -46,8 +46,14 @@ const TEAM = [
   {
     name: "Bhramanandam",
     role: "Finance Officer",
-    img: "/bhaskaran.jpg",
+    img: "",
     desc: "Overseeing financial operations, capital investment in advanced AM infrastructure, and fiscal compliance.",
+  },
+  {
+    name: "Tushar Mishra",
+    role: "Application Research Engineer",
+    img: "/tushar.jpg",
+    desc: "Conducting additive manufacturing research, DfAM parameter optimization, and advanced engineering application development.",
   },
 ];
 
@@ -92,17 +98,23 @@ export default function TeamCarousel() {
                 >
                   {/* CLEARLY VISIBLE MEMBER PHOTO CONTAINER */}
                   <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-gray-100 border border-gray-200 mb-3 shadow-inner">
-                    <Image
-                      src={member.img}
-                      alt={member.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className={`object-cover transition-all duration-500 ${
-                        isActive
-                          ? "grayscale-0 scale-105"
-                          : "grayscale group-hover:grayscale-0 group-hover:scale-105"
-                      }`}
-                    />
+                    {member.img ? (
+                      <Image
+                        src={member.img}
+                        alt={member.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className={`object-cover object-top transition-all duration-500 ${
+                          isActive
+                            ? "grayscale-0 scale-105"
+                            : "grayscale group-hover:grayscale-0 group-hover:scale-105"
+                        }`}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 font-extrabold text-2xl select-none">
+                        {member.name.charAt(0)}
+                      </div>
+                    )}
                     
                     {/* MEMBER NUMBER BADGE IN TOP LEFT */}
                     <div className="absolute top-2.5 left-2.5 z-10">
@@ -153,13 +165,19 @@ export default function TeamCarousel() {
 
                 {/* LARGE MEMBER IMAGE */}
                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm mb-6">
-                  <Image
-                    src={activeMember.img}
-                    alt={activeMember.name}
-                    fill
-                    sizes="450px"
-                    className="object-cover"
-                  />
+                  {activeMember.img ? (
+                    <Image
+                      src={activeMember.img}
+                      alt={activeMember.name}
+                      fill
+                      sizes="450px"
+                      className="object-cover object-top"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 font-extrabold text-4xl select-none">
+                      {activeMember.name.charAt(0)}
+                    </div>
+                  )}
                 </div>
 
                 {/* MEMBER DETAILS */}

@@ -181,3 +181,20 @@ p {
     min-height: 40px;
   }
 }
+
+/* Continuous Right-to-Left Marquee Animation */
+@keyframes marquee-left {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee-left {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee-left 12s linear infinite;
+  will-change: transform;
+}

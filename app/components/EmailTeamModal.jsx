@@ -17,6 +17,11 @@ export default function EmailTeamModal({ isOpen, onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) {
+      setStatus("error");
+      return;
+    }
+
     setSubmitting(true);
     setStatus("idle");
 
@@ -24,11 +29,17 @@ export default function EmailTeamModal({ isOpen, onClose }) {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject || "Inquiry to Galactic 3D Team",
+          message: formData.message,
+          sourcePage: "Email Team Modal",
+        }),
       });
 
       const data = await res.json();
-      if (data.success) {
+      if (res.ok && data.success) {
         setStatus("success");
       } else {
         setStatus("error");
@@ -41,10 +52,10 @@ export default function EmailTeamModal({ isOpen, onClose }) {
     }
   };
 
-  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=admin@galactic-3d.com&su=${encodeURIComponent(
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=sidhantkr4478@gmail.com&su=${encodeURIComponent(
     formData.subject
   )}&body=${encodeURIComponent(formData.message)}`;
-  const mailtoUrl = `mailto:admin@galactic-3d.com?subject=${encodeURIComponent(
+  const mailtoUrl = `mailto:sidhantkr4478@gmail.com?subject=${encodeURIComponent(
     formData.subject
   )}&body=${encodeURIComponent(formData.message)}`;
 
@@ -60,7 +71,7 @@ export default function EmailTeamModal({ isOpen, onClose }) {
             </div>
             <div>
               <h3 className="text-base font-extrabold text-white">Email Galactic 3D Team</h3>
-              <p className="text-xs text-zinc-400">Direct recipient: <span className="text-white font-mono">admin@galactic-3d.com</span></p>
+              <p className="text-xs text-zinc-400">Direct recipient: <span className="text-white font-mono">sidhantkr4478@gmail.com</span></p>
             </div>
           </div>
 
@@ -80,7 +91,7 @@ export default function EmailTeamModal({ isOpen, onClose }) {
               <CheckCircle2 size={40} className="text-emerald-600 mx-auto" />
               <h4 className="text-lg font-bold text-gray-900">Email Sent Successfully!</h4>
               <p className="text-xs text-gray-600 leading-relaxed">
-                Your message has been delivered to <strong>admin@galactic-3d.com</strong>. Our team will get back to you within 24 hours.
+                Your message has been delivered to <strong className="text-gray-900">sidhantkr4478@gmail.com</strong>. Our team will get back to you within 24 hours.
               </p>
               <button
                 onClick={() => {
@@ -161,7 +172,7 @@ export default function EmailTeamModal({ isOpen, onClose }) {
                 disabled={submitting}
                 className="w-full btn-corporate-primary justify-center text-xs py-3"
               >
-                {submitting ? "Sending Email..." : "Send Email to admin@galactic-3d.com"} <Send size={14} />
+                {submitting ? "Sending Email..." : "Send Email to sidhantkr4478@gmail.com"} <Send size={14} />
               </button>
 
             </form>

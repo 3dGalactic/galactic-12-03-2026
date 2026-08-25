@@ -96,39 +96,61 @@ export default function Submit() {
       return;
     }
     setIsSubmitting(true);
-    setProgress(0);
-    // Simulate upload progress
-    let prog = 0;
-    const interval = setInterval(() => {
-      prog += Math.random() * 20 + 10;
-      setProgress(Math.min(prog, 100));
-      if (prog >= 100) {
-        clearInterval(interval);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-          setProgress(100);
-      setTimeout(() => {
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          projectName: '',
-          description: '',
-          material: 'pla',
-          color: '',
-          quantity: 1,
-          resolution: 'standard',
-          notes: ''
-        });
-        setFile(null);
-        setSubmitSuccess(false);
-            setProgress(0);
-            if (fileInputRef.current) fileInputRef.current.value = '';
-          }, 5000);
-        }, 800);
+    setProgress(30);
+
+    try {
+      const payloadData = new FormData();
+      payloadData.append("type", "quote");
+      payloadData.append("name", formData.name);
+      payloadData.append("email", formData.email);
+      payloadData.append("phone", formData.phone || "");
+      payloadData.append("company", formData.projectName || "N/A");
+      payloadData.append("serviceRequested", `Material: ${formData.material.toUpperCase()} | Color: ${formData.color || "Default"} | Qty: ${formData.quantity}`);
+      payloadData.append("projectDetails", `Project Name: ${formData.projectName}\nResolution: ${formData.resolution}\nDescription: ${formData.description}\nNotes: ${formData.notes || "None"}`);
+      payloadData.append("sourcePage", "Quote Submit Page");
+
+      if (file) {
+        payloadData.append("file", file);
       }
-    }, 300);
+
+      setProgress(60);
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: payloadData,
+      });
+
+      const data = await res.json();
+      setProgress(100);
+
+      if (res.ok && data.success) {
+        setSubmitSuccess(true);
+        setTimeout(() => {
+          setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            projectName: '',
+            description: '',
+            material: 'pla',
+            color: '',
+            quantity: 1,
+            resolution: 'standard',
+            notes: ''
+          });
+          setFile(null);
+          setSubmitSuccess(false);
+          setProgress(0);
+          if (fileInputRef.current) fileInputRef.current.value = '';
+        }, 5000);
+      } else {
+        alert("Failed to send message. Please try again.");
+      }
+    } catch (err) {
+      console.error("Quote submission error:", err);
+      alert("Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   return (

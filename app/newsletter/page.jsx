@@ -89,18 +89,41 @@ export default function Newsletter() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validation = validate();
     if (Object.keys(validation).length > 0) {
       setErrors(validation);
       return;
     }
-    setSubscribed(true);
-    setTimeout(() => {
-      setSubscribed(false);
-      setForm({ first: '', last: '', email: '', company: '', interests: [], terms: false });
-    }, 4000);
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: `${form.first} ${form.last}`.trim(),
+          email: form.email,
+          company: form.company,
+          subject: 'Newsletter Subscription',
+          message: form.interests.length ? `Interests: ${form.interests.join(', ')}` : 'Newsletter subscription request',
+          sourcePage: 'Newsletter Page',
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || 'Unable to send message. Please try again.');
+      }
+
+      setSubscribed(true);
+      setTimeout(() => {
+        setSubscribed(false);
+        setForm({ first: '', last: '', email: '', company: '', interests: [], terms: false });
+      }, 4000);
+    } catch (error) {
+      setErrors({ submit: error.message || 'Unable to send message. Please try again.' });
+    }
   };
 
   return (

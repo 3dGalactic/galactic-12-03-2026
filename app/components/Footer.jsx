@@ -82,8 +82,8 @@ export default function CorporateFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/team" className="hover:text-white transition">
-                  Leadership Team
+                <Link href="/workshops-events" className="hover:text-white transition">
+                  Workshop/Forum
                 </Link>
               </li>
               <li>

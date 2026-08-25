@@ -25,7 +25,7 @@ const MEMBERS = [
     id: 7,
     name: "Bhramanandam",
     role: "Finance Officer",
-    img: "/bhaskaran.jpg",
+    img: "",
     bio: "User-centered design creating intuitive 3D printing solutions.",
     achievements: ["Figma Community Featured", "Product Design Lead", "2M+ Users Served"]
   },
@@ -52,6 +52,14 @@ const MEMBERS = [
     img: "/brth.png",
     bio: "User-centered design creating intuitive 3D printing solutions.",
     achievements: ["Figma Community Featured", "Product Design Lead", "2M+ Users Served"]
+  },
+  {
+    id: 8,
+    name: "Tushar Mishra",
+    role: "Application Research Engineer",
+    img: "/tushar.jpg",
+    bio: "Specializing in additive manufacturing research, DfAM optimization, and advanced engineering application development.",
+    achievements: ["DMLS Process Research", "DfAM Lattice Optimization", "Advanced Materials Testing"]
   },
 ];
 

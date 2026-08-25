@@ -53,97 +53,22 @@ export default function Contact() {
   };
 
   const faqData = [
-
     {
       question: "What additive manufacturing technologies do you offer?",
-      answer: "We offer multiple additive manufacturing technologies depending on the application requirements. These include FDM (Fused Deposition Modeling) for functional prototypes and cost-efficient parts, SLA (Stereolithography) for high-resolution components and smooth surface finishes, and SLS (Selective Laser Sintering) for strong nylon production parts. Each technology has different strengths in terms of accuracy, mechanical performance, and surface finish, and our email team helps select the best process for your part."
+      answer: "We specialize exclusively in advanced industrial metal additive manufacturing technologies: DMLS (Direct Metal Laser Sintering) and LPBF (Laser Powder Bed Fusion). These technologies produce fully dense, high-integrity metal components with mechanical properties exceeding traditional castings."
     },
-
     {
       question: "What materials can you print with?",
-      answer: "We support a wide range of engineering-grade materials. For polymer printing we commonly use PLA, ABS, PETG, Nylon (PA12), TPU, and high-performance resins. For advanced applications we also work with reinforced composites such as carbon-fiber infused filaments. Depending on project needs we can also produce metal parts through partner networks using aluminum, stainless steel, or titanium additive manufacturing systems."
+      answer: "We print with high-performance engineering metal alloys including Titanium (Ti6Al4V), Stainless Steel (316L, 17-4PH), Aluminum (AlSi10Mg), Inconel (625, 718), and Cobalt-Chrome for aerospace, medical, and industrial applications."
     },
-
     {
       question: "What is the maximum build volume you support?",
-      answer: "Build volume depends on the printing technology used. Typical build plate sizes include: FDM printers up to approximately 300 x 300 x 400 mm, SLA printers around 145 x 145 x 175 mm for high resolution resin parts, and larger industrial machines up to 500 mm in one dimension for batch production. For parts larger than the build plate, we can segment the model and assemble it after printing."
+      answer: "Our DMLS and LPBF metal additive systems support build volumes up to 250 x 250 x 325 mm for single-piece metal components, with segmented assembly options available for larger assemblies."
     },
-
     {
       question: "What tolerances can you achieve?",
-      answer: "Dimensional tolerances vary depending on technology and part geometry. Typical tolerances are ±0.2 mm or ±0.5% of the dimension for FDM prints, and ±0.1–0.15 mm for SLA parts due to the higher resolution of resin printing. For precision mechanical parts, we recommend post-processing or secondary machining to achieve tighter tolerances."
-    },
-
-    {
-      question: "How long does 3D printing take?",
-      answer: "Print times depend on part size, layer height, infill density, and technology used. Small prototypes can often be printed within 12–24 hours. Medium sized parts typically require 1–3 days including post-processing. Larger components or production batches may take 3–10 days depending on the queue and finishing requirements."
-    },
-
-    {
-      question: "What file formats do you accept?",
-      answer: "We accept most standard CAD and mesh formats including STL, STEP (.step/.stp), IGES (.igs/.iges), OBJ, and 3MF. Native CAD formats such as SolidWorks (.sldprt) or Fusion 360 exports can also be used. For best results we recommend exporting files as STL or STEP with high resolution settings."
-    },
-
-    {
-      question: "How should I prepare my 3D model before sending it?",
-      answer: "Your model should be watertight (no holes or non-manifold edges), correctly scaled, and exported at high mesh resolution. Wall thickness should generally be at least 1–1.5 mm for structural parts depending on the material used. Overhangs greater than 45 degrees may require supports, and thin features should be reinforced to prevent breakage."
-    },
-
-    {
-      question: "Do you offer CAD design or design optimization services?",
-      answer: "Yes. Our email team provides full CAD modeling, design optimization for additive manufacturing (DfAM), topology optimization, and manufacturability consulting. If you only have a sketch or concept, we can create a printable CAD model and optimize it for strength, weight reduction, and print efficiency."
-    },
-
-    {
-      question: "What surface finish can I expect?",
-      answer: "Surface finish depends on the printing technology and layer height. FDM parts typically have visible layer lines with layer heights ranging from 0.1–0.3 mm. SLA prints offer smoother surfaces with layer heights as fine as 25–50 microns. Additional finishing processes such as sanding, vapor smoothing, painting, or resin coating can significantly improve the final appearance."
-    },
-
-    {
-      question: "Do you provide post-processing and finishing services?",
-      answer: "Yes. We offer several finishing options including sanding, polishing, primer coating, painting, threaded inserts, mechanical assembly, and basic CNC finishing for precision features. These finishing steps improve both aesthetics and functional performance depending on the application."
-    },
-
-    {
-      question: "Can you handle production runs or only prototypes?",
-      answer: "We support both rapid prototyping and small to medium scale production. For batch manufacturing we can run multiple machines simultaneously and optimize part nesting on the build plate to maximize throughput. For higher volumes we can also recommend transitioning from additive manufacturing to injection molding when appropriate."
-    },
-
-    {
-      question: "How strong are 3D printed parts?",
-      answer: "The strength of printed parts depends heavily on the material and printing orientation. Nylon and engineering resins can produce strong functional parts suitable for mechanical use. However, due to the layered manufacturing process, parts may have anisotropic strength (weaker along layer lines). Our team optimizes orientation and infill patterns to improve structural performance."
-    },
-
-    {
-      question: "What infill options are available?",
-      answer: "For FDM prints we can adjust internal infill structures to balance strength and material usage. Common infill densities range from 10% for lightweight prototypes up to 80–100% for structural components. Patterns such as gyroid, grid, and cubic infill provide different mechanical characteristics."
-    },
-
-    {
-      question: "Can you print functional mechanical parts?",
-      answer: "Yes. Many of our customers use additive manufacturing for brackets, enclosures, fixtures, jigs, and functional prototypes. With proper material selection and print orientation, printed parts can withstand significant mechanical loads."
-    },
-
-    {
-      question: "Do you offer confidentiality or NDAs?",
-      answer: "Yes. We understand that many projects involve proprietary designs. We are happy to sign non-disclosure agreements (NDAs) before reviewing files and ensure that all submitted models remain confidential."
-    },
-
-    {
-      question: "How do I request a quote?",
-      answer: "To request a quote simply upload your 3D model along with material preferences, quantity, and any finishing requirements. Our team will analyze the file, estimate print time, material usage, and provide a detailed quotation."
-    },
-
-    {
-      question: "What industries do you work with?",
-      answer: "Our additive manufacturing services support a wide range of industries including product design, robotics, automotive prototyping, aerospace components, academic research, medical device development, and industrial tooling."
-    },
-
-    {
-      question: "Can you help choose the right printing technology?",
-      answer: "Absolutely. If you're unsure which technology to use, our engineers will evaluate your design, required mechanical properties, surface finish, and production quantity to recommend the most suitable additive manufacturing process."
+      answer: "Our precision DMLS / LPBF systems achieve dimensional tolerances of ±0.05 mm to ±0.1 mm (or ±0.2%). For critical bearing or mating surfaces, precision CNC post-machining is available down to ±0.005 mm."
     }
-
   ];
 
   const handleChange = (e) => {
@@ -164,15 +89,16 @@ export default function Contact() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, sourcePage: "Contact Page" }),
       });
 
       const data = await res.json();
       if (!res.ok || !data.success) {
-        throw new Error(data.message || "Failed to send message");
+        throw new Error(data.message || "Unable to send message. Please try again.");
       }
 
       setStatus("success");
+
       setForm({
         name: "",
         email: "",
@@ -216,22 +142,28 @@ export default function Contact() {
             </h2>
 
             {status === "success" ? (
-              <div className="border border-gray-200 bg-gray-50 p-10 rounded-2xl shadow-sm text-black">
-                <h3 className="text-2xl font-bold mb-4 text-black">
-                  Message Sent Successfully
-                </h3>
+              <div className="border border-emerald-500/30 bg-emerald-50/50 p-8 sm:p-10 rounded-2xl shadow-sm text-black space-y-6">
+                <div>
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-3 py-1 bg-emerald-600 text-white rounded-full">
+                    Direct Email Sent
+                  </span>
+                  <h3 className="text-2xl font-black mt-3 text-black">
+                    Message Sent Directly to sidhantkr4478@gmail.com
+                  </h3>
+                </div>
 
-                <p className="text-black font-medium mb-8">
-                  Thank you for reaching out. Our team will get back to you within
-                  24–48 hours.
+                <p className="text-black font-medium text-sm leading-relaxed">
+                  Your inquiry has been logged and sent directly to <strong className="text-emerald-700 font-bold">sidhantkr4478@gmail.com</strong>. Our engineering team will review your message and get back to you shortly.
                 </p>
 
-                <button
-                  onClick={() => setStatus("idle")}
-                  className="bg-black text-white px-8 py-3 rounded-full font-bold uppercase text-xs tracking-wider hover:bg-zinc-800 transition shadow-md"
-                >
-                  Send Another Message
-                </button>
+                <div className="pt-2">
+                  <button
+                    onClick={() => setStatus("idle")}
+                    className="bg-emerald-700 text-white px-6 py-3 rounded-xl font-bold uppercase text-xs tracking-wider hover:bg-emerald-800 transition shadow-md"
+                  >
+                    Send Another Message
+                  </button>
+                </div>
               </div>
             ) : (
               <form
@@ -410,10 +342,10 @@ export default function Contact() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="relative w-full h-[480px] overflow-hidden rounded-2xl border border-gray-200 shadow-md"
           >
-            {/* MAP */}
+            {/* MAP EMBED - SINGLE GALACTIC 3D PIN LOCATION */}
             <iframe
               title="Galactic 3D Location"
-              src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d62198.617989690334!2d77.60654333821292!3d13.00931143128238!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e6!4m3!3m2!1d13.0242069!2d77.6025813!4m5!1s0x3bae11a915ab800d%3A0x7b9df0b7c02a0008!2sGalactic-3D%2C%20Cambridge%20Institute%20of%20Technology%2C%20Jai%20Bhuvaneshwari%20Layout%20Road%2C%20SR%20Layout%2C%20Chikkabasavanapura%2C%20Krishnarajapuram%2C%20Bengaluru%2C%20Karnataka!3m2!1d13.0135513!2d77.7036341!5e0!3m2!1sen!2sin!4v1750678240914!5m2!1sen!2sin"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.279644026365!2d77.70105927593685!3d13.014631313175855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae11a915ab800d%3A0x7b9df0b7c02a0008!2sGalactic-3D!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
               className="absolute inset-0 w-full h-full border-0"
               loading="lazy"
             />
@@ -429,12 +361,12 @@ export default function Contact() {
               </h3>
 
               <p className="text-sm text-black font-medium leading-relaxed mb-4">
-                Cambridge Institute of Technology
+                Cambridge Institute of Technology<br />
                 Krishnarajapuram, Bengaluru
               </p>
 
               <a
-                href="https://www.google.com/maps/dir/?api=1&destination=Galactic-3D,+Bengaluru"
+                href="https://maps.app.goo.gl/LHrfq9h8VYAn8i4v9"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-black bg-black text-white hover:bg-zinc-800 transition text-xs font-mono font-bold uppercase tracking-wider shadow-sm"
@@ -468,8 +400,9 @@ export default function Contact() {
             <div className="flex flex-col divide-y divide-gray-200">
               {/* Location */}
               <a
-                href="https://maps.google.com"
+                href="https://maps.app.goo.gl/LHrfq9h8VYAn8i4v9"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="group flex items-start gap-4 py-5"
               >
                 <MapPinIcon className="w-6 h-6 text-black mt-1 shrink-0" />

@@ -149,33 +149,45 @@ export default function TrainingProgramsNav() {
               </h4>
 
               {/* PARTNER CARDS */}
-              <div className="space-y-3 mb-6">
+              <div className="space-y-4 mb-6">
                 
-                {/* PARTNER 1: MATERIALISE */}
-                <div className="bg-gray-50 rounded-xl p-3.5 border border-gray-200/80 flex items-start gap-3">
-                  <div className="w-9 h-9 bg-white rounded-lg p-1.5 flex items-center justify-center shrink-0 border border-gray-200 shadow-sm mt-0.5">
-                    <ShieldCheck className="text-[#D32F2F]" size={20} />
-                  </div>
-                  <div>
-                    <span className="text-xs font-extrabold text-[#111111] block">Materialise</span>
-                    <span className="text-[11px] text-gray-600 leading-snug block mt-0.5">
-                      Industrial software and additive manufacturing workflow solutions.
-                    </span>
-                  </div>
-                </div>
+                {/* PARTNER 1: EOS */}
+                <a
+                  href="https://www.eos.info"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open("https://www.eos.info", "_blank", "noopener,noreferrer");
+                  }}
+                  className="block bg-white rounded-xl p-3 border border-gray-200 shadow-sm flex items-center justify-center h-24 overflow-hidden group hover:border-[#D32F2F] transition-all"
+                  aria-label="Visit EOS website"
+                >
+                  <img 
+                    src="/eos.png" 
+                    alt="EOS Logo" 
+                    className="w-full h-full max-h-18 object-contain transition-transform duration-300 group-hover:scale-105" 
+                  />
+                </a>
 
-                {/* PARTNER 2: EOS */}
-                <div className="bg-gray-50 rounded-xl p-3.5 border border-gray-200/80 flex items-start gap-3">
-                  <div className="w-9 h-9 bg-white rounded-lg p-1.5 flex items-center justify-center shrink-0 border border-gray-200 shadow-sm mt-0.5">
-                    <img src="/eos.png" alt="EOS Partner" className="max-h-full max-w-full object-contain" />
-                  </div>
-                  <div>
-                    <span className="text-xs font-extrabold text-[#111111] block">EOS</span>
-                    <span className="text-[11px] text-gray-600 leading-snug block mt-0.5">
-                      Industrial DMLS metal additive manufacturing technology partner.
-                    </span>
-                  </div>
-                </div>
+                {/* PARTNER 2: MATERIALISE */}
+                <a
+                  href="https://www.materialise.com/en"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open("https://www.materialise.com/en", "_blank", "noopener,noreferrer");
+                  }}
+                  className="block bg-white rounded-xl p-3 border border-gray-200 shadow-sm flex items-center justify-center h-28 overflow-hidden group hover:border-[#D32F2F] transition-all"
+                  aria-label="Visit Materialise website"
+                >
+                  <img 
+                    src="/Materialise-Logo.jpg" 
+                    alt="Materialise Logo" 
+                    className="w-full h-full max-h-24 object-contain transition-transform duration-300 group-hover:scale-105" 
+                  />
+                </a>
 
               </div>
             </div>

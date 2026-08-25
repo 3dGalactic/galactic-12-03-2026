@@ -2,77 +2,52 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Zap, CheckCircle2, ArrowRight } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Zap, Factory, Cpu, ShieldCheck, ArrowRight, CheckCircle2, Download } from "lucide-react";
 
 const SERVICES = [
   {
     id: "srv-01",
-    title: "RAPID PROTOTYPING",
-    lines: [
-      "Accelerated functional prototyping and design iteration for complex engineered components.",
-      "High-precision DMLS metal and FDM thermoplastic prototypes delivered in 24 to 48 hours."
-    ],
-    features: [
-      "Fast 24-48 hour turnaround",
-      "Functional DMLS & FDM prototypes",
-      "Confidential DfAM design review",
-    ],
-    gallery: ["/dmls.webp", "/spark.jpg"],
+    title: "Rapid Prototyping",
+    tag: "PROTOTYPING",
+    icon: Zap,
+    image: "/dmls.webp",
+    desc: "Accelerated functional prototyping, design iteration, and DMLS metal & FDM plastic prototypes delivered in 24 to 48 hours.",
+    features: ["24-48h Turnaround", "Functional DMLS", "DfAM Review"],
   },
   {
     id: "srv-02",
-    title: "FULL-SCALE PRODUCTION",
-    lines: [
-      "High-volume metal additive manufacturing certified for aerospace, defense, and automotive standards.",
-      "Complete quality control with parameter tracking, heat treatment, and 100% CMM inspection reporting."
-    ],
-    features: [
-      "Certified alloy powder supply chain",
-      "Documented parameter control",
-      "Full heat treatment & CMM inspection",
-    ],
-    gallery: ["/production.png", "/hist1.jpeg"],
+    title: "Full-Scale Production",
+    tag: "PRODUCTION",
+    icon: Factory,
+    image: "/production.png",
+    desc: "High-volume metal additive manufacturing certified for aerospace, defense, and automotive engineering standards.",
+    features: ["Certified Powders", "Parameter Control", "CMM Inspection"],
   },
   {
     id: "srv-03",
-    title: "CUSTOM MANUFACTURING",
-    lines: [
-      "Tailored additive manufacturing solutions optimized for complex geometries and specialized assemblies.",
-      "Multi-material engineering in titanium, inconel, and aluminum with precision CNC post-processing."
-    ],
-    features: [
-      "Complex geometry support",
-      "Specialized materials",
-      "Custom finishing",
-    ],
-    gallery: ["/consult.png", "/aboutgrp.jpg"],
+    title: "Custom Manufacturing",
+    tag: "CUSTOM",
+    icon: Cpu,
+    image: "/consult.png",
+    desc: "Tailored additive solutions optimized for complex geometries, multi-material titanium/inconel, and precision CNC finishing.",
+    features: ["Complex Geometries", "Specialized Alloys", "CNC Finishing"],
   },
   {
     id: "srv-04",
-    title: "MANUFACTURING PARTNER",
-    lines: [
-      "We help you design, validate, and build research-driven solutions with expert application development.",
-      "Scaling for tomorrow with an India-first approach across a wide range of materials and DMLS/LPBF contract manufacturing."
-    ],
-    features: [
-      "Research Driven & Collaborative",
-      "Application Development & DMLS/LPBF",
-      "India First Contract Manufacturing",
-    ],
-    gallery: ["/hist2.jpg", "/production.png"],
+    title: "Manufacturing Partner",
+    tag: "PARTNER",
+    icon: ShieldCheck,
+    image: "/hist1.jpeg",
+    desc: "Research-driven collaborative engineering, DMLS/LPBF application development, and India-first contract manufacturing.",
+    features: ["Collaborative R&D", "LPBF Contract", "India First"],
   },
 ];
 
 export default function ServiceTabs() {
-  const [activeTabId, setActiveTabId] = useState("srv-04");
-
-  const activeService = SERVICES.find((s) => s.id === activeTabId) || SERVICES[3];
-
   return (
-    <section id="services" className="py-20 lg:py-28 bg-white text-[#111111] font-sans relative overflow-hidden border-t border-b border-[#EAEAEA]">
+    <section id="services" className="py-12 lg:py-16 bg-transparent text-[#111111] font-sans relative overflow-hidden border-t border-b border-[#EAEAEA]">
       
-      {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY MATCHING THE WEBSITE */}
+      {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY */}
       <div 
         className="absolute inset-0 opacity-40 pointer-events-none z-0"
         style={{
@@ -83,137 +58,104 @@ export default function ServiceTabs() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8">
         
-        {/* SECTION HEADER */}
-        <div className="border-b border-[#EAEAEA] pb-8 mb-10">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-[#111111] leading-none">
-            Manufacturing <span className="text-[#E53935]">Services</span>
-          </h2>
-        </div>
-
-        {/* 3-COLUMN INTERACTIVE SERVICES SHOWCASE IN WHITE THEME */}
-        <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
-          
-          {/* COLUMN 1: LEFT SERVICE SELECTOR TABS (4 COLS) */}
-          <div className="lg:col-span-4 flex flex-col gap-3 justify-between">
-            {SERVICES.map((srv) => {
-              const isSelected = activeTabId === srv.id;
-              return (
-                <button
-                  key={srv.id}
-                  onClick={() => setActiveTabId(srv.id)}
-                  className={`w-full text-left p-5 sm:p-6 rounded-2xl border-2 transition-all duration-300 flex items-center justify-between group cursor-pointer relative overflow-hidden ${
-                    isSelected
-                      ? "bg-[#E53935] text-white border-[#E53935] shadow-[0_0_25px_rgba(229,57,53,0.25)]"
-                      : "bg-white text-[#111111] border-[#EAEAEA] hover:border-[#E53935]/60 hover:shadow-md"
-                  }`}
-                >
-                  <h3 className={`text-base sm:text-lg font-black uppercase tracking-tight ${
-                    isSelected ? "text-white" : "text-[#111111] group-hover:text-[#E53935]"
-                  }`}>
-                    {srv.title}
-                  </h3>
-
-                  <ArrowRight 
-                    size={18} 
-                    className={`transition-transform shrink-0 ${
-                      isSelected ? "text-white translate-x-1" : "text-gray-400 group-hover:text-[#E53935] group-hover:translate-x-1"
-                    }`} 
-                  />
-                </button>
-              );
-            })}
+        {/* SECTION HEADER MATCHING SCREENSHOT + DOWNLOAD BROCHURE BUTTON */}
+        <div className="border-b border-[#EAEAEA] pb-4 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-[#111111] leading-none">
+              MANUFACTURING <span className="text-[#E53935]">SERVICES</span>
+            </h2>
           </div>
 
-          {/* COLUMN 2: MIDDLE ACTIVE SERVICE DETAIL CARD */}
-          <div className="lg:col-span-5 bg-white rounded-2xl border-2 border-[#EAEAEA] p-7 sm:p-8 flex flex-col justify-between relative overflow-hidden shadow-sm">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeService.id}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.25 }}
-                className="space-y-6 flex-1 flex flex-col justify-between"
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <a
+              href="/galactic-3d-contract-manufacturing-brochure.pdf"
+              download="Galactic_3D_Contract_Manufacturing_Brochure.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#E53935] hover:bg-[#D32F2F] text-white text-xs sm:text-sm font-extrabold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5"
+            >
+              <Download size={16} />
+              <span>Download Brochure</span>
+            </a>
+            
+            <span className="hidden md:inline-flex text-xs font-bold uppercase tracking-wider px-3.5 py-2.5 bg-red-50 text-[#E53935] rounded-xl border border-red-100 shrink-0">
+              Industrial Capabilities
+            </span>
+          </div>
+        </div>
+
+        {/* CARD GRID WITH UNIFORM CLEAN BORDERS */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+          {SERVICES.map((srv) => {
+            const Icon = srv.icon;
+
+            return (
+              <div
+                key={srv.id}
+                className="bg-white rounded-2xl border border-gray-200 hover:border-[#E53935] transition-all duration-300 flex flex-col justify-between overflow-hidden group shadow-sm hover:shadow-md"
               >
                 <div>
-                  {/* SERVICE HEADER WITH ICON */}
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="w-10 h-10 rounded-full bg-red-50 border border-red-100 text-[#E53935] flex items-center justify-center">
-                      <Zap size={20} />
+                  {/* TOP IMAGE CONTAINER WITH OVERLAYS */}
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-100">
+                    <img
+                      src={srv.image}
+                      alt={srv.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+                    {/* BOTTOM-LEFT RED ICON BADGE */}
+                    <div className="absolute bottom-3 left-3 z-10 w-8 h-8 rounded-full bg-[#E53935] text-white flex items-center justify-center shadow-md">
+                      <Icon size={16} />
+                    </div>
+
+                    {/* BOTTOM-RIGHT CATEGORY PILL BADGE */}
+                    <div className="absolute bottom-3 right-3 z-10">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-black/80 text-white backdrop-blur-xs">
+                        {srv.tag}
+                      </span>
                     </div>
                   </div>
 
-                  {/* ACTIVE TITLE */}
-                  <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-[#111111] leading-tight mb-4">
-                    {activeService.title}
-                  </h3>
+                  {/* CARD BODY CONTENT */}
+                  <div className="p-5 space-y-3">
+                    <h3 className="text-xl font-extrabold tracking-tight text-[#111111] group-hover:text-[#E53935] transition-colors leading-tight">
+                      {srv.title}
+                    </h3>
 
-                  {/* EXACT 2-LINE DESCRIPTION ABOUT THE SELECTED SERVICE */}
-                  <div className="space-y-2 mb-6 border-l-2 border-[#E53935] pl-4 py-1">
-                    {activeService.lines.map((line, idx) => (
-                      <p key={idx} className="text-xs sm:text-sm text-gray-600 font-medium leading-relaxed">
-                        {line}
-                      </p>
-                    ))}
-                  </div>
+                    <p className="text-xs text-gray-600 leading-relaxed font-medium">
+                      {srv.desc}
+                    </p>
 
-                  {/* FEATURE PILLS WITH CHECKMARK */}
-                  <div className="space-y-2.5">
-                    {activeService.features.map((feature, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-200 text-xs sm:text-sm font-semibold text-gray-800"
-                      >
-                        <CheckCircle2 size={16} className="text-[#E53935] shrink-0" />
-                        <span>{feature}</span>
-                      </div>
-                    ))}
+                    {/* FEATURE TAGS */}
+                    <div className="pt-2 flex flex-wrap gap-1.5">
+                      {srv.features.map((feat, idx) => (
+                        <span
+                          key={idx}
+                          className="text-[10px] font-bold text-gray-700 bg-gray-50 border border-gray-200 px-2 py-0.5 rounded-md flex items-center gap-1"
+                        >
+                          <CheckCircle2 size={10} className="text-[#E53935]" />
+                          {feat}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                {/* CTA BUTTON */}
-                <div className="pt-6 border-t border-gray-100 mt-6">
+                {/* BOTTOM EXPLORE BUTTON */}
+                <div className="px-5 pb-5 pt-2">
                   <Link
                     href="/contact"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#E53935] hover:bg-[#c62828] text-white text-xs font-extrabold uppercase tracking-wider shadow-md hover:shadow-lg transition-all group cursor-pointer"
+                    className="w-full py-2.5 px-4 rounded-xl bg-gray-50 group-hover:bg-red-50 text-gray-800 group-hover:text-[#E53935] font-extrabold text-xs flex items-center justify-between border border-gray-200 group-hover:border-red-200 transition-all cursor-pointer shadow-xs"
                   >
-                    <span>Request Production Quote</span>
-                    <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+                    <span>Explore Service</span>
+                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
 
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* COLUMN 3: RIGHT MEDIA GALLERY PREVIEW CARDS IN LIGHT THEME */}
-          <div className="lg:col-span-3 flex flex-col gap-4 justify-between">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeService.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.25 }}
-                className="h-full flex flex-col gap-4"
-              >
-                {activeService.gallery.map((imgSrc, idx) => (
-                  <div
-                    key={idx}
-                    className="relative flex-1 min-h-[160px] rounded-2xl overflow-hidden border-2 border-[#EAEAEA] bg-white group shadow-xs hover:border-[#E53935] transition-colors"
-                  >
-                    <img
-                      src={imgSrc}
-                      alt={activeService.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                  </div>
-                ))}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
+              </div>
+            );
+          })}
         </div>
 
       </div>

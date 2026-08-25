@@ -13,6 +13,7 @@ import {
   CheckCircle2,
   X,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 
 export const INDUSTRIES_DATA = [
@@ -132,16 +133,17 @@ export default function IndustriesSection() {
 
   const categories = ["All", "Aerospace", "Automotive", "Medical", "Education", "Electronics", "Energy"];
 
-  const filteredIndustries = filter === "All"
-    ? INDUSTRIES_DATA
-    : INDUSTRIES_DATA.filter((item) => item.category === filter);
+  // Active industry selection based on filter tab or modal selection
+  const activeIndustryInfo = filter !== "All"
+    ? INDUSTRIES_DATA.find((item) => item.category === filter)
+    : selectedIndustry;
 
   return (
-    <section className="py-20 bg-white border-t border-[#EAEAEA] font-sans">
+    <section className="py-16 lg:py-20 bg-transparent border-t border-[#EAEAEA] font-sans relative">
       <div className="mx-auto max-w-7xl px-4 sm:px-8">
         
-        {/* SECTION TITLE & SUBTITLE */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#EAEAEA] pb-8 mb-10">
+        {/* SECTION TITLE & FILTER TABS */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#EAEAEA] pb-6 mb-8">
           <div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
               Industries We Serve
@@ -156,11 +158,14 @@ export default function IndustriesSection() {
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setFilter(cat)}
-                className={`px-3.5 py-1.5 rounded text-xs font-semibold transition cursor-pointer ${
+                onClick={() => {
+                  setFilter(cat);
+                  if (cat === "All") setSelectedIndustry(null);
+                }}
+                className={`px-4 py-2 rounded-lg text-xs font-extrabold transition cursor-pointer ${
                   filter === cat
                     ? "bg-[#D32F2F] text-white shadow-sm"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 hover:text-[#D32F2F]"
                 }`}
               >
                 {cat}
@@ -169,163 +174,166 @@ export default function IndustriesSection() {
           </div>
         </div>
 
-        {/* EQUAL-SIZED INDUSTRY CARDS GRID */}
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
-          {filteredIndustries.map((ind) => {
-            const Icon = ind.icon;
-            return (
-              <div
-                key={ind.id}
-                className="corporate-card bg-white rounded-lg border border-[#EAEAEA] overflow-hidden flex flex-col justify-between hover:border-[#D32F2F] transition-all duration-300 group shadow-sm hover:shadow-md"
-              >
-                <div>
-                  {/* CARD IMAGE */}
-                  <div className="relative aspect-[16/10] bg-gray-100 overflow-hidden">
-                    <img
-                      src={ind.image}
-                      alt={ind.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                    <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white">
-                      <div className="p-1.5 rounded bg-[#D32F2F] text-white">
-                        <Icon size={16} />
+        {/* CASE 1: WHEN "ALL" IS SELECTED - DISPLAY 6-CARD GRID */}
+        {filter === "All" && !activeIndustryInfo && (
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 animate-fadeIn">
+            {INDUSTRIES_DATA.map((ind) => {
+              const Icon = ind.icon;
+              return (
+                <div
+                  key={ind.id}
+                  className="bg-white rounded-xl border border-[#EAEAEA] overflow-hidden flex flex-col justify-between hover:border-[#D32F2F] transition-all duration-300 group shadow-xs hover:shadow-md"
+                >
+                  <div>
+                    {/* CARD IMAGE */}
+                    <div className="relative aspect-[16/10] bg-gray-100 overflow-hidden">
+                      <img
+                        src={ind.image}
+                        alt={ind.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                      <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white">
+                        <div className="p-1.5 rounded-lg bg-[#D32F2F] text-white shadow-xs">
+                          <Icon size={16} />
+                        </div>
+                        <span className="text-[10px] font-bold uppercase tracking-wider bg-black/70 backdrop-blur-xs px-2.5 py-0.5 rounded text-white">
+                          {ind.category}
+                        </span>
                       </div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded text-white">
-                        {ind.category}
-                      </span>
+                    </div>
+
+                    {/* CARD CONTENT */}
+                    <div className="p-4 space-y-2">
+                      <h3 className="font-extrabold text-sm text-[#111111] leading-snug group-hover:text-[#D32F2F] transition-colors">
+                        {ind.title}
+                      </h3>
+                      <p className="text-xs text-gray-600 line-clamp-3 leading-relaxed">
+                        {ind.shortDesc}
+                      </p>
                     </div>
                   </div>
 
-                  {/* CARD CONTENT */}
-                  <div className="p-4 space-y-2">
-                    <h3 className="font-bold text-sm text-[#111111] leading-snug group-hover:text-[#D32F2F] transition-colors">
-                      {ind.title}
-                    </h3>
-                    <p className="text-xs text-gray-600 line-clamp-3 leading-relaxed">
-                      {ind.shortDesc}
-                    </p>
+                  {/* EXPLORE INDUSTRY BUTTON */}
+                  <div className="p-4 pt-0">
+                    <button
+                      onClick={() => setFilter(ind.category)}
+                      className="w-full py-2.5 px-3 rounded-lg bg-gray-50 border border-gray-200 text-xs font-extrabold text-[#111111] hover:bg-[#D32F2F] hover:text-white hover:border-[#D32F2F] transition-all duration-200 flex items-center justify-between group/btn cursor-pointer shadow-xs"
+                    >
+                      <span>Explore {ind.category} Full Info</span>
+                      <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
+                    </button>
                   </div>
+
                 </div>
+              );
+            })}
+          </div>
+        )}
 
-                {/* EXPLORE INDUSTRY BUTTON */}
-                <div className="p-4 pt-0">
-                  <button
-                    onClick={() => setSelectedIndustry(ind)}
-                    className="w-full py-2 px-3 rounded bg-gray-50 border border-gray-200 text-xs font-bold text-[#111111] hover:bg-[#D32F2F] hover:text-white hover:border-[#D32F2F] transition-all duration-200 flex items-center justify-between group/btn cursor-pointer"
-                  >
-                    <span>Explore Industry</span>
-                    <ArrowRight size={13} className="group-hover/btn:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-
-              </div>
-            );
-          })}
-        </div>
-
-      </div>
-
-      {/* DEDICATED INDUSTRY DETAIL MODAL */}
-      {selectedIndustry && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 sm:p-6 overflow-y-auto">
-          <div className="relative w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-200 animate-fadeIn my-8">
+        {/* CASE 2: WHEN A SPECIFIC INDUSTRY OPTION IS SELECTED - SHOW FULL DETAILED INFO SHOWCASE */}
+        {activeIndustryInfo && (
+          <div className="bg-white rounded-2xl border-2 border-[#D32F2F] shadow-lg overflow-hidden animate-fadeIn">
             
-            {/* MODAL HEADER WITH IMAGE */}
-            <div className="relative h-48 sm:h-56 bg-gray-900 text-white flex items-end p-6">
+            {/* HERO HEADER FOR SELECTED INDUSTRY - CRISP & CLEAR IMAGE */}
+            <div className="relative h-64 sm:h-80 bg-gray-900 text-white flex items-end p-6 sm:p-8 overflow-hidden">
               <img
-                src={selectedIndustry.image}
-                alt={selectedIndustry.title}
-                className="absolute inset-0 w-full h-full object-cover opacity-40"
+                src={activeIndustryInfo.image}
+                alt={activeIndustryInfo.title}
+                className="absolute inset-0 w-full h-full object-cover opacity-100 transition-transform duration-700 hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10 z-[1]" />
               
               <button
-                onClick={() => setSelectedIndustry(null)}
-                className="absolute top-4 right-4 p-2 rounded-full bg-black/60 hover:bg-black text-white transition z-10 cursor-pointer"
+                onClick={() => {
+                  setFilter("All");
+                  setSelectedIndustry(null);
+                }}
+                className="absolute top-4 right-4 px-4 py-2 rounded-full bg-black/75 backdrop-blur-md text-white hover:bg-[#D32F2F] font-extrabold text-xs transition z-20 flex items-center gap-1.5 shadow-lg border border-white/20 cursor-pointer"
               >
-                <X size={18} />
+                <X size={14} /> Close &amp; View All Industries
               </button>
 
               <div className="relative z-10 space-y-2">
-                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-[#D32F2F] text-white text-[10px] font-bold uppercase tracking-wider">
-                  Industrial Sector Overview
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D32F2F] text-white text-[11px] font-extrabold uppercase tracking-wider shadow-sm">
+                  <Sparkles size={13} /> Full Industry Profile
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-                  {selectedIndustry.title}
-                </h2>
+                <h3 className="text-2xl sm:text-4xl font-black text-white tracking-tight drop-shadow-md">
+                  {activeIndustryInfo.title}
+                </h3>
               </div>
             </div>
 
-            {/* MODAL CONTENT BODY */}
-            <div className="p-6 sm:p-8 space-y-8 max-h-[60vh] overflow-y-auto">
+            {/* FULL INFORMATION SHOWCASE CONTENT */}
+            <div className="p-6 sm:p-8 space-y-8">
               
-              {/* OVERVIEW */}
-              <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#D32F2F] mb-2">
-                  Industry Overview
+              {/* OVERVIEW SECTION */}
+              <div className="space-y-2">
+                <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#D32F2F]">
+                  Industry Overview &amp; Additive Engineering Scope
                 </h4>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  {selectedIndustry.overview}
+                <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-medium">
+                  {activeIndustryInfo.overview}
                 </p>
               </div>
 
               {/* CHALLENGES & SOLUTIONS GRID */}
-              <div className="grid sm:grid-cols-2 gap-6 bg-[#F8F9FA] p-5 rounded-lg border border-[#EAEAEA]">
-                <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#111111] mb-2">
-                    Industry Challenges
+              <div className="grid sm:grid-cols-2 gap-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <div className="space-y-2">
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111]">
+                    Key Industry Challenges
                   </h4>
-                  <p className="text-xs text-gray-600 leading-relaxed">
-                    {selectedIndustry.challenges}
+                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-medium">
+                    {activeIndustryInfo.challenges}
                   </p>
                 </div>
 
-                <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#D32F2F] mb-2">
-                    Galactic 3D Engineering Solutions
+                <div className="space-y-2">
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#D32F2F]">
+                    Galactic 3D Advanced Solutions
                   </h4>
-                  <p className="text-xs text-gray-600 leading-relaxed">
-                    {selectedIndustry.solutions}
+                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-medium">
+                    {activeIndustryInfo.solutions}
                   </p>
                 </div>
               </div>
 
-              {/* SERVICES, MATERIALS, TECH */}
-              <div className="grid sm:grid-cols-3 gap-6 text-xs">
-                <div>
-                  <h4 className="font-bold uppercase tracking-wider text-[#111111] mb-2.5">
+              {/* SERVICES, MATERIALS, TECHNOLOGIES TRIPLE COLUMN */}
+              <div className="grid sm:grid-cols-3 gap-6 pt-2">
+                <div className="space-y-3 bg-white p-4 rounded-xl border border-gray-200">
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111]">
                     Relevant Services
                   </h4>
-                  <ul className="space-y-1.5">
-                    {selectedIndustry.services.map((s) => (
-                      <li key={s} className="flex items-center gap-1.5 text-gray-700 font-medium">
-                        <CheckCircle2 size={13} className="text-[#D32F2F]" /> {s}
+                  <ul className="space-y-2">
+                    {activeIndustryInfo.services.map((s) => (
+                      <li key={s} className="flex items-center gap-2 text-xs text-gray-700 font-bold">
+                        <CheckCircle2 size={14} className="text-[#D32F2F] shrink-0" />
+                        <span>{s}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div>
-                  <h4 className="font-bold uppercase tracking-wider text-[#111111] mb-2.5">
-                    Materials Qualified
+                <div className="space-y-3 bg-white p-4 rounded-xl border border-gray-200">
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111]">
+                    Qualified Materials
                   </h4>
-                  <div className="flex flex-wrap gap-1">
-                    {selectedIndustry.materials.map((m) => (
-                      <span key={m} className="px-2 py-0.5 rounded bg-gray-100 text-gray-800 font-medium text-[11px]">
+                  <div className="flex flex-wrap gap-1.5">
+                    {activeIndustryInfo.materials.map((m) => (
+                      <span key={m} className="px-2.5 py-1 rounded-md bg-gray-100 text-gray-800 font-bold text-xs">
                         {m}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div>
-                  <h4 className="font-bold uppercase tracking-wider text-[#111111] mb-2.5">
+                <div className="space-y-3 bg-white p-4 rounded-xl border border-gray-200">
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111]">
                     Technologies Applied
                   </h4>
-                  <div className="flex flex-wrap gap-1">
-                    {selectedIndustry.tech.map((t) => (
-                      <span key={t} className="px-2 py-0.5 rounded bg-red-50 text-[#D32F2F] font-bold text-[11px]">
+                  <div className="flex flex-wrap gap-1.5">
+                    {activeIndustryInfo.tech.map((t) => (
+                      <span key={t} className="px-2.5 py-1 rounded-md bg-red-50 text-[#D32F2F] border border-red-100 font-bold text-xs">
                         {t}
                       </span>
                     ))}
@@ -333,42 +341,54 @@ export default function IndustriesSection() {
                 </div>
               </div>
 
-              {/* REAL CASE STUDY HIGHLIGHT */}
-              <div className="p-4 rounded-lg bg-red-50 border border-red-100 flex items-start gap-3">
-                <ShieldCheck size={20} className="text-[#D32F2F] shrink-0 mt-0.5" />
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#D32F2F]">
+              {/* FEATURED CASE STUDY */}
+              <div className="p-5 rounded-xl bg-red-50/80 border border-red-100 flex items-start gap-4 shadow-xs">
+                <ShieldCheck size={24} className="text-[#D32F2F] shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F]">
                     Featured Industry Success Story
                   </span>
-                  <h5 className="text-sm font-bold text-[#111111] mt-0.5">
-                    {selectedIndustry.caseStudy.title}
+                  <h5 className="text-sm sm:text-base font-extrabold text-[#111111]">
+                    {activeIndustryInfo.caseStudy.title}
                   </h5>
-                  <p className="text-xs text-gray-700 mt-1">
-                    {selectedIndustry.caseStudy.result}
+                  <p className="text-xs sm:text-sm text-gray-700 font-medium">
+                    {activeIndustryInfo.caseStudy.result}
                   </p>
+                </div>
+              </div>
+
+              {/* BOTTOM CTA BAR */}
+              <div className="pt-6 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p className="text-xs text-gray-600 font-bold">
+                  Looking for custom DfAM engineering or contract additive production for {activeIndustryInfo.title}?
+                </p>
+
+                <div className="flex items-center gap-3 shrink-0">
+                  <button
+                    onClick={() => {
+                      setFilter("All");
+                      setSelectedIndustry(null);
+                    }}
+                    className="px-4 py-2.5 rounded-lg border border-gray-300 text-xs font-bold text-gray-700 hover:bg-gray-100 transition"
+                  >
+                    View All Industries
+                  </button>
+
+                  <Link
+                    href="/contact"
+                    className="btn-corporate-primary"
+                  >
+                    Request Quote <ArrowRight size={14} />
+                  </Link>
                 </div>
               </div>
 
             </div>
 
-            {/* MODAL FOOTER CTA */}
-            <div className="p-4 sm:p-5 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <span className="text-xs text-gray-600 font-medium">
-                Need specialized DfAM review for your {selectedIndustry.title} application?
-              </span>
-
-              <Link
-                href="/contact"
-                onClick={() => setSelectedIndustry(null)}
-                className="btn-corporate-primary shrink-0"
-              >
-                Request Industry Review <ArrowRight size={14} />
-              </Link>
-            </div>
-
           </div>
-        </div>
-      )}
+        )}
+
+      </div>
     </section>
   );
 }

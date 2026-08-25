@@ -793,11 +793,22 @@ const TEAM_CORE = [
     name: "Bhramanandam", 
     role: "Finance Officer", 
     bio: "Managing the fiscal landscape of the enterprise, ensuring sustainable growth for advanced manufacturing initiatives.", 
-    img: "/bhaskaran.jpg", 
+    img: "", 
     left: "75%", 
     top: "50%", 
     width: "25%", 
     height: "50%" 
+  },
+  {
+    id: 8,
+    name: "Tushar Mishra",
+    role: "Application Research Engineer",
+    bio: "Specializing in additive manufacturing research, DfAM optimization, and advanced engineering application development.",
+    img: "/tushar.jpg",
+    left: "0%",
+    top: "100%",
+    width: "25%",
+    height: "50%"
   },
 ];
 

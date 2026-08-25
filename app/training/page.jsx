@@ -79,12 +79,15 @@ export default function TrainingPage() {
     const courseTitle = selectedCourse ? selectedCourse.title : "General Additive Training Program";
 
     try {
-      await fetch("/api/training", {
+      await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
           courseTitle,
+          subject: courseTitle || "Training Inquiry",
+          message: `Training inquiry for ${courseTitle || "program"}.\n\nInstitution: ${formData.institution || "N/A"}\nInterests: ${formData.interests || "N/A"}`,
+          sourcePage: "Training Page",
         }),
       });
 
@@ -596,11 +599,6 @@ export default function TrainingPage() {
                     className="corporate-card bg-white rounded-xl border border-[#EAEAEA] p-6 flex flex-col justify-between hover:border-[#D32F2F] transition-all shadow-sm"
                   >
                     <div>
-                      <div className="flex items-center justify-end mb-3">
-                        <span className="text-[10px] text-gray-500 font-bold bg-gray-100 px-2.5 py-1 rounded">
-                          {prog.duration}
-                        </span>
-                      </div>
                       <h4 className="text-base font-bold text-[#111111] mb-2">{prog.title}</h4>
                       <p className="text-xs text-gray-600 leading-relaxed mb-4">{prog.description}</p>
                       
@@ -621,7 +619,7 @@ export default function TrainingPage() {
                       }}
                       className="w-full py-2 px-3 rounded-lg bg-gray-50 border border-gray-200 text-xs font-bold text-[#111111] hover:bg-[#D32F2F] hover:text-white transition flex items-center justify-between"
                     >
-                      <span>Request Syllabus</span>
+                      <span>Enroll Program</span>
                       <ArrowRight size={13} />
                     </button>
                   </div>
@@ -665,7 +663,7 @@ export default function TrainingPage() {
                   </div>
                   <h4 className="text-xl font-extrabold text-[#111111]">Registration Received!</h4>
                   <p className="text-xs text-gray-600 max-w-xs mx-auto">
-                    Thank you. Our academic coordinator will contact you shortly with the syllabus &amp; batch schedule.
+                    Your registration details have been delivered to <strong className="text-emerald-600">admin@galactic-3d.com</strong>. Our academic coordinator will contact you shortly.
                   </p>
                 </div>
               ) : (

@@ -510,18 +510,7 @@ export default function CareersPage() {
         duration: 0.4,
       });
 
-      // Dispatch mailto to admin@galactic-3d.com
-      const mailtoUrl = `mailto:admin@galactic-3d.com?subject=${encodeURIComponent(
-        `New Career Application: ${form.name} (${form.role})`
-      )}&body=${encodeURIComponent(
-        `Name: ${form.name}\nEmail: ${form.email}\nPosition: ${form.role}\nAbout: ${form.about}\n`
-      )}`;
-      
-      const link = document.createElement("a");
-      link.href = mailtoUrl;
-      link.click();
-
-      /* RESET */
+      /* RESET FORM */
       setForm({
         name: "",
         email: "",

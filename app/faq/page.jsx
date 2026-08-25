@@ -30,11 +30,6 @@ const FAQ_ITEMS = [
     a: "All file uploads and technical drawings are protected by strict Non-Disclosure Agreements (NDAs). Data is stored on 256-bit encrypted servers and is never shared, sold, or exposed to third parties.",
     category: "Security & IP",
   },
-  {
-    q: "Can you assist with Design for Additive Manufacturing (DfAM)?",
-    a: "Yes! Our team of additive manufacturing engineers provides full DfAM optimization, including wall thickness analysis, overhang support reduction, topology optimization, and weight reduction recommendations.",
-    category: "Engineering & DfAM",
-  },
 ];
 
 export default function FAQPage() {

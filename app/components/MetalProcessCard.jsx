@@ -106,15 +106,6 @@ export default function MetalProcessCard() {
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
-              <div className="absolute bottom-6 right-6">
-                <Link
-                  href="/equipment"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#D32F2F] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#B71C1C] transition-colors shadow-lg"
-                >
-                  Explore
-                  <ArrowUpRight className="w-4 h-4" />
-                </Link>
-              </div>
             </div>
           </div>
         </div>

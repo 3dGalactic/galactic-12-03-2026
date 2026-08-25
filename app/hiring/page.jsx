@@ -61,7 +61,7 @@ const HiringPage = () => {
         form.append("resume", resumeFile);
       }
 
-      const response = await fetch("/api/careers", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         body: form,
       });

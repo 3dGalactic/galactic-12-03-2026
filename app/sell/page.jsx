@@ -19,19 +19,44 @@ const SellPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Form submission logic would go here
-    console.log('Form submitted:', formData);
-    alert('Quote request submitted! We will contact you shortly.');
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      projectType: '',
-      description: ''
-    });
+
+    if (!formData.name || !formData.email || !formData.projectType || !formData.description) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: `Quote Request: ${formData.projectType}`,
+          message: formData.description,
+          sourcePage: 'Sell Page',
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || 'Unable to send message. Please try again.');
+      }
+
+      alert('Thank you! Your message has been sent successfully.');
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        projectType: '',
+        description: ''
+      });
+    } catch (error) {
+      alert(error.message || 'Unable to send message. Please try again.');
+    }
   };
 
   const printingOptions = [
