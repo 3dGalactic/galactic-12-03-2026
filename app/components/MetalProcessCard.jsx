@@ -47,28 +47,34 @@ export default function MetalProcessCard() {
           <div className="p-8 sm:p-10 flex flex-col justify-between">
             <div>
               <div className="mb-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold text-[#111111] tracking-tight">
-                  What We Can Print
-                </h3>
-              </div>
+  <h3 className="text-4xl sm:text-5xl font-extrabold text-[#111111] tracking-tight">
+    EOS M290
+  </h3>
+</div>
 
-              <div className="flex flex-wrap gap-2 mb-8">
-                {METAL_TAGS.map((tag) => (
-                  <button
-                    key={tag.label}
-                    onClick={() => setActiveTag(tag)}
-                    className="rounded-full border border-[#EAEAEA] bg-gray-50 px-4 py-2 text-sm font-semibold text-[#111111] hover:bg-[#D32F2F] hover:text-white hover:border-[#D32F2F] transition-colors"
-                  >
-                    {tag.label}
-                  </button>
-                ))}
-              </div>
+<div className="mb-8">
+  <p className="text-xs font-bold text-gray-400 tracking-widest mb-1">
+      MATERIALS WE PRINT
+  </p>
+
+  <div className="grid grid-cols-3 gap-2 max-w-xl">
+    {METAL_TAGS.map((tag) => (
+      <button
+        key={tag.label}
+        onClick={() => setActiveTag(tag)}
+        className="w-full rounded-full border border-[#EAEAEA] bg-gray-50 px-3 py-2 text-sm font-semibold text-[#111111] hover:bg-[#D32F2F] hover:text-white hover:border-[#D32F2F] transition-colors"
+      >
+        {tag.label}
+      </button>
+    ))}
+  </div>
+</div>
 
               <div className="border-t border-[#EAEAEA] pt-6">
                 <p className="text-xs font-bold text-gray-400 tracking-widest mb-1">
                   PROCESS
                 </p>
-                <p className="text-xl font-extrabold text-[#D32F2F] mb-4">
+                <p className="text-2xl sm:text-3xl font-extrabold text-[#D32F2F] mb-4">
                   DMLS / LPBF
                 </p>
 
