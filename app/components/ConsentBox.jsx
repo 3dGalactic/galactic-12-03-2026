@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
+import React, { useState } from "react";
 import { CheckCircle2, ShieldCheck, X, FileText } from "lucide-react";
 
 export const CONSENT_TEXT = `By submitting this form, I consent to receiving communications from Galactic 3D regarding industrial manufacturing services, additive manufacturing solutions, DMLS metal printing, training programs, events, consultations, quotations, career opportunities, certifications, and other relevant business communications via Email, Phone, SMS, or WhatsApp.
@@ -15,24 +14,8 @@ Submitting this form does not guarantee employment, admission into training prog
 By submitting this form, I agree to receive email notifications, WhatsApp messages, phone calls, and SMS communications related to my inquiry or application.`;
 
 export default function ConsentBox({ value = "", onChange, error }) {
-  const [mounted, setMounted] = useState(false);
   const [showPolicyModal, setShowPolicyModal] = useState(false);
   const [inputText, setInputText] = useState(value);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (showPolicyModal) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [showPolicyModal]);
 
   const handleInputChange = (e) => {
     const val = e.target.value;
@@ -51,7 +34,7 @@ export default function ConsentBox({ value = "", onChange, error }) {
   const isAccepted = cleanedVal === "YES I ACCEPT";
 
   return (
-    <div className="w-full my-4 font-sans text-left">
+    <div className="w-full my-4 font-sans text-left relative">
       <div
         className={`p-4 sm:p-5 rounded-2xl bg-gray-50 border transition-all ${
           error
@@ -66,14 +49,14 @@ export default function ConsentBox({ value = "", onChange, error }) {
             DATA PRIVACY CONSENT
           </h4>
 
-          {/* SECONDARY REVIEW POLICY BUTTON */}
+          {/* INLINE REVIEW POLICY BUTTON */}
           <button
             type="button"
-            onClick={() => setShowPolicyModal(true)}
+            onClick={() => setShowPolicyModal(!showPolicyModal)}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E53935] bg-white text-[#E53935] hover:bg-red-50 text-xs font-bold transition shadow-2xs cursor-pointer active:scale-95"
           >
             <FileText size={14} />
-            <span>Review Policy</span>
+            <span>{showPolicyModal ? "Hide Policy" : "Review Policy"}</span>
           </button>
         </div>
 
@@ -100,6 +83,44 @@ export default function ConsentBox({ value = "", onChange, error }) {
             </span>
           )}
         </div>
+
+        {/* IN-PLACE POLICY POPUP BOX */}
+        {showPolicyModal && (
+          <div className="mt-3 p-4 sm:p-5 rounded-2xl bg-white border-2 border-[#D32F2F] shadow-xl animate-in fade-in zoom-in-95 duration-200 space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <ShieldCheck size={18} className="text-[#D32F2F]" />
+                <span className="text-xs sm:text-sm font-extrabold uppercase text-[#111111]">
+                  Data Privacy &amp; Communication Terms
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPolicyModal(false)}
+                className="w-7 h-7 rounded-full bg-gray-100 hover:bg-[#D32F2F] text-gray-500 hover:text-white flex items-center justify-center transition cursor-pointer"
+                aria-label="Close policy"
+              >
+                <X size={15} />
+              </button>
+            </div>
+
+            <div className="max-h-52 overflow-y-auto space-y-2 pr-1 text-xs text-gray-600 leading-relaxed font-sans border-b border-gray-100 pb-3">
+              {CONSENT_TEXT.split("\n\n").map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
+            </div>
+
+            <div className="flex justify-end pt-1">
+              <button
+                type="button"
+                onClick={() => setShowPolicyModal(false)}
+                className="px-4 py-1.5 rounded-lg bg-[#D32F2F] hover:bg-red-700 text-white text-xs font-bold transition shadow-xs cursor-pointer"
+              >
+                Close Policy
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* VALIDATION ERROR MESSAGE */}
@@ -107,88 +128,6 @@ export default function ConsentBox({ value = "", onChange, error }) {
         <p className="mt-2 text-xs font-bold text-[#D32F2F] flex items-center gap-1">
           Please type &quot;YES I ACCEPT&quot; to proceed.
         </p>
-      )}
-
-      {/* POLICY REVIEW MODAL OVERLAY */}
-      {mounted && showPolicyModal && createPortal(
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            width: "100vw",
-            height: "100vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "rgba(0, 0, 0, 0.75)",
-            backdropFilter: "blur(6px)",
-            WebkitBackdropFilter: "blur(6px)",
-            zIndex: 999999,
-            margin: 0,
-            padding: "1rem",
-            boxSizing: "border-box",
-          }}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setShowPolicyModal(false);
-            }
-          }}
-        >
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-2xl max-w-xl w-full max-h-[85vh] flex flex-col overflow-hidden relative my-auto">
-            {/* MODAL HEADER */}
-            <div className="bg-[#111111] p-5 sm:p-6 text-white flex items-center justify-between shrink-0 border-b border-gray-800">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#D32F2F]/20 border border-[#D32F2F]/40 flex items-center justify-center text-[#D32F2F]">
-                  <ShieldCheck size={18} />
-                </div>
-                <div>
-                  <h3 className="text-sm sm:text-base font-extrabold uppercase tracking-wide text-white">
-                    DATA PRIVACY &amp; COMMUNICATION CONSENT
-                  </h3>
-                  <p className="text-[11px] text-gray-400 font-mono">Galactic 3D Official Policy Terms</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowPolicyModal(false)}
-                className="p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white transition"
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            {/* MODAL BODY (SCROLLABLE) */}
-            <div className="p-5 sm:p-6 overflow-y-auto space-y-4 text-xs sm:text-sm text-gray-700 leading-relaxed font-sans">
-              {CONSENT_TEXT.split("\n\n").map((paragraph, index) => (
-                <p key={index} className="text-gray-700 font-normal">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-
-            {/* MODAL FOOTER */}
-            <div className="p-4 sm:p-5 bg-gray-50 border-t border-gray-200 flex flex-wrap items-center justify-end gap-3 shrink-0">
-              <button
-                type="button"
-                onClick={() => setShowPolicyModal(false)}
-                className="px-4 py-2 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs font-bold transition cursor-pointer"
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowPolicyModal(false)}
-                className="px-5 py-2 rounded-xl bg-[#D32F2F] hover:bg-[#b71c1c] text-white text-xs font-bold transition shadow-xs cursor-pointer"
-              >
-                I Understand
-              </button>
-            </div>
-          </div>
-        </div>,
-        document.body
       )}
     </div>
   );

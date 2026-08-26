@@ -1405,6 +1405,153 @@ export default function TrainingPage() {
 
 
 
+      {/* ENROLLMENT PORTAL MODAL */}
+      {mounted && showEnrollModal && createPortal(
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
+            zIndex: 999999,
+            margin: 0,
+            padding: "1rem",
+            boxSizing: "border-box",
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowEnrollModal(false);
+            }
+          }}
+        >
+          <div
+            className="relative w-full max-w-lg bg-white border border-gray-200 text-[#111111] rounded-2xl shadow-2xl p-6 overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+              <div>
+                <span className="text-[10px] font-extrabold text-[#D32F2F] uppercase tracking-wider block">Galactic 3D Academy</span>
+                <h3 className="text-lg font-extrabold text-[#111111]">Enroll in Training Program</h3>
+                {selectedCourse?.title && (
+                  <p className="text-xs text-[#D32F2F] font-bold">{selectedCourse.title}</p>
+                )}
+              </div>
+              <button
+                onClick={() => setShowEnrollModal(false)}
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-[#D32F2F] text-gray-500 hover:text-white flex items-center justify-center transition cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {submitted ? (
+              <div className="py-8 text-center space-y-3">
+                <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+                  <CheckCircle2 size={24} />
+                </div>
+                <h4 className="text-base font-extrabold text-[#111111]">Enrollment Inquiry Received!</h4>
+                <p className="text-xs text-gray-600 max-w-xs mx-auto">
+                  Thank you for enrolling. Our training team will review your application and contact you within 24 hours.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleEnrollSubmit} className="space-y-4 pt-4">
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1">Full Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="e.g. Rahul Sharma"
+                    className="w-full px-3.5 py-2 text-xs rounded-xl bg-gray-50 border border-gray-300 text-[#111111] placeholder:text-gray-400 focus:border-[#D32F2F] focus:bg-white focus:outline-hidden transition-colors"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Email Address *</label>
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="name@company.com"
+                      className="w-full px-3.5 py-2 text-xs rounded-xl bg-gray-50 border border-gray-300 text-[#111111] placeholder:text-gray-400 focus:border-[#D32F2F] focus:bg-white focus:outline-hidden transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Phone / WhatsApp *</label>
+                    <input
+                      type="tel"
+                      required
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      placeholder="+91 98765 43210"
+                      className="w-full px-3.5 py-2 text-xs rounded-xl bg-gray-50 border border-gray-300 text-[#111111] placeholder:text-gray-400 focus:border-[#D32F2F] focus:bg-white focus:outline-hidden transition-colors"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1">Institution / Organization</label>
+                  <input
+                    type="text"
+                    value={formData.institution}
+                    onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
+                    placeholder="e.g. NMIT / Corporate Company"
+                    className="w-full px-3.5 py-2 text-xs rounded-xl bg-gray-50 border border-gray-300 text-[#111111] placeholder:text-gray-400 focus:border-[#D32F2F] focus:bg-white focus:outline-hidden transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1">Training Interests / Objectives</label>
+                  <textarea
+                    rows={2}
+                    value={formData.interests}
+                    onChange={(e) => setFormData({ ...formData, interests: e.target.value })}
+                    placeholder="Describe your 3D printing background or learning goals..."
+                    className="w-full px-3.5 py-2 text-xs rounded-xl bg-gray-50 border border-gray-300 text-[#111111] placeholder:text-gray-400 focus:border-[#D32F2F] focus:bg-white focus:outline-hidden transition-colors resize-none"
+                  />
+                </div>
+
+                {/* CONSENT BOX */}
+                <ConsentBox
+                  consentText={consentText}
+                  setConsentText={setConsentText}
+                  consentValid={consentValid}
+                  setConsentValid={setConsentValid}
+                  consentError={consentError}
+                />
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-3 bg-[#D32F2F] hover:bg-red-700 text-white text-xs font-extrabold uppercase tracking-wider rounded-xl transition shadow-lg flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <span>Submitting Application...</span>
+                  ) : (
+                    <>
+                      <span>Submit Enrollment Application</span>
+                      <ArrowRight size={15} />
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>,
+        document.body
+      )}
+
       {/* DIRECT PHOTO LIGHTBOX VIEWER - MOUNTED DIRECTLY TO document.body VIA PORTAL */}
       {mounted && photoLightbox && createPortal(
         <div
