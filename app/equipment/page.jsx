@@ -3,6 +3,7 @@ import Image from "next/image";
 import {
   ArrowLeft,
   ArrowUpRight,
+  Download,
   Zap,
   Target,
   Gauge,
@@ -88,6 +89,15 @@ export const metadata = {
 export default function EquipmentPage() {
   return (
     <div className="min-h-screen text-[#111111] font-sans">
+      {/* FLOATING DOWNLOAD BUTTON */}
+      <a
+        href="/EOS M290 _ Galactic 3D.pdf"
+        download
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-[#D32F2F] text-white px-5 py-3 shadow-lg hover:bg-[#B71C1C] transition-colors"
+      >
+        <Download className="w-5 h-5" />
+        <span className="text-sm font-bold hidden sm:inline">Download PDF</span>
+      </a>
       {/* HERO */}
       <section className="hero-video-section relative overflow-hidden">
         {/* GRID BACKGROUND PATTERN */}
