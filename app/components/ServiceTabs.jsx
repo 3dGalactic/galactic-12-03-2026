@@ -61,7 +61,7 @@ export default function ServiceTabs() {
         {/* SECTION HEADER MATCHING SCREENSHOT + DOWNLOAD BROCHURE BUTTON */}
         <div className="border-b border-[#EAEAEA] pb-4 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-[#111111] leading-none">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-[800] uppercase tracking-tight text-[#111111] leading-none">
               MANUFACTURING <span className="text-[#E53935]">SERVICES</span>
             </h2>
           </div>
