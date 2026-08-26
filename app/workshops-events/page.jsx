@@ -34,7 +34,7 @@ const FEATURED_WORKSHOP = {
   experience:
     "Experience the complete industrial workflow of Additive Manufacturing, from design and build preparation to live Metal 3D Printing.",
   date: "18th & 19th September 2026",
-  time: "9:00 AM – 5:00 PM (Both Days)",
+  time: "9:00 AM – 4:00 PM (Both Days)",
   location:
     "Cambridge Institute of Technology, Jai Bhuvaneshwari Layout Rd, SR Layout, Chikkabasavanapura, Krishnarajapuram, Bengaluru, Karnataka 560036",
   mapUrl:
@@ -43,7 +43,10 @@ const FEATURED_WORKSHOP = {
   contactName: "Bharath Kumar S",
   contactPhone: "6360146030",
   pricing: {
-    earlyBird: "₹1,999/-",
+    earlyBird: {
+      students: "₹1,499/-",
+      professionals: "₹1,999/-",
+    },
     regular: {
       students: "₹1,999/-",
       professors: "₹2,499/-",
@@ -216,7 +219,7 @@ export default function WorkshopsEventsPage() {
     phone: "",
     organization: "",
     designation: "",
-    selectedPass: "Early Bird Pass — ₹1,999/-",
+    selectedPass: "Early Bird Student Pass — ₹1,499/-",
     notes: "",
   });
 
@@ -254,7 +257,7 @@ export default function WorkshopsEventsPage() {
           phone: "",
           organization: "",
           designation: "",
-          selectedPass: "Early Bird Pass — ₹1,999/-",
+          selectedPass: "Early Bird Student Pass — ₹1,499/-",
           notes: "",
         });
       }, 3500);
@@ -332,7 +335,7 @@ export default function WorkshopsEventsPage() {
                 </div>
                 <div className="flex items-center gap-2 bg-red-50 text-[#D32F2F] px-3.5 py-2 rounded-xl border border-red-200 font-extrabold">
                   <Tag size={16} />
-                  <span>Early Bird: {FEATURED_WORKSHOP.pricing.earlyBird}</span>
+                  <span>Early Bird: Students ₹1,499/- | Professionals ₹1,999/-</span>
                 </div>
               </div>
 
@@ -435,14 +438,20 @@ export default function WorkshopsEventsPage() {
                         Special Offer
                       </span>
                       <span className="text-xs font-extrabold uppercase tracking-wider text-[#D32F2F] block">
-                        Early Bird Pass
+                        Early Bird Passes
                       </span>
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-black text-[#111111]">₹1,999</span>
-                        <span className="text-xs text-gray-500 font-bold">/- per participant</span>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center justify-between gap-4">
+                          <span className="font-semibold text-gray-700">Students</span>
+                          <span className="font-black text-[#111111]">₹1,499/-</span>
+                        </div>
+                        <div className="flex items-center justify-between gap-4">
+                          <span className="font-semibold text-gray-700">Professionals</span>
+                          <span className="font-black text-[#111111]">₹1,999/-</span>
+                        </div>
                       </div>
                       <p className="text-xs text-gray-600 leading-relaxed pt-1">
-                        Discounted early registration rate open for all individual applicants.
+                        Discounted early registration rates for student and professional applicants.
                       </p>
                     </div>
 
@@ -942,7 +951,8 @@ export default function WorkshopsEventsPage() {
                       onChange={(e) => setFormData({ ...formData, selectedPass: e.target.value })}
                       className="w-full px-3.5 py-2 text-xs rounded-lg border border-gray-300 focus:border-[#D32F2F] focus:outline-hidden font-semibold text-gray-800"
                     >
-                      <option value="Early Bird Pass — ₹1,999/-">Early Bird Offer Pass — ₹1,999/-</option>
+                      <option value="Early Bird Student Pass — ₹1,499/-">Early Bird: Student — ₹1,499/-</option>
+                      <option value="Early Bird Professional Pass — ₹1,999/-">Early Bird: Professional — ₹1,999/-</option>
                       <option value="Student Individual Pass — ₹1,999/-">Individual: Student — ₹1,999/-</option>
                       <option value="Professor / Academician Pass — ₹2,499/-">Individual: Professor / Academician — ₹2,499/-</option>
                       <option value="Industry Professional Pass — ₹2,999/-">Individual: Industry Professional — ₹2,999/-</option>
