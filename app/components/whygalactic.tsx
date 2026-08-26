@@ -87,12 +87,6 @@ export default function WhyGalactic() {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-[#EAEAEA] pb-8 mb-12">
           
           <div className="space-y-3">
-            {/* TOP LOGO BADGE */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-50 border border-red-100 text-[#D32F2F] text-xs font-bold uppercase tracking-wider">
-              <span className="w-2 h-2 rounded-full bg-[#D32F2F]" />
-              GALACTIC 3D
-            </div>
-
             {/* HEADLINE: Why choose Galactic? */}
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#111111]">
               Why choose <span className="text-[#D32F2F]">Galactic?</span>

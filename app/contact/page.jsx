@@ -13,6 +13,7 @@ import {
   MessageSquare,
   MessageCircle,
 } from "lucide-react";
+import ConsentBox from "../components/ConsentBox";
 import { motion } from "framer-motion";
 import {
   MapPinIcon,
@@ -37,6 +38,10 @@ export default function Contact() {
   });
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [errors, setErrors] = useState({});
+  const [consentText, setConsentText] = useState("");
+  const [consentValid, setConsentValid] = useState(false);
+  const [consentError, setConsentError] = useState(false);
+  const [submittedMessage, setSubmittedMessage] = useState("");
   const [activeAccordion, setActiveAccordion] = useState(null);
   const formRef = useRef(null);
 
@@ -78,18 +83,26 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!consentValid) {
+      setConsentError(true);
+      return;
+    }
+    setConsentError(false);
+
     const validation = validate();
     if (Object.keys(validation).length > 0) {
       setErrors(validation);
       return;
     }
     setStatus("loading");
+    setSubmittedMessage("");
 
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, sourcePage: "Contact Page" }),
+        body: JSON.stringify({ ...form, type: "production", sourcePage: "Contact Page" }),
       });
 
       const data = await res.json();
@@ -98,6 +111,8 @@ export default function Contact() {
       }
 
       setStatus("success");
+      setSubmittedMessage("Thank you for contacting Galactic 3D.\n\nYour submission has been received successfully.\n\nOur team will review your information and get back to you shortly via email, phone, or WhatsApp.");
+      setConsent(false);
 
       setForm({
         name: "",
@@ -296,6 +311,24 @@ export default function Contact() {
                     </p>
                   )}
                 </div>
+
+                {/* CONSENT NOTICE & MANDATORY WRITE SPACE */}
+                <ConsentBox
+                  value={consentText}
+                  onChange={(val, isValid) => {
+                    setConsentText(val);
+                    setConsentValid(isValid);
+                    if (isValid) setConsentError(false);
+                  }}
+                  error={consentError}
+                />
+
+                {submittedMessage && (
+                  <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-2 text-[#111111] text-xs font-bold whitespace-pre-line shadow-sm my-4">
+                    <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
+                    <p>{submittedMessage}</p>
+                  </div>
+                )}
 
                 {/* ALWAYS-VISIBLE SOLID BLACK SUBMIT BUTTON */}
                 <button

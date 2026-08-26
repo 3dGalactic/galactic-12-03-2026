@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Mail, X, Send, CheckCircle2, AlertCircle, ExternalLink, Globe } from "lucide-react";
+import ConsentBox from "./ConsentBox";
 
 export default function EmailTeamModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -12,11 +13,20 @@ export default function EmailTeamModal({ isOpen, onClose }) {
   });
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState("idle");
+  const [consentText, setConsentText] = useState("");
+  const [consentValid, setConsentValid] = useState(false);
+  const [consentError, setConsentError] = useState(false);
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!consentValid) {
+      setConsentError(true);
+      return;
+    }
+    setConsentError(false);
+
     if (!formData.name || !formData.email || !formData.message) {
       setStatus("error");
       return;
@@ -160,6 +170,16 @@ export default function EmailTeamModal({ isOpen, onClose }) {
                   className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-xs text-[#111111] focus:outline-none focus:border-[#D32F2F] focus:bg-white transition resize-none"
                 />
               </div>
+
+              <ConsentBox
+                value={consentText}
+                onChange={(val, isValid) => {
+                  setConsentText(val);
+                  setConsentValid(isValid);
+                  if (isValid) setConsentError(false);
+                }}
+                error={consentError}
+              />
 
               {status === "error" && (
                 <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700 flex items-center gap-2">

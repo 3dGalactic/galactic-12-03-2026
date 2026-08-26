@@ -23,23 +23,46 @@ import {
   Target,
   Compass,
   Briefcase,
-  Layers,
   Cpu,
   Factory,
   Download,
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
 } from "lucide-react";
+import ConsentBox from "../components/ConsentBox";
 
 export default function TrainingPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [showEnrollModal, setShowEnrollModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedPartnerModal, setSelectedPartnerModal] = useState(null);
-  const [activePhoto, setActivePhoto] = useState(null);
+  
+  // DIRECT PHOTO LIGHTBOX VIEWER STATE
+  const [photoLightbox, setPhotoLightbox] = useState(null); // { src, caption, list, index, title }
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [consentText, setConsentText] = useState("");
+  const [consentValid, setConsentValid] = useState(false);
+  const [consentError, setConsentError] = useState(false);
+
+  // Close modals on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setPhotoLightbox(null);
+        setSelectedPartnerModal(null);
+        setShowEnrollModal(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const PARTNER_DETAILS = {
     nmit: {
+      id: "nmit",
       name: "Nitte Meenakshi Institute of Technology (NMIT)",
       location: "Bengaluru, Karnataka",
       years: "2024 – 2025",
@@ -64,6 +87,7 @@ export default function TrainingPage() {
       ],
     },
     alliance: {
+      id: "alliance",
       name: "Alliance University",
       location: "Bengaluru, Karnataka",
       years: "2024 – 2025",
@@ -78,6 +102,7 @@ export default function TrainingPage() {
       images: [],
     },
     cit: {
+      id: "cit",
       name: "Cambridge Institute of Technology (CIT)",
       location: "Bengaluru, Karnataka",
       years: "2024 – Present",
@@ -92,6 +117,7 @@ export default function TrainingPage() {
       images: [],
     },
     cambridge_school: {
+      id: "cambridge_school",
       name: "Cambridge School",
       location: "Bengaluru",
       years: "2024 – 2025",
@@ -106,6 +132,7 @@ export default function TrainingPage() {
       images: [],
     },
     imtma: {
+      id: "imtma",
       name: "IMTMA (Indian Machine Tool Manufacturers' Association)",
       location: "Bengaluru",
       years: "March 2026",
@@ -159,17 +186,24 @@ export default function TrainingPage() {
 
   const handleEnrollSubmit = async (e) => {
     e.preventDefault();
+    if (!consentValid) {
+      setConsentError(true);
+      return;
+    }
+    setConsentError(false);
     setIsSubmitting(true);
 
     const courseTitle = selectedCourse ? selectedCourse.title : "General Additive Training Program";
 
     try {
-      await fetch("/api/contact", {
+      await fetch("/api/training", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          trainingType: courseTitle,
           courseTitle,
+          type: "training",
           subject: courseTitle || "Training Inquiry",
           message: `Training inquiry for ${courseTitle || "program"}.\n\nInstitution: ${formData.institution || "N/A"}\nInterests: ${formData.interests || "N/A"}`,
           sourcePage: "Training Page",
@@ -186,7 +220,7 @@ export default function TrainingPage() {
         setShowEnrollModal(false);
         setSubmitted(false);
         setFormData({ name: "", email: "", phone: "", institution: "", interests: "" });
-      }, 3000);
+      }, 4000);
     }
   };
 
@@ -262,7 +296,7 @@ export default function TrainingPage() {
       ],
     },
     {
-      id: "inst-03",
+      id: "inst-[#03]",
       title: "Design Thinking & DFAM",
       target: "Advanced DfAM Engineers & Designers",
       description:
@@ -325,7 +359,7 @@ export default function TrainingPage() {
   return (
     <div className="min-h-screen bg-transparent text-[#222222] font-sans">
       
-      {/* 1. HERO SECTION - HOME THEME (EDS TECHNOLOGIES STYLE) */}
+      {/* HERO SECTION */}
       <section className="bg-gradient-to-b from-[#F8F9FA] to-white py-16 lg:py-24 border-b border-[#EAEAEA]">
         <div className="mx-auto max-w-7xl px-4 sm:px-8 text-center">
           <div className="max-w-3xl mx-auto space-y-4">
@@ -343,7 +377,7 @@ export default function TrainingPage() {
                   setSelectedCourse({ title: "General Training & Skill Development" });
                   setShowEnrollModal(true);
                 }}
-                className="btn-corporate-primary flex items-center gap-2"
+                className="btn-corporate-primary flex items-center gap-2 cursor-pointer"
               >
                 <span>Enroll in Training Program</span>
                 <ArrowRight size={16} />
@@ -361,7 +395,7 @@ export default function TrainingPage() {
         </div>
       </section>
 
-      {/* 3. BROCHURE PAGE 2 OVERVIEW: VISION, MENTORSHIP & LAB SHOWCASE */}
+      {/* OVERVIEW SECTION */}
       <section className="py-16 bg-white border-b border-[#EAEAEA]">
         <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-12">
           
@@ -414,17 +448,31 @@ export default function TrainingPage() {
               </div>
             </div>
 
-            {/* BROCHURE PAGE 2 IMAGE SHOWCASE */}
+            {/* BROCHURE SHOWCASE IMAGE - OPENS DIRECT PHOTO LIGHTBOX */}
             <div className="lg:col-span-6">
-              <div className="relative rounded-2xl overflow-hidden border border-[#EAEAEA] shadow-md group">
+              <div
+                onClick={() =>
+                  setPhotoLightbox({
+                    title: "Hands-On Expert Mentorship",
+                    src: "/Training/mentorship.jpg",
+                    caption: "Students and researchers interacting directly with industrial 3D printing equipment.",
+                  })
+                }
+                className="relative rounded-2xl overflow-hidden border border-[#EAEAEA] shadow-md group cursor-pointer bg-gray-900"
+              >
                 <img
                   src="/Training/mentorship.jpg"
                   alt="Mentorship & Competence Training"
                   className="w-full h-80 sm:h-96 object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-4 rounded-xl border border-gray-200 shadow-sm">
-                  <span className="text-xs font-bold text-[#111111] block">Hands-On Expert Mentorship</span>
-                  <span className="text-[11px] text-gray-600">Students and researchers interacting directly with industrial 3D printing equipment.</span>
+                <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md p-4 rounded-xl border border-gray-200 shadow-md flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-bold text-[#111111] block">Hands-On Expert Mentorship</span>
+                    <span className="text-[11px] text-gray-600">Students and researchers interacting directly with industrial equipment.</span>
+                  </div>
+                  <span className="text-xs font-bold text-white bg-[#D32F2F] px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1.5 shrink-0 ml-2">
+                    <Maximize2 size={13} /> View Photo 🔍
+                  </span>
                 </div>
               </div>
             </div>
@@ -433,7 +481,7 @@ export default function TrainingPage() {
         </div>
       </section>
 
-      {/* 4. WHY CHOOSE US? (4 PILLARS WITH BROCHURE ILLUSTRATION IMAGES) */}
+      {/* WHY CHOOSE US */}
       <section className="py-16 bg-[#F8F9FA] border-b border-[#EAEAEA]">
         <div className="mx-auto max-w-7xl px-4 sm:px-8">
           
@@ -446,14 +494,26 @@ export default function TrainingPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             
             {/* PILLAR 1 */}
-            <div className="p-5 bg-white rounded-2xl border border-[#EAEAEA] text-center shadow-sm hover:border-[#D32F2F] transition flex flex-col justify-between group">
+            <div
+              onClick={() =>
+                setPhotoLightbox({
+                  title: "Industry-Aligned Curriculum",
+                  src: "/Training/curriculum.png",
+                  caption: "Curated by 30+ year experienced AM pioneers, approved by EOS and Board of Studies.",
+                })
+              }
+              className="p-5 bg-white rounded-2xl border border-[#EAEAEA] text-center shadow-sm hover:border-[#D32F2F] transition flex flex-col justify-between group cursor-pointer"
+            >
               <div>
-                <div className="h-40 w-full rounded-xl overflow-hidden mb-4 border border-[#EAEAEA] shadow-xs group-hover:border-[#D32F2F]/40 transition-colors">
+                <div className="h-40 w-full rounded-xl overflow-hidden mb-4 border border-[#EAEAEA] shadow-xs group-hover:border-[#D32F2F]/40 transition-colors relative bg-gray-900">
                   <img
                     src="/Training/curriculum.png"
                     alt="Industry-aligned curriculum"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
+                  <div className="absolute top-2 right-2 bg-[#D32F2F] text-white px-2 py-0.5 rounded text-[10px] font-extrabold flex items-center gap-1">
+                    <Maximize2 size={11} /> View Photo
+                  </div>
                 </div>
                 <h3 className="text-base font-bold text-[#111111] mb-2">Industry-Aligned Curriculum</h3>
                 <p className="text-xs text-gray-600 leading-relaxed">
@@ -463,14 +523,26 @@ export default function TrainingPage() {
             </div>
 
             {/* PILLAR 2 */}
-            <div className="p-5 bg-white rounded-2xl border border-[#EAEAEA] text-center shadow-sm hover:border-[#D32F2F] transition flex flex-col justify-between group">
+            <div
+              onClick={() =>
+                setPhotoLightbox({
+                  title: "Hands-on Industrial Exposure",
+                  src: "/Training/competence.png",
+                  caption: "Direct interaction with DMLS metal printers, polymer SLS/FDM systems, and inspection tools.",
+                })
+              }
+              className="p-5 bg-white rounded-2xl border border-[#EAEAEA] text-center shadow-sm hover:border-[#D32F2F] transition flex flex-col justify-between group cursor-pointer"
+            >
               <div>
-                <div className="h-40 w-full rounded-xl overflow-hidden mb-4 border border-[#EAEAEA] shadow-xs group-hover:border-[#D32F2F]/40 transition-colors">
+                <div className="h-40 w-full rounded-xl overflow-hidden mb-4 border border-[#EAEAEA] shadow-xs group-hover:border-[#D32F2F]/40 transition-colors relative bg-gray-900">
                   <img
                     src="/Training/competence.png"
                     alt="Hands-on Industrial Exposure"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
+                  <div className="absolute top-2 right-2 bg-[#D32F2F] text-white px-2 py-0.5 rounded text-[10px] font-extrabold flex items-center gap-1">
+                    <Maximize2 size={11} /> View Photo
+                  </div>
                 </div>
                 <h3 className="text-base font-bold text-[#111111] mb-2">Hands-on Industrial Exposure</h3>
                 <p className="text-xs text-gray-600 leading-relaxed">
@@ -480,14 +552,26 @@ export default function TrainingPage() {
             </div>
 
             {/* PILLAR 3 */}
-            <div className="p-5 bg-white rounded-2xl border border-[#EAEAEA] text-center shadow-sm hover:border-[#D32F2F] transition flex flex-col justify-between group">
+            <div
+              onClick={() =>
+                setPhotoLightbox({
+                  title: "Ph.D & Expert Faculty",
+                  src: "/Training/experts.png",
+                  caption: "Mentorship from Ph.D. holders, M.Tech specialists, and seasoned manufacturing engineers.",
+                })
+              }
+              className="p-5 bg-white rounded-2xl border border-[#EAEAEA] text-center shadow-sm hover:border-[#D32F2F] transition flex flex-col justify-between group cursor-pointer"
+            >
               <div>
-                <div className="h-40 w-full rounded-xl overflow-hidden mb-4 border border-[#EAEAEA] shadow-xs group-hover:border-[#D32F2F]/40 transition-colors">
+                <div className="h-40 w-full rounded-xl overflow-hidden mb-4 border border-[#EAEAEA] shadow-xs group-hover:border-[#D32F2F]/40 transition-colors relative bg-gray-900">
                   <img
                     src="/Training/experts.png"
                     alt="Ph.D & Expert Faculty"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
+                  <div className="absolute top-2 right-2 bg-[#D32F2F] text-white px-2 py-0.5 rounded text-[10px] font-extrabold flex items-center gap-1">
+                    <Maximize2 size={11} /> View Photo
+                  </div>
                 </div>
                 <h3 className="text-base font-bold text-[#111111] mb-2">Ph.D &amp; Expert Faculty</h3>
                 <p className="text-xs text-gray-600 leading-relaxed">
@@ -497,14 +581,26 @@ export default function TrainingPage() {
             </div>
 
             {/* PILLAR 4 */}
-            <div className="p-5 bg-white rounded-2xl border border-[#EAEAEA] text-center shadow-sm hover:border-[#D32F2F] transition flex flex-col justify-between group">
+            <div
+              onClick={() =>
+                setPhotoLightbox({
+                  title: "End-to-End Skill Pathways",
+                  src: "/Training/facility.png",
+                  caption: "From STREAM high school basics to UG/PG engineering, PG Diplomas, and executive MSME support.",
+                })
+              }
+              className="p-5 bg-white rounded-2xl border border-[#EAEAEA] text-center shadow-sm hover:border-[#D32F2F] transition flex flex-col justify-between group cursor-pointer"
+            >
               <div>
-                <div className="h-40 w-full rounded-xl overflow-hidden mb-4 border border-[#EAEAEA] shadow-xs group-hover:border-[#D32F2F]/40 transition-colors">
+                <div className="h-40 w-full rounded-xl overflow-hidden mb-4 border border-[#EAEAEA] shadow-xs group-hover:border-[#D32F2F]/40 transition-colors relative bg-gray-900">
                   <img
                     src="/Training/facility.png"
                     alt="End-to-End Skill Pathways"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
+                  <div className="absolute top-2 right-2 bg-[#D32F2F] text-white px-2 py-0.5 rounded text-[10px] font-extrabold flex items-center gap-1">
+                    <Maximize2 size={11} /> View Photo
+                  </div>
                 </div>
                 <h3 className="text-base font-bold text-[#111111] mb-2">End-to-End Skill Pathways</h3>
                 <p className="text-xs text-gray-600 leading-relaxed">
@@ -518,7 +614,7 @@ export default function TrainingPage() {
         </div>
       </section>
 
-      {/* 5. COMPLETE TRAINING PROGRAM SCOPE (DETAILED CARD MATRIX) */}
+      {/* PROGRAM SCOPE MATRIX */}
       <section className="py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-8">
           
@@ -604,7 +700,7 @@ export default function TrainingPage() {
                         setSelectedCourse(prog);
                         setShowEnrollModal(true);
                       }}
-                      className="w-full py-2 px-3 rounded-lg bg-gray-50 border border-gray-200 text-xs font-bold text-[#111111] hover:bg-[#D32F2F] hover:text-white transition flex items-center justify-between"
+                      className="w-full py-2 px-3 rounded-lg bg-gray-50 border border-gray-200 text-xs font-bold text-[#111111] hover:bg-[#D32F2F] hover:text-white transition flex items-center justify-between cursor-pointer"
                     >
                       <span>Enroll Program</span>
                       <ArrowRight size={13} />
@@ -615,7 +711,9 @@ export default function TrainingPage() {
 
               {/* SCHOOL TRAINING COLLABORATION BADGE */}
               <div
-                onClick={() => setSelectedPartnerModal(PARTNER_DETAILS.cambridge_school)}
+                onClick={() => {
+                  setSelectedPartnerModal(PARTNER_DETAILS.cambridge_school);
+                }}
                 className="mt-6 p-4 rounded-xl bg-blue-50/70 border border-blue-200/80 hover:border-blue-400 hover:shadow-md transition-all cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-3"
               >
                 <div className="flex items-center gap-3">
@@ -672,7 +770,7 @@ export default function TrainingPage() {
                         setSelectedCourse(prog);
                         setShowEnrollModal(true);
                       }}
-                      className="w-full py-2 px-3 rounded-lg bg-gray-50 border border-gray-200 text-xs font-bold text-[#111111] hover:bg-[#D32F2F] hover:text-white transition flex items-center justify-between"
+                      className="w-full py-2 px-3 rounded-lg bg-gray-50 border border-gray-200 text-xs font-bold text-[#111111] hover:bg-[#D32F2F] hover:text-white transition flex items-center justify-between cursor-pointer"
                     >
                       <span>Enroll Program</span>
                       <ArrowRight size={13} />
@@ -681,48 +779,59 @@ export default function TrainingPage() {
                 ))}
               </div>
 
-              {/* INSTITUTIONAL TRAINING COLLABORATIONS BADGE */}
-              <div className="mt-6 p-5 rounded-xl bg-red-50/50 border border-red-200/80 space-y-3">
+              {/* INSTITUTIONAL TRAINING COLLABORATIONS */}
+              <div className="mt-6 p-5 rounded-2xl bg-red-50/50 border border-red-200/80 space-y-4 shadow-xs">
                 <div className="flex items-center gap-2">
                   <GraduationCap size={18} className="text-[#D32F2F]" />
                   <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111]">
                     Training Conducted Across Premier Engineering Institutions &amp; Universities:
                   </h4>
                 </div>
+
                 <div className="grid sm:grid-cols-3 gap-3">
-                  {/* NMIT */}
+                  {/* NMIT - OPENS PHOTO LIGHTBOX DIRECTLY */}
                   <div
-                    onClick={() => setSelectedPartnerModal(PARTNER_DETAILS.nmit)}
-                    className="p-3 bg-white rounded-lg border border-[#D32F2F]/40 hover:border-[#D32F2F] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+                    onClick={() => {
+                      setPhotoLightbox({
+                        title: PARTNER_DETAILS.nmit.name,
+                        src: PARTNER_DETAILS.nmit.images[0].src,
+                        caption: PARTNER_DETAILS.nmit.images[0].caption,
+                        list: PARTNER_DETAILS.nmit.images,
+                        index: 0,
+                      });
+                    }}
+                    className="p-4 rounded-xl bg-white border border-[#D32F2F]/40 hover:border-[#D32F2F] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   >
                     <div>
-                      <span className="text-xs font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block mb-1">
+                      <span className="text-xs sm:text-sm font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block mb-1 leading-tight">
                         Nitte Meenakshi Institute of Technology (NMIT)
                       </span>
-                      <p className="text-[10px] text-gray-500 line-clamp-1">Hands-on CAD &amp; DfAM lab sessions</p>
+                      <p className="text-[11px] text-gray-500 line-clamp-1">Hands-on CAD &amp; DfAM lab sessions</p>
                     </div>
-                    <div className="flex items-center justify-between text-[10px] text-gray-500 mt-2">
+                    <div className="flex items-center justify-between text-[11px] text-gray-500 mt-3 pt-2 border-t border-gray-100">
                       <span className="font-extrabold text-[#D32F2F]">2024 – 2025</span>
-                      <span className="inline-flex items-center gap-1 font-bold text-[#D32F2F] bg-red-50 px-2 py-0.5 rounded-full border border-red-100 group-hover:bg-[#D32F2F] group-hover:text-white transition-colors">
-                        📸 2 Photos &amp; Details &rarr;
+                      <span className="inline-flex items-center gap-1 font-extrabold text-white bg-[#D32F2F] px-2.5 py-1 rounded-lg shadow-2xs text-[11px] hover:bg-[#b71c1c] transition">
+                        📸 2 Photos &rarr;
                       </span>
                     </div>
                   </div>
 
                   {/* ALLIANCE UNIVERSITY */}
                   <div
-                    onClick={() => setSelectedPartnerModal(PARTNER_DETAILS.alliance)}
-                    className="p-3 bg-white rounded-lg border border-gray-200 hover:border-[#D32F2F] hover:shadow-sm transition-all cursor-pointer group flex flex-col justify-between"
+                    onClick={() => {
+                      setSelectedPartnerModal(PARTNER_DETAILS.alliance);
+                    }}
+                    className="p-4 rounded-xl bg-white border border-gray-200 hover:border-[#D32F2F]/60 hover:shadow-sm transition-all cursor-pointer group flex flex-col justify-between"
                   >
                     <div>
-                      <span className="text-xs font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block mb-1">
+                      <span className="text-xs sm:text-sm font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block mb-1 leading-tight">
                         Alliance University
                       </span>
-                      <p className="text-[10px] text-gray-500 line-clamp-1">3D printing &amp; build preparation track</p>
+                      <p className="text-[11px] text-gray-500 line-clamp-1">3D printing &amp; build preparation track</p>
                     </div>
-                    <div className="flex items-center justify-between text-[10px] text-gray-500 mt-2">
+                    <div className="flex items-center justify-between text-[11px] text-gray-500 mt-3 pt-2 border-t border-gray-100">
                       <span className="font-extrabold text-[#D32F2F]">2024 – 2025</span>
-                      <span className="font-bold text-gray-500 group-hover:text-[#D32F2F] transition-colors">
+                      <span className="font-bold text-gray-700 group-hover:text-[#D32F2F] transition-colors flex items-center gap-1">
                         View Details &rarr;
                       </span>
                     </div>
@@ -730,18 +839,20 @@ export default function TrainingPage() {
 
                   {/* CAMBRIDGE INSTITUTE OF TECHNOLOGY (CIT) */}
                   <div
-                    onClick={() => setSelectedPartnerModal(PARTNER_DETAILS.cit)}
-                    className="p-3 bg-white rounded-lg border border-gray-200 hover:border-[#D32F2F] hover:shadow-sm transition-all cursor-pointer group flex flex-col justify-between"
+                    onClick={() => {
+                      setSelectedPartnerModal(PARTNER_DETAILS.cit);
+                    }}
+                    className="p-4 rounded-xl bg-white border border-gray-200 hover:border-[#D32F2F]/60 hover:shadow-sm transition-all cursor-pointer group flex flex-col justify-between"
                   >
                     <div>
-                      <span className="text-xs font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block mb-1">
+                      <span className="text-xs sm:text-sm font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block mb-1 leading-tight">
                         Cambridge Institute of Technology (CIT)
                       </span>
-                      <p className="text-[10px] text-gray-500 line-clamp-1">Industry 4.0 Skill Center Partner</p>
+                      <p className="text-[11px] text-gray-500 line-clamp-1">Industry 4.0 Skill Center Partner</p>
                     </div>
-                    <div className="flex items-center justify-between text-[10px] text-gray-500 mt-2">
+                    <div className="flex items-center justify-between text-[11px] text-gray-500 mt-3 pt-2 border-t border-gray-100">
                       <span className="font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">2024 – Present</span>
-                      <span className="font-bold text-gray-500 group-hover:text-[#D32F2F] transition-colors">
+                      <span className="font-bold text-gray-700 group-hover:text-[#D32F2F] transition-colors flex items-center gap-1">
                         View Details &rarr;
                       </span>
                     </div>
@@ -789,7 +900,7 @@ export default function TrainingPage() {
                         setSelectedCourse(prog);
                         setShowEnrollModal(true);
                       }}
-                      className="w-full py-2 px-3 rounded-lg bg-gray-50 border border-gray-200 text-xs font-bold text-[#111111] hover:bg-[#D32F2F] hover:text-white transition flex items-center justify-between"
+                      className="w-full py-2 px-3 rounded-lg bg-gray-50 border border-gray-200 text-xs font-bold text-[#111111] hover:bg-[#D32F2F] hover:text-white transition flex items-center justify-between cursor-pointer"
                     >
                       <span>Enroll Program</span>
                       <ArrowRight size={13} />
@@ -800,7 +911,9 @@ export default function TrainingPage() {
 
               {/* INDUSTRY TRAINING COLLABORATION BADGE */}
               <div
-                onClick={() => setSelectedPartnerModal(PARTNER_DETAILS.imtma)}
+                onClick={() => {
+                  setSelectedPartnerModal(PARTNER_DETAILS.imtma);
+                }}
                 className="mt-6 p-4 rounded-xl bg-emerald-50/70 border border-emerald-200/80 hover:border-emerald-400 hover:shadow-md transition-all cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-3"
               >
                 <div className="flex items-center gap-3">
@@ -825,7 +938,7 @@ export default function TrainingPage() {
       {/* ENROLLMENT MODAL POPUP */}
       {showEnrollModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-2xl w-full max-w-lg overflow-hidden relative animate-fade-in-up">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-2xl w-full max-w-lg overflow-hidden relative">
             
             {/* MODAL HEADER */}
             <div className="bg-[#111111] text-white p-6 flex items-center justify-between">
@@ -839,7 +952,7 @@ export default function TrainingPage() {
               </div>
               <button
                 onClick={() => setShowEnrollModal(false)}
-                className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition"
+                className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition cursor-pointer"
               >
                 <X size={20} />
               </button>
@@ -919,6 +1032,16 @@ export default function TrainingPage() {
                     />
                   </div>
 
+                  <ConsentBox
+                    value={consentText}
+                    onChange={(val, isValid) => {
+                      setConsentText(val);
+                      setConsentValid(isValid);
+                      if (isValid) setConsentError(false);
+                    }}
+                    error={consentError}
+                  />
+
                   <button
                     type="submit"
                     disabled={isSubmitting}
@@ -934,18 +1057,23 @@ export default function TrainingPage() {
         </div>
       )}
 
-      {/* PARTNER / INSTITUTION DETAILS MODAL POPUP WITH PHOTO GALLERY */}
+      {/* TEXT DETAILS MODAL (FOR ALLIANCE, CIT, CAMBRIDGE SCHOOL, IMTMA) */}
       {selectedPartnerModal && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-2xl w-full max-w-3xl overflow-hidden relative animate-fade-in-up my-8">
-            
+        <div
+          className="fixed inset-0 z-[500] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 overflow-hidden animate-in fade-in duration-150"
+          onClick={() => setSelectedPartnerModal(null)}
+        >
+          <div
+            className="bg-white rounded-2xl border border-gray-200 shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-150 my-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* MODAL HEADER */}
-            <div className="bg-[#111111] text-white p-6 flex items-start justify-between">
+            <div className="bg-[#111111] text-white p-5 sm:p-6 flex items-start justify-between shrink-0 border-b border-gray-800">
               <div>
-                <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] bg-red-950/60 border border-red-900/60 px-2.5 py-0.5 rounded-full mb-2">
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] bg-red-950/60 border border-red-900/60 px-2.5 py-0.5 rounded-full mb-1.5">
                   <GraduationCap size={13} /> {selectedPartnerModal.type}
                 </span>
-                <h3 className="text-xl sm:text-2xl font-extrabold text-white">
+                <h3 className="text-lg sm:text-2xl font-extrabold text-white leading-tight">
                   {selectedPartnerModal.name}
                 </h3>
                 <p className="text-xs text-gray-400 mt-1">
@@ -955,61 +1083,24 @@ export default function TrainingPage() {
               <button
                 onClick={() => {
                   setSelectedPartnerModal(null);
-                  setActivePhoto(null);
                 }}
-                className="w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:text-white hover:bg-white/20 flex items-center justify-center transition cursor-pointer shrink-0"
+                className="w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:text-white hover:bg-[#D32F2F] flex items-center justify-center transition cursor-pointer shrink-0 ml-3"
               >
                 <X size={18} />
               </button>
             </div>
 
             {/* MODAL BODY */}
-            <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
-              
-              {/* IMAGE GALLERY SHOWCASE */}
-              {selectedPartnerModal.images && selectedPartnerModal.images.length > 0 && (
-                <div>
-                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111] mb-3 flex items-center gap-2">
-                    <Sparkles size={16} className="text-[#D32F2F]" /> Training Lab Photos ({selectedPartnerModal.images.length})
-                  </h4>
-
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {selectedPartnerModal.images.map((img, idx) => (
-                      <div
-                        key={idx}
-                        onClick={() => setActivePhoto(img.src)}
-                        className="group relative rounded-xl overflow-hidden border border-gray-200 shadow-sm cursor-pointer hover:border-[#D32F2F] transition-all bg-gray-900"
-                      >
-                        <img
-                          src={img.src}
-                          alt={img.caption}
-                          className="w-full h-48 sm:h-52 object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-end">
-                          <p className="text-[11px] text-white font-medium leading-tight drop-shadow-xs">
-                            {img.caption}
-                          </p>
-                          <span className="text-[10px] font-bold text-red-300 mt-1 flex items-center gap-1">
-                            Click to Enlarge 🔍
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* OVERVIEW & DESCRIPTION */}
+            <div className="p-5 sm:p-6 space-y-6 overflow-y-auto flex-1">
               <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-2">
                 <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111] flex items-center gap-2">
                   <BookOpen size={15} className="text-[#D32F2F]" /> Program Overview
                 </h4>
-                <p className="text-xs text-gray-700 leading-relaxed">
+                <p className="text-xs text-gray-700 leading-relaxed font-medium">
                   {selectedPartnerModal.description}
                 </p>
               </div>
 
-              {/* KEY HIGHLIGHTS */}
               {selectedPartnerModal.highlights && (
                 <div>
                   <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111] mb-3 flex items-center gap-2">
@@ -1025,55 +1116,120 @@ export default function TrainingPage() {
                   </div>
                 </div>
               )}
-
-              {/* FOOTER ACTIONS */}
-              <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-gray-200">
-                <button
-                  onClick={() => {
-                    const name = selectedPartnerModal.name;
-                    setSelectedPartnerModal(null);
-                    setSelectedCourse({ title: `Training Program for ${name}` });
-                    setShowEnrollModal(true);
-                  }}
-                  className="btn-corporate-primary flex items-center gap-2 text-xs py-2.5 px-4"
-                >
-                  <span>Enroll Similar Program for Your Institution</span>
-                  <ArrowRight size={14} />
-                </button>
-
-                <button
-                  onClick={() => setSelectedPartnerModal(null)}
-                  className="py-2 px-4 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold transition"
-                >
-                  Close
-                </button>
-              </div>
-
             </div>
 
+            <div className="p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 bg-gray-50 shrink-0">
+              <button
+                onClick={() => {
+                  const name = selectedPartnerModal.name;
+                  setSelectedPartnerModal(null);
+                  setSelectedCourse({ title: `Training Program for ${name}` });
+                  setShowEnrollModal(true);
+                }}
+                className="btn-corporate-primary flex items-center gap-2 text-xs py-2.5 px-4 cursor-pointer"
+              >
+                <span>Enroll Similar Program for Your Institution</span>
+                <ArrowRight size={14} />
+              </button>
+
+              <button
+                onClick={() => setSelectedPartnerModal(null)}
+                className="py-2 px-4 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs font-bold transition cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* FULLSCREEN PHOTO LIGHTBOX ZOOM */}
-      {activePhoto && (
+      {/* DIRECT PHOTO LIGHTBOX VIEWER - OPENS THE ACTUAL PHOTO DIRECTLY! */}
+      {photoLightbox && (
         <div
-          className="fixed inset-0 z-60 bg-black/90 flex items-center justify-center p-4 cursor-zoom-out animate-fade-in"
-          onClick={() => setActivePhoto(null)}
+          className="fixed inset-0 z-[99999] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 animate-in fade-in duration-150 select-none"
+          onClick={() => setPhotoLightbox(null)}
         >
-          <div className="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center">
-            <img
-              src={activePhoto}
-              alt="Enlarged Training Photo"
-              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl border border-gray-800"
-            />
+          {/* HEADER */}
+          <div
+            className="w-full max-w-5xl flex items-center justify-between text-white mb-3 px-2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div>
+              <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest block">
+                {photoLightbox.title || "Galactic 3D Training Photo"}
+              </span>
+              {photoLightbox.list && (
+                <span className="text-xs text-gray-300 font-extrabold">
+                  Photo {photoLightbox.index + 1} of {photoLightbox.list.length}
+                </span>
+              )}
+            </div>
             <button
-              onClick={() => setActivePhoto(null)}
-              className="mt-3 px-4 py-1.5 rounded-full bg-white/20 text-white hover:bg-white/40 text-xs font-bold transition flex items-center gap-2 cursor-pointer"
+              onClick={() => setPhotoLightbox(null)}
+              className="p-2 rounded-full bg-white/20 hover:bg-[#D32F2F] text-white transition flex items-center gap-2 text-xs font-bold px-4 cursor-pointer"
             >
-              <X size={14} /> Close Fullscreen
+              <X size={16} />
+              <span>Close (Esc)</span>
             </button>
           </div>
+
+          {/* MAIN PHOTO DISPLAY */}
+          <div
+            className="relative max-w-5xl w-full flex-1 flex flex-col items-center justify-center my-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={photoLightbox.src}
+              alt={photoLightbox.caption || photoLightbox.title}
+              className="max-w-full max-h-[72vh] w-auto h-auto object-contain rounded-2xl shadow-2xl border border-white/20"
+            />
+
+            {/* PREVIOUS ARROW */}
+            {photoLightbox.list && photoLightbox.list.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const newIdx = (photoLightbox.index - 1 + photoLightbox.list.length) % photoLightbox.list.length;
+                  setPhotoLightbox({
+                    ...photoLightbox,
+                    src: photoLightbox.list[newIdx].src,
+                    caption: photoLightbox.list[newIdx].caption,
+                    index: newIdx,
+                  });
+                }}
+                className="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/60 hover:bg-[#D32F2F] text-white transition shadow-2xl border border-white/20 cursor-pointer"
+              >
+                <ChevronLeft size={28} />
+              </button>
+            )}
+
+            {/* NEXT ARROW */}
+            {photoLightbox.list && photoLightbox.list.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const newIdx = (photoLightbox.index + 1) % photoLightbox.list.length;
+                  setPhotoLightbox({
+                    ...photoLightbox,
+                    src: photoLightbox.list[newIdx].src,
+                    caption: photoLightbox.list[newIdx].caption,
+                    index: newIdx,
+                  });
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/60 hover:bg-[#D32F2F] text-white transition shadow-2xl border border-white/20 cursor-pointer"
+              >
+                <ChevronRight size={28} />
+              </button>
+            )}
+
+            {/* CAPTION BAR */}
+            {photoLightbox.caption && (
+              <div className="mt-3 max-w-2xl text-center bg-zinc-900/90 text-white px-5 py-2 rounded-xl border border-zinc-800 text-xs sm:text-sm font-medium shadow-xl">
+                {photoLightbox.caption}
+              </div>
+            )}
+          </div>
+
         </div>
       )}
 

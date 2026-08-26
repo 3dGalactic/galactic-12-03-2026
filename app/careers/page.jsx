@@ -284,6 +284,7 @@ import {
   Check,
 } from "lucide-react";
 
+import ConsentBox from "../components/ConsentBox";
 import { gsap } from "gsap";
 import { supabase } from "../lib/supabaseClient";
 
@@ -356,6 +357,10 @@ export default function CareersPage() {
   });
 
   const [resume, setResume] = useState(null);
+  const [consentText, setConsentText] = useState("");
+  const [consentValid, setConsentValid] = useState(false);
+  const [consentError, setConsentError] = useState(false);
+  const [submittedMessage, setSubmittedMessage] = useState("");
 
   const [phase, setPhase] = useState("idle");
   /*
@@ -453,33 +458,31 @@ export default function CareersPage() {
 
     if (loading) return;
 
+    if (!consentValid) {
+      setConsentError(true);
+      setPhase("error");
+      return;
+    }
+    setConsentError(false);
+
     if (
       !form.name ||
       !form.email ||
       !form.role ||
       !form.about
     ) {
-
       setPhase("error");
-
       gsap.fromTo(
         formRef.current,
-        {
-          x: -8,
-        },
-        {
-          x: 8,
-          duration: 0.08,
-          repeat: 5,
-          yoyo: true,
-        }
+        { x: -8 },
+        { x: 8, duration: 0.08, repeat: 5, yoyo: true }
       );
-
       return;
     }
 
     setLoading(true);
     setPhase("processing");
+    setSubmittedMessage("");
 
     try {
       const dataPayload = new FormData();
@@ -487,6 +490,8 @@ export default function CareersPage() {
       dataPayload.append("email", form.email);
       dataPayload.append("role", form.role);
       dataPayload.append("about", form.about);
+      dataPayload.append("userInput", consentText || "YES I ACCEPT");
+      dataPayload.append("consentStatus", "Accepted");
       if (resume) {
         dataPayload.append("resume", resume);
       }
@@ -504,6 +509,8 @@ export default function CareersPage() {
 
       /* SUCCESS */
       setPhase("success");
+      setSubmittedMessage("Thank you for contacting Galactic 3D.\n\nYour submission has been received successfully.\n\nOur team will review your information and get back to you shortly via email, phone, or WhatsApp.");
+      setConsent(false);
 
       gsap.to(formRef.current, {
         borderColor: "#22c55e",
@@ -788,16 +795,36 @@ export default function CareersPage() {
 
             </div>
 
+            {/* CONSENT NOTICE & MANDATORY WRITE SPACE */}
+            <div className="fade-item border-t border-[#EAEAEA] px-6 sm:px-8 pt-4">
+              <ConsentBox
+                value={consentText}
+                onChange={(val, isValid) => {
+                  setConsentText(val);
+                  setConsentValid(isValid);
+                  if (isValid) setConsentError(false);
+                }}
+                error={consentError}
+              />
+            </div>
+
+            {submittedMessage && (
+              <div className="mx-6 sm:mx-8 p-6 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-2 text-[#111111] text-xs font-bold whitespace-pre-line shadow-sm">
+                <Check className="w-8 h-8 text-emerald-600 mx-auto" />
+                <p>{submittedMessage}</p>
+              </div>
+            )}
+
             {/* BUTTON */}
             <div className="fade-item border-t border-[#EAEAEA] p-8">
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !consentValid}
                 className={`
                   relative h-20 w-full overflow-hidden
                   rounded-full px-8 transition-all duration-500
-                  ${current.cls}
+                  ${!consentValid ? "bg-gray-300 text-gray-500 cursor-not-allowed opacity-60 shadow-none" : current.cls}
                 `}
               >
 

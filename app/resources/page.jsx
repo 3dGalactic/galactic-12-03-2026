@@ -77,7 +77,7 @@ export default function ResourcesPage() {
       <section className="relative min-h-[70vh] pt-28 pb-16 flex items-end overflow-hidden">
         {/* Background video */}
         <div className="absolute inset-0 -z-20 overflow-hidden">
-          <video className="w-full h-full object-cover" autoPlay muted loop playsInline preload="auto" poster="https://images.unsplash.com/photo-1581091215367-59ab6d0051d4?q=80&w=1600&auto=format&fit=crop">
+          <video className="w-full h-full object-cover" autoPlay muted loop playsInline preload="metadata" loading="lazy" poster="https://images.unsplash.com/photo-1581091215367-59ab6d0051d4?q=80&w=1600&auto=format&fit=crop">
             <source src="/galactic-bg.mp4" type="video/mp4" />
           </video>
         </div>
@@ -397,7 +397,7 @@ export default function ResourcesPage() {
       {/* FINAL CALL-TO-ACTION */}
       <section className="relative py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0 -z-20 overflow-hidden">
-          <video className="w-full h-full object-cover" autoPlay muted loop playsInline preload="auto" poster="https://images.unsplash.com/photo-1554475901-4538ddfbccc0?q=80&w=1600&auto=format&fit=crop">
+          <video className="w-full h-full object-cover" autoPlay muted loop playsInline preload="metadata" loading="lazy" poster="https://images.unsplash.com/photo-1554475901-4538ddfbccc0?q=80&w=1600&auto=format&fit=crop">
             <source src="https://videos.pexels.com/video-files/3184292/3184292-uhd_2560_1440_24fps.mp4" type="video/mp4" />
           </video>
         </div>

@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@galactic-3d.com";
+export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.EMAIL_USER || "admin@galactic-3d.com";
 
 const rateLimitMap = new Map();
 
@@ -41,6 +41,10 @@ export function buildAdminEmailContent(data = {}) {
   const trainingType = sanitizeString(data.trainingType || data.courseTitle);
   const organizationName = sanitizeString(data.organization || data.institution || data.company);
 
+  const userInput = sanitizeString(data.userInput || data.consentInput || "YES I ACCEPT");
+  const consentStatus = data.consentStatus || "Accepted";
+  const consentMethod = data.consentMethod || "Typed Confirmation";
+
   let emailSubject = "[Galactic 3D] Production Enquiry";
   const type = (data.type || "").toLowerCase();
   const pageLower = sourcePage.toLowerCase();
@@ -54,38 +58,47 @@ export function buildAdminEmailContent(data = {}) {
     const nameStr = name ? ` - ${name}` : "";
     emailSubject = `[Galactic 3D] Training Enquiry${courseStr}${nameStr}`;
   } else {
-    // Default to Production Enquiry for Contact, Upload, Marketplace, etc.
     const customSub = data.subject && data.subject !== "Website Inquiry" && data.subject !== "New Website Inquiry" ? `: ${data.subject}` : "";
     const nameStr = name ? ` - ${name}` : "";
     emailSubject = `[Galactic 3D] Production Enquiry${customSub}${nameStr}`;
   }
 
   const text = `Subject: ${emailSubject}
-Name: ${name || "N/A"}
+Form Type: ${type || "General Inquiry"}
+Date & Time: ${dateTime}
+Full Name: ${name || "N/A"}
 Email: ${email || "N/A"}
-Phone: ${phone || "N/A"}
+Phone Number: ${phone || "N/A"}
 Company / Organization: ${company || organizationName || "N/A"}
-${position ? `Position Applied For: ${position}\n` : ""}${trainingType ? `Training Type: ${trainingType}\n` : ""}Message: ${message || "N/A"}
-Source Page: ${sourcePage}
-Date & Time: ${dateTime}`;
+Subject: ${data.subject || emailSubject}
+Message: ${message || "N/A"}
+${position ? `Position Applied For: ${position}\n` : ""}${trainingType ? `Training Program: ${trainingType}\n` : ""}Consent Status: ${consentStatus}
+Consent Method: ${consentMethod}
+User Input: ${userInput}
+Consent Timestamp: ${dateTime}
+Website Page Submitted From: ${sourcePage}`;
 
   const html = `
-    <div style="font-family: Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 24px; background: #ffffff; color: #111111; border-radius: 12px; border: 1px solid #e5e7eb; shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+    <div style="font-family: Arial, sans-serif; max-width: 640px; margin: 0 auto; padding: 24px; background: #ffffff; color: #111111; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
       <div style="background: #111111; padding: 16px 20px; border-radius: 8px 8px 0 0; border-bottom: 3px solid #D32F2F;">
         <h2 style="margin: 0; font-size: 18px; color: #ffffff;">${emailSubject}</h2>
       </div>
       <div style="padding: 20px;">
         <table cellpadding="8" cellspacing="0" style="width:100%; border-collapse: collapse; color: #111111; font-size: 14px;">
-          <tr style="border-bottom: 1px solid #f3f4f6;"><td style="width: 160px; color: #6b7280; font-weight: bold;">Enquiry Type:</td><td><strong style="color: #D32F2F;">${emailSubject.split("] ")[1] || "Production Enquiry"}</strong></td></tr>
-          <tr style="border-bottom: 1px solid #f3f4f6;"><td style="width: 160px; color: #6b7280; font-weight: bold;">Name:</td><td><strong>${name || "N/A"}</strong></td></tr>
+          <tr style="border-bottom: 1px solid #f3f4f6;"><td style="width: 170px; color: #6b7280; font-weight: bold;">Form Type:</td><td><strong style="color: #D32F2F;">${type || "General Inquiry"}</strong></td></tr>
+          <tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Date & Time:</td><td>${dateTime}</td></tr>
+          <tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Full Name:</td><td><strong>${name || "N/A"}</strong></td></tr>
           <tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Email:</td><td><a href="mailto:${email}" style="color: #D32F2F; text-decoration: none;">${email || "N/A"}</a></td></tr>
-          <tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Phone:</td><td>${phone || "N/A"}</td></tr>
+          <tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Phone Number:</td><td>${phone || "N/A"}</td></tr>
           <tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Company / Organization:</td><td>${company || organizationName || "N/A"}</td></tr>
           ${position ? `<tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Position Applied For:</td><td><strong>${position}</strong></td></tr>` : ""}
-          ${trainingType ? `<tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Training Type:</td><td><strong>${trainingType}</strong></td></tr>` : ""}
+          ${trainingType ? `<tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Training Program:</td><td><strong>${trainingType}</strong></td></tr>` : ""}
           <tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold; vertical-align: top;">Message / Details:</td><td>${(message || "N/A").replace(/\n/g, "<br />")}</td></tr>
-          <tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Source Page:</td><td><span style="background: #f3f4f6; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">${sourcePage}</span></td></tr>
-          <tr><td style="color: #6b7280; font-weight: bold;">Date & Time:</td><td>${dateTime}</td></tr>
+          <tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Consent Status:</td><td><span style="background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">${consentStatus}</span></td></tr>
+          <tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Consent Method:</td><td><strong>${consentMethod}</strong></td></tr>
+          <tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">User Input:</td><td><code style="font-weight: bold; color: #111111;">${userInput}</code></td></tr>
+          <tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Consent Timestamp:</td><td>${dateTime}</td></tr>
+          <tr style="border-bottom: 1px solid #f3f4f6;"><td style="color: #6b7280; font-weight: bold;">Website Page Submitted From:</td><td><span style="background: #f3f4f6; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">${sourcePage}</span></td></tr>
         </table>
       </div>
     </div>
@@ -96,18 +109,24 @@ Date & Time: ${dateTime}`;
 
 // Build User Auto-Reply Email
 export function buildUserAutoReplyEmail(data = {}) {
-  const name = sanitizeString(data.name || data.fullName || "Valued Customer");
+  const name = sanitizeString(data.name || data.fullName || "Valued Contact");
   const email = sanitizeString(data.email || "");
 
   const text = `Hello ${name},
 
-Thank You For Contacting Galactic 3D.
+Thank you for contacting Galactic 3D.
 
-We have received your inquiry and our team will contact you shortly.
+We have successfully received your submission and our team will review your information shortly.
 
-Best regards,
+This email confirms that your request has been recorded in our system.
+
+Our team may contact you via email, phone, or WhatsApp regarding your inquiry, quotation request, training application, career application, event registration, consultation request, or other related services.
+
+Thank you for your interest in Galactic 3D.
+
+Regards,
 Galactic 3D Team
-admin@galactic-3d.com`;
+https://www.galactic-3d.com`;
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background: #ffffff; color: #111111; border-radius: 12px; border: 1px solid #e5e7eb;">
@@ -116,25 +135,28 @@ admin@galactic-3d.com`;
       </div>
       <div style="padding: 24px;">
         <h3 style="margin: 0 0 16px; color: #111111; font-size: 18px;">Hello ${name},</h3>
-        <p style="font-size: 15px; line-height: 1.6; color: #374151; font-weight: bold;">Thank You For Contacting Galactic 3D</p>
-        <p style="font-size: 14px; line-height: 1.6; color: #4b5563;">We have received your inquiry and our team will contact you shortly.</p>
+        <p style="font-size: 14px; line-height: 1.6; color: #374151;">Thank you for contacting Galactic 3D.</p>
+        <p style="font-size: 14px; line-height: 1.6; color: #374151;">We have successfully received your submission and our team will review your information shortly.</p>
+        <p style="font-size: 14px; line-height: 1.6; color: #374151;">This email confirms that your request has been recorded in our system.</p>
+        <p style="font-size: 14px; line-height: 1.6; color: #374151;">Our team may contact you via email, phone, or WhatsApp regarding your inquiry, quotation request, training application, career application, event registration, consultation request, or other related services.</p>
+        <p style="font-size: 14px; line-height: 1.6; color: #374151;">Thank you for your interest in Galactic 3D.</p>
         <div style="margin: 24px 0; padding: 16px; background: #f9fafb; border-left: 4px solid #D32F2F; border-radius: 4px; font-size: 13px; color: #4b5563;">
           <strong>Official Contact Email:</strong> admin@galactic-3d.com
         </div>
-        <p style="font-size: 13px; color: #6b7280; margin-bottom: 0;">Best regards,<br /><strong>Galactic 3D Team</strong></p>
+        <p style="font-size: 13px; color: #6b7280; margin-bottom: 0;">Regards,<br /><strong>Galactic 3D Team</strong><br /><a href="https://www.galactic-3d.com" style="color: #D32F2F; text-decoration: none;">https://www.galactic-3d.com</a></p>
       </div>
     </div>
   `;
 
-  return { to: email, subject: "Thank You For Contacting Galactic 3D", text, html };
+  return { to: email, subject: "Thank You for Contacting Galactic 3D", text, html };
 }
 
 // Direct Nodemailer Transport with Timeout Protection
 export async function sendSmtpMail({ to, fromName = "Galactic 3D", subject, text, html, replyTo, attachments = [] }) {
   const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
   const smtpPort = Number(process.env.SMTP_PORT || 465);
-  const smtpUser = process.env.SMTP_USER || "admin@galactic-3d.com";
-  const smtpPass = process.env.SMTP_PASS || "cmcc spkd lsfo bhji";
+  const smtpUser = process.env.SMTP_USER || process.env.EMAIL_USER || "admin@galactic-3d.com";
+  const smtpPass = process.env.SMTP_PASS || process.env.EMAIL_PASSWORD || "cmcc spkd lsfo bhji";
 
   const transporter = nodemailer.createTransport({
     host: smtpHost,

@@ -110,14 +110,6 @@ export default function TrustCertifications() {
                 </button>
 
                 <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-50 text-[#E53935] border border-red-100 text-[10px] font-extrabold uppercase tracking-wider">
-                      <ShieldCheck size={11} /> {activeCert.badge}
-                    </span>
-                    <span className="text-xs font-mono font-bold text-gray-400">
-                      Certificate Inspection
-                    </span>
-                  </div>
 
                   <h3 className="text-2xl font-black uppercase text-[#111111] mb-4">
                     {activeCert.title}
@@ -166,15 +158,6 @@ export default function TrustCertifications() {
                     }`}
                   >
                     <div>
-                      {/* STATUS TAG */}
-                      <div className="flex items-center justify-between mb-6">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#E53935] border border-red-100 text-[10px] font-extrabold uppercase tracking-wider">
-                          <Sparkles size={11} /> {cert.badge}
-                        </span>
-                        <span className="text-xs font-mono font-bold text-gray-400 group-hover:text-[#E53935] transition-colors">
-                          01 / 03
-                        </span>
-                      </div>
 
                       {/* LOGO THUMBNAIL CENTERED */}
                       <div className="relative aspect-[16/10] max-h-56 bg-white rounded-xl overflow-hidden mb-6 border border-gray-200 flex items-center justify-center p-6 group-hover:scale-102 transition-transform shadow-xs">
@@ -227,14 +210,6 @@ export default function TrustCertifications() {
                 </button>
 
                 <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-50 text-[#E53935] border border-red-100 text-[10px] font-extrabold uppercase tracking-wider">
-                      <ShieldCheck size={11} /> {activeCert.badge}
-                    </span>
-                    <span className="text-xs font-mono font-bold text-gray-400">
-                      Certificate Inspection
-                    </span>
-                  </div>
 
                   <h3 className="text-2xl font-black uppercase text-[#111111] mb-4">
                     {activeCert.title}
@@ -293,14 +268,6 @@ export default function TrustCertifications() {
                       </div>
 
                       <div className="text-left space-y-2 flex-grow">
-                        <div className="flex items-center justify-between">
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-50 text-[#E53935] border border-red-100 text-[10px] font-extrabold uppercase tracking-wider">
-                            <Sparkles size={10} /> {cert.badge}
-                          </span>
-                          <span className="text-xs font-mono font-bold text-gray-400 group-hover:text-[#E53935] transition-colors">
-                            0{index + 2} / 03
-                          </span>
-                        </div>
 
                         <h3 className="text-xl font-black uppercase text-[#111111] group-hover:text-[#E53935] transition-colors leading-tight">
                           {cert.title}

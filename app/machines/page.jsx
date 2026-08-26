@@ -11,7 +11,7 @@ export default function MachinesPage() {
       <section className="relative min-h-[70vh] pt-28 pb-20 flex items-end overflow-hidden">
         {/* Background video */}
         <div className="absolute inset-0 -z-20 overflow-hidden">
-          <video className="w-full h-full object-cover" autoPlay muted loop playsInline preload="auto" poster="https://images.unsplash.com/photo-1581091215367-59ab6d0051d4?q=80&w=1600&auto=format&fit=crop">
+          <video className="w-full h-full object-cover" autoPlay muted loop playsInline preload="metadata" loading="lazy" poster="https://images.unsplash.com/photo-1581091215367-59ab6d0051d4?q=80&w=1600&auto=format&fit=crop">
             <source src="/galactic-bg.mp4" type="video/mp4" />
             <source src="https://videos.pexels.com/video-files/6819731/6819731-hd_1920_1080_24fps.mp4" type="video/mp4" />
           </video>
@@ -38,7 +38,7 @@ export default function MachinesPage() {
       <section className="relative py-20 md:py-28">
         {/* Background video/image underlay */}
         <div className="absolute inset-0 -z-20 overflow-hidden">
-          <video className="w-full h-full object-cover" autoPlay muted loop playsInline preload="auto" poster="https://images.unsplash.com/photo-1581090700227-1e37b190418e?q=80&w=1600&auto=format&fit=crop" />
+          <video className="w-full h-full object-cover" autoPlay muted loop playsInline preload="metadata" loading="lazy" poster="https://images.unsplash.com/photo-1581090700227-1e37b190418e?q=80&w=1600&auto=format&fit=crop" />
         </div>
         <div className="absolute inset-0 -z-10">
           <div className="absolute inset-0 bg-gradient-to-b from-[#0f0b0b] via-[#130d0d] to-[#0f0b0b]" />
@@ -101,7 +101,7 @@ export default function MachinesPage() {
       <section className="relative py-20 md:py-28 overflow-hidden">
         {/* Background video underlay */}
         <div className="absolute inset-0 -z-20 overflow-hidden">
-          <video className="w-full h-full object-cover" autoPlay muted loop playsInline preload="auto" poster="https://images.unsplash.com/photo-1581092919535-7146ff1a5907?q=80&w=1600&auto=format&fit=crop">
+          <video className="w-full h-full object-cover" autoPlay muted loop playsInline preload="metadata" loading="lazy" poster="https://images.unsplash.com/photo-1581092919535-7146ff1a5907?q=80&w=1600&auto=format&fit=crop">
             <source src="https://videos.pexels.com/video-files/4329011/4329011-uhd_2560_1440_30fps.mp4" type="video/mp4" />
           </video>
         </div>

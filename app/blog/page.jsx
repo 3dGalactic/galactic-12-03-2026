@@ -136,7 +136,7 @@ export default function Blog() {
             <span className="text-sm font-medium font-['NeueMontreal']">Latest Insights</span>
           </div>
         </div>
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 relative font-['MonumentExtended'] bg-clip-text text-transparent bg-gradient-metal drop-shadow-xl tracking-tight leading-tight">
+        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 relative bg-clip-text text-transparent bg-gradient-metal drop-shadow-xl tracking-tight leading-tight">
           <span className="bg-clip-text text-transparent bg-gradient-metal">Galactic 3D</span>
           <span className="bg-clip-text text-transparent bg-gradient-red ml-3">Blog</span>
           <div className="absolute -bottom-3 left-0 w-20 h-1 bg-primary"></div>
@@ -159,7 +159,7 @@ export default function Blog() {
             </div>
             <div className="p-8 lg:p-12 flex flex-col justify-center relative z-20">
               <span className="inline-block bg-primary text-white text-sm font-medium px-3 py-1 rounded-full mb-4 transform hover:scale-105 transition-all duration-300 font-['NeueMontreal']">{featuredPost.category}</span>
-              <h2 className="text-3xl md:text-4xl font-extrabold mb-4 hover:text-primary transition-all duration-300 font-['MonumentExtended']">{featuredPost.title}</h2>
+              <h2 className="text-3xl md:text-4xl font-extrabold mb-4 hover:text-primary transition-all duration-300">{featuredPost.title}</h2>
               <p className="text-gray-400 text-lg mb-6 font-['NeueMontreal']">{featuredPost.excerpt}</p>
               <div className="flex items-center mb-6">
                 <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center mr-4 animate-pulse-glow">

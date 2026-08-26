@@ -38,7 +38,8 @@ export default function HeroSection() {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
+          loading="lazy"
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
             currentVideo === idx ? "opacity-100 z-0 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
           }`}
@@ -64,7 +65,7 @@ export default function HeroSection() {
       {/* HERO CONTENT: EXACT INTER FONT, REGULAR WEIGHT, TIGHT LEADING */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 py-16 sm:py-20 lg:py-28 w-full">
         <div>
-          <h1 className="font-['Inter',-apple-system,BlinkMacSystemFont,sans-serif] text-[clamp(2.25rem,7.5vw,105px)] sm:text-7xl lg:text-[105px] font-normal tracking-[-0.035em] text-white leading-[0.95] sm:leading-[0.88] drop-shadow-2xl max-w-6xl">
+          <h1 className="hero-title font-['Inter',-apple-system,BlinkMacSystemFont,sans-serif] text-[clamp(2.25rem,7.5vw,105px)] sm:text-7xl lg:text-[105px] font-normal tracking-[-0.035em] text-white leading-[0.95] sm:leading-[0.88] drop-shadow-2xl max-w-6xl">
             <span className="block">Concept</span>
             <span className="block">Engineered Into</span>
             <span className="block text-[#E53935]">Production</span>
