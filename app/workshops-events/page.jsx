@@ -67,7 +67,6 @@ const FEATURED_WORKSHOP = {
     "Materialise Magics Software Training",
     "Support Structures & Build Preparation",
     "Part Organization & Optimization",
-    "Live Metal 3D Printing Demonstration",
     "Galactic 3D Facility Tour",
     "Metal Part Samples Showcase",
     "Career Opportunities in Additive Manufacturing",
@@ -81,7 +80,7 @@ const FEATURED_WORKSHOP = {
   day2: {
     dateLabel: "Day 2 — 19th September 2026",
     agenda:
-      "Live Print Setup & Demonstration • Materialise Magics • Support Structures • Build Preparation • Industry Scope & Careers",
+      "Materialise Magics • Support Structures • Build Preparation • Industry Scope & Careers",
   },
   includes: [
     "Certificate",
@@ -99,7 +98,7 @@ const PAST_WORKSHOPS = [
     date: "3 – 4 July 2026",
     title: "Additive Manufacturing Workshop",
     category: "Masterclass",
-    description: "Comprehensive 2-day technical masterclass featuring live Metal 3D Printing demonstrations and Materialise Magics software training.",
+    description: "Comprehensive 2-day technical masterclass featuring Materialise Magics software training and industrial Additive Manufacturing workflows.",
     highlights: [
       "Covered the complete industrial AM workflow.",
       "Included design, build preparation, live Metal 3D Printing and post-processing.",
