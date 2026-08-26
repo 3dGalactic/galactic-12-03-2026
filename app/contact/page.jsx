@@ -917,57 +917,6 @@ ${activeAccordion === index ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
         </div>
       </motion.div> */}
 
-      <motion.section
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="py-16"
-      >
-        <div className="container mx-auto px-6">
-
-          <div className="max-w-4xl mx-auto rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl px-10 py-10 flex flex-col md:flex-row items-center justify-between gap-8">
-
-            {/* TEXT */}
-            <div className="text-center md:text-left">
-              <h2 className="text-3xl md:text-4xl font-['test'] leading-tight mb-2">
-                Ready to start your project?
-              </h2>
-
-              <p className="text-gray-400 font-['scrib'] text-sm md:text-base">
-                Let’s discuss your requirements and build something exceptional.
-              </p>
-            </div>
-
-            {/* ACTIONS */}
-            <div className="flex gap-4">
-
-              {/* <Link
-          href="/services"
-          className="group px-6 py-3 rounded-full border border-white/20 bg-white/[0.05] hover:bg-white/[0.1] transition-all duration-300"
-        >
-          <span className="font-['dena'] text-sm flex items-center gap-2">
-            Explore
-            <span className="group-hover:translate-x-1 transition">→</span>
-          </span>
-        </Link> */}
-
-              <a
-                href="#contact-form"
-                className="group px-6 py-3 rounded-full bg-primary hover:bg-secondary text-white transition-all duration-300"
-              >
-                <span className="font-['dena'] text-sm flex items-center gap-2">
-                  Contact
-                  <span className="group-hover:translate-x-1 transition">→</span>
-                </span>
-              </a>
-
-            </div>
-
-          </div>
-
-        </div>
-      </motion.section>
-
       {/* Animations */}
       <style jsx global>{`
         @keyframes fade-in {
