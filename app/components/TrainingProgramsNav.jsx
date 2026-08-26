@@ -143,22 +143,34 @@ export default function TrainingProgramsNav() {
               </span>
 
               {/* LOGO 1: EOS */}
-              <div className="p-4 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center h-20 hover:border-red-200 transition-colors">
+              <a
+                href="https://www.eos.info"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Visit EOS Official Website"
+                className="p-3 rounded-xl border border-gray-100 bg-white flex items-center justify-center h-20 hover:border-red-300 hover:shadow-md transition-all cursor-pointer group"
+              >
                 <img
-                  src="/hero/eos.svg"
+                  src="/eos.png"
                   alt="EOS Ecosystem Partner"
-                  className="h-10 w-auto object-contain"
+                  className="max-h-12 w-auto object-contain group-hover:scale-105 transition-transform"
                 />
-              </div>
+              </a>
 
               {/* LOGO 2: MATERIALISE */}
-              <div className="p-4 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center h-20 hover:border-red-200 transition-colors">
+              <a
+                href="https://www.materialise.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Visit Materialise Official Website"
+                className="p-3 rounded-xl border border-gray-100 bg-white flex items-center justify-center h-20 hover:border-red-300 hover:shadow-md transition-all cursor-pointer group"
+              >
                 <img
-                  src="/hero/materialise.svg"
+                  src="/Materialise-Logo.jpg"
                   alt="Materialise Partner"
-                  className="h-10 w-auto object-contain"
+                  className="max-h-12 w-auto object-contain group-hover:scale-105 transition-transform"
                 />
-              </div>
+              </a>
             </div>
 
             {/* ACTION CTA BUTTON */}
