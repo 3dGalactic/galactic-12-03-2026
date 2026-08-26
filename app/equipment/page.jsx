@@ -108,9 +108,7 @@ export default function EquipmentPage() {
           </Link>
 
           <div className="text-center mb-2">
-            <p className="text-sm sm:text-base font-bold text-[#D32F2F] tracking-widest mb-3">
-              METAL SOLUTIONS
-            </p>
+            
             <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-[#111111]">
               EOS M290
             </h1>
@@ -155,7 +153,7 @@ export default function EquipmentPage() {
 
             <div className="relative w-full h-[420px] sm:h-[440px] -mt-8">
               <Image
-                src="/eos-m290-front.png"
+                src="/eos-m290-front.webp"
                 alt="EOS M290 metal 3D printing machine, front view"
                 fill
                 className="object-contain object-top scale-125"
