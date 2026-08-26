@@ -118,8 +118,7 @@ export default function EquipmentPage() {
           </Link>
 
           <div className="text-center mb-2">
-            
-            <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-[#111111]">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#111111]">
               EOS M290
             </h1>
           </div>

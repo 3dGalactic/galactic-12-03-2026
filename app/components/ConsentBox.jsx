@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { CheckCircle2, ShieldCheck, X, FileText } from "lucide-react";
 
 export const CONSENT_TEXT = `By submitting this form, I consent to receiving communications from Galactic 3D regarding industrial manufacturing services, additive manufacturing solutions, DMLS metal printing, training programs, events, consultations, quotations, career opportunities, certifications, and other relevant business communications via Email, Phone, SMS, or WhatsApp.
@@ -14,8 +15,24 @@ Submitting this form does not guarantee employment, admission into training prog
 By submitting this form, I agree to receive email notifications, WhatsApp messages, phone calls, and SMS communications related to my inquiry or application.`;
 
 export default function ConsentBox({ value = "", onChange, error }) {
+  const [mounted, setMounted] = useState(false);
   const [showPolicyModal, setShowPolicyModal] = useState(false);
   const [inputText, setInputText] = useState(value);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (showPolicyModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [showPolicyModal]);
 
   const handleInputChange = (e) => {
     const val = e.target.value;
@@ -93,8 +110,33 @@ export default function ConsentBox({ value = "", onChange, error }) {
       )}
 
       {/* POLICY REVIEW MODAL OVERLAY */}
-      {showPolicyModal && (
-        <div className="fixed inset-0 z-[300] bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
+      {mounted && showPolicyModal && createPortal(
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
+            zIndex: 999999,
+            margin: 0,
+            padding: "1rem",
+            boxSizing: "border-box",
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowPolicyModal(false);
+            }
+          }}
+        >
           <div className="bg-white rounded-2xl border border-gray-200 shadow-2xl max-w-xl w-full max-h-[85vh] flex flex-col overflow-hidden relative my-auto">
             {/* MODAL HEADER */}
             <div className="bg-[#111111] p-5 sm:p-6 text-white flex items-center justify-between shrink-0 border-b border-gray-800">
@@ -145,7 +187,8 @@ export default function ConsentBox({ value = "", onChange, error }) {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Mail, X, Send, CheckCircle2, AlertCircle, ExternalLink, Globe } from "lucide-react";
 import ConsentBox from "./ConsentBox";
 
 export default function EmailTeamModal({ isOpen, onClose }) {
+  const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,7 +19,22 @@ export default function EmailTeamModal({ isOpen, onClose }) {
   const [consentValid, setConsentValid] = useState(false);
   const [consentError, setConsentError] = useState(false);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
+  if (!isOpen || !mounted) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,8 +86,31 @@ export default function EmailTeamModal({ isOpen, onClose }) {
     formData.subject
   )}&body=${encodeURIComponent(formData.message)}`;
 
-  return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200 font-sans">
+  return createPortal(
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.75)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
+        zIndex: 999999,
+        margin: 0,
+        padding: "1rem",
+        boxSizing: "border-box",
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
       <div className="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-gray-200">
         
         {/* MODAL HEADER */}
@@ -222,10 +262,9 @@ export default function EmailTeamModal({ isOpen, onClose }) {
               </a>
             </div>
           </div>
-
         </div>
-
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

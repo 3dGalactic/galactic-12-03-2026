@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import {
   Calendar,
@@ -21,6 +22,8 @@ import {
   ExternalLink,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
+  ChevronRight,
   Tag,
   Percent,
   Wrench,
@@ -205,12 +208,34 @@ const PAST_FORUMS = [
 ];
 
 export default function WorkshopsEventsPage() {
+  const [mounted, setMounted] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [showRegModal, setShowRegModal] = useState(false);
   const [selectedDetailEvent, setSelectedDetailEvent] = useState(null);
   const [fullscreenPhoto, setFullscreenPhoto] = useState(null);
+  const [cardPhotoModal, setCardPhotoModal] = useState(null);
+  const [animateIn, setAnimateIn] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Lock body scroll when any modal is open and trigger 300ms entry animation
+  useEffect(() => {
+    if (selectedDetailEvent || showRegModal || fullscreenPhoto) {
+      document.body.style.overflow = "hidden";
+      const timer = setTimeout(() => setAnimateIn(true), 10);
+      return () => clearTimeout(timer);
+    } else {
+      setAnimateIn(false);
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [selectedDetailEvent, showRegModal, fullscreenPhoto]);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -299,7 +324,11 @@ export default function WorkshopsEventsPage() {
           </div>
 
           {/* MAIN EVENT CARD CONTAINER */}
-          <div className="bg-white rounded-3xl border border-[#EAEAEA] p-6 sm:p-9 shadow-lg hover:border-[#D32F2F] transition-all duration-300 space-y-8">
+          <div
+            onMouseEnter={() => setIsExpanded(true)}
+            onMouseLeave={() => setIsExpanded(false)}
+            className="bg-white rounded-3xl border border-[#EAEAEA] p-6 sm:p-9 shadow-lg hover:border-[#D32F2F] transition-all duration-300 space-y-8"
+          >
             
             {/* TOP TITLE & COMPACT SUMMARY */}
             <div className="space-y-4">
@@ -624,49 +653,197 @@ export default function WorkshopsEventsPage() {
             </h3>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {PAST_WORKSHOPS.map((event, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => setSelectedDetailEvent(event)}
-                  className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4 hover:border-[#D32F2F] hover:shadow-md transition-all duration-200 flex flex-col justify-between cursor-pointer group"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between gap-2 flex-wrap">
-                      <span className="px-3 py-1 rounded-md bg-red-50 text-[#D32F2F] border border-red-100 text-[11px] font-extrabold flex items-center gap-1.5">
-                        <Calendar size={13} /> {event.date}
-                      </span>
-                      <span className="px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider">
-                        {event.category}
-                      </span>
+              {PAST_WORKSHOPS.map((event, idx) => {
+                const isSelected = selectedDetailEvent?.id === event.id;
+                const isViewingPhoto = cardPhotoModal?.eventId === event.id;
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => setSelectedDetailEvent(isSelected ? null : event)}
+                    className={`relative bg-white rounded-2xl border transition-all duration-300 flex flex-col justify-between h-full cursor-pointer group p-6 space-y-4 shadow-xs hover:shadow-xl hover:-translate-y-1 overflow-hidden ${
+                      isSelected || isViewingPhoto ? "border-[#D32F2F] ring-2 ring-red-100" : "border-gray-200 hover:border-[#D32F2F]"
+                    }`}
+                  >
+                    {/* IN-PLACE POP-UP LARGE PHOTO LIGHTBOX OVERLAY (WHITE BACKGROUND) */}
+                    {isViewingPhoto && (
+                      <div className="absolute inset-0 z-30 bg-white text-[#111111] rounded-2xl p-4 flex flex-col justify-between shadow-2xl animate-in fade-in zoom-in-95 duration-200 border-2 border-[#D32F2F]">
+                        <div className="flex items-center justify-between border-b border-gray-100 pb-2 z-10">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] bg-red-50 px-2.5 py-0.5 rounded-full border border-red-100">
+                            Photo {cardPhotoModal.index + 1} of {cardPhotoModal.list.length}
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCardPhotoModal(null);
+                            }}
+                            className="w-7 h-7 rounded-full bg-gray-100 hover:bg-[#D32F2F] text-gray-600 hover:text-white flex items-center justify-center transition cursor-pointer"
+                            aria-label="Close photo"
+                          >
+                            <X size={15} />
+                          </button>
+                        </div>
+
+                        <div className="relative flex-1 flex items-center justify-center my-2 overflow-hidden bg-gray-50 rounded-xl p-2 border border-gray-100">
+                          <img
+                            src={cardPhotoModal.imgSrc}
+                            alt="Enlarged event photo"
+                            className="max-h-full max-w-full object-contain rounded-lg shadow-md"
+                          />
+
+                          {cardPhotoModal.list.length > 1 && (
+                            <>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  const prevIdx = (cardPhotoModal.index - 1 + cardPhotoModal.list.length) % cardPhotoModal.list.length;
+                                  setCardPhotoModal({
+                                    ...cardPhotoModal,
+                                    index: prevIdx,
+                                    imgSrc: cardPhotoModal.list[prevIdx],
+                                  });
+                                }}
+                                className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#111111]/80 hover:bg-[#D32F2F] text-white transition cursor-pointer shadow-lg"
+                              >
+                                <ChevronLeft size={18} />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  const nextIdx = (cardPhotoModal.index + 1) % cardPhotoModal.list.length;
+                                  setCardPhotoModal({
+                                    ...cardPhotoModal,
+                                    index: nextIdx,
+                                    imgSrc: cardPhotoModal.list[nextIdx],
+                                  });
+                                }}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#111111]/80 hover:bg-[#D32F2F] text-white transition cursor-pointer shadow-lg"
+                              >
+                                <ChevronRight size={18} />
+                              </button>
+                            </>
+                          )}
+                        </div>
+
+                        <div className="text-center text-[10px] text-gray-500 font-bold z-10">
+                          Click X to close photo
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="space-y-3 flex-1 flex flex-col justify-between">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between gap-2 flex-wrap">
+                          <span className="px-3 py-1 rounded-md bg-red-50 text-[#D32F2F] border border-red-100 text-[11px] font-extrabold flex items-center gap-1.5">
+                            <Calendar size={13} /> {event.date}
+                          </span>
+                          <span className="px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider">
+                            {event.category}
+                          </span>
+                        </div>
+
+                        <h4 className="text-base sm:text-lg font-extrabold text-[#111111] leading-snug group-hover:text-[#D32F2F] transition-colors">
+                          {event.title}
+                        </h4>
+
+                        <div className="space-y-2 pt-2 border-t border-gray-100">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 block">
+                            Key Highlights:
+                          </span>
+                          <ul className="space-y-1.5">
+                            {event.highlights.slice(0, 2).map((highlight, hIdx) => (
+                              <li key={hIdx} className="text-xs text-gray-700 font-medium leading-relaxed flex items-start gap-2">
+                                <CheckCircle2 size={14} className="text-[#D32F2F] shrink-0 mt-0.5" />
+                                <span className="line-clamp-2">{highlight}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+
+                      {/* SMOOTH ANIMATED INLINE DETAILS EXPANDER */}
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                          isSelected
+                            ? "max-h-[1200px] opacity-100 mt-4 pt-4 border-t-2 border-[#D32F2F] bg-red-50/40 rounded-xl p-4 space-y-3"
+                            : "max-h-0 opacity-0 py-0 border-none"
+                        }`}
+                      >
+                        {event.description && (
+                          <div className="space-y-1">
+                            <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] block">
+                              Overview
+                            </span>
+                            <p className="text-xs text-gray-700 font-medium leading-relaxed">
+                              {event.description}
+                            </p>
+                          </div>
+                        )}
+
+                        {event.highlights && event.highlights.length > 2 && (
+                          <div className="space-y-1.5 pt-2 border-t border-gray-200/60">
+                            <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-500 block">
+                              All Outcomes:
+                            </span>
+                            <ul className="space-y-1">
+                              {event.highlights.slice(2).map((hl, hIdx) => (
+                                <li key={hIdx} className="text-[11px] text-gray-700 flex items-start gap-1.5">
+                                  <CheckCircle2 size={13} className="text-[#D32F2F] shrink-0 mt-0.5" />
+                                  <span>{hl}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {event.images && event.images.length > 0 && (
+                          <div className="space-y-2 pt-2 border-t border-gray-200/60">
+                            <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] flex items-center gap-1">
+                              <Camera size={13} /> Photo Showcase (Click to enlarge 🔍)
+                            </span>
+                            <div className="grid grid-cols-3 gap-2">
+                              {event.images.map((imgSrc, imgIdx) => (
+                                <div
+                                  key={imgIdx}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setCardPhotoModal({
+                                      eventId: event.id,
+                                      imgSrc,
+                                      index: imgIdx,
+                                      list: event.images,
+                                    });
+                                  }}
+                                  className="group relative aspect-video rounded-lg overflow-hidden border border-gray-200 cursor-pointer hover:border-[#D32F2F] transition-all bg-gray-900"
+                                >
+                                  <img src={imgSrc} alt="Event photo" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[9px] font-bold">
+                                    Enlarge
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
-                    <h4 className="text-base sm:text-lg font-extrabold text-[#111111] leading-snug group-hover:text-[#D32F2F] transition-colors">
-                      {event.title}
-                    </h4>
-
-                    <div className="space-y-2 pt-2 border-t border-gray-100">
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 block">
-                        Key Highlights:
-                      </span>
-                      <ul className="space-y-1.5">
-                        {event.highlights.slice(0, 2).map((highlight, hIdx) => (
-                          <li key={hIdx} className="text-xs text-gray-700 font-medium leading-relaxed flex items-start gap-2">
-                            <CheckCircle2 size={14} className="text-[#D32F2F] shrink-0 mt-0.5" />
-                            <span className="line-clamp-2">{highlight}</span>
-                          </li>
-                        ))}
-                      </ul>
+                    <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedDetailEvent(isSelected ? null : event);
+                        }}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer ${
+                          isSelected ? "bg-[#D32F2F] text-white shadow-sm" : "bg-gray-100 hover:bg-[#D32F2F] text-gray-700 hover:text-white"
+                        }`}
+                      >
+                        {isSelected ? "Hide Details" : "Full Details"} <ChevronDown size={14} className={`transition-transform duration-200 ${isSelected ? "rotate-180" : ""}`} />
+                      </button>
+                      <span className="text-gray-400 font-medium text-[11px]">Galactic 3D</span>
                     </div>
                   </div>
-
-                  <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
-                    <button className="px-4 py-2 rounded-xl bg-gray-100 group-hover:bg-[#D32F2F] text-gray-700 group-hover:text-white text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer">
-                      Full Details <ChevronDown size={14} />
-                    </button>
-                    <span className="text-gray-400 font-medium text-[11px]">Galactic 3D</span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -684,49 +861,197 @@ export default function WorkshopsEventsPage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PAST_FORUMS.map((event, idx) => (
-              <div
-                key={idx}
-                onClick={() => setSelectedDetailEvent(event)}
-                className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4 hover:border-[#D32F2F] hover:shadow-md transition-all duration-200 flex flex-col justify-between cursor-pointer group"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between gap-2 flex-wrap">
-                    <span className="px-3 py-1 rounded-md bg-red-50 text-[#D32F2F] border border-red-100 text-[11px] font-extrabold flex items-center gap-1.5">
-                      <Calendar size={13} /> {event.date}
-                    </span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider">
-                      {event.category}
-                    </span>
+            {PAST_FORUMS.map((event, idx) => {
+              const isSelected = selectedDetailEvent?.id === event.id;
+              const isViewingPhoto = cardPhotoModal?.eventId === event.id;
+              return (
+                <div
+                  key={idx}
+                  onClick={() => setSelectedDetailEvent(isSelected ? null : event)}
+                  className={`relative bg-white rounded-2xl border transition-all duration-300 flex flex-col justify-between h-full cursor-pointer group p-6 space-y-4 shadow-xs hover:shadow-xl hover:-translate-y-1 overflow-hidden ${
+                    isSelected || isViewingPhoto ? "border-[#D32F2F] ring-2 ring-red-100" : "border-gray-200 hover:border-[#D32F2F]"
+                  }`}
+                >
+                  {/* IN-PLACE POP-UP LARGE PHOTO LIGHTBOX OVERLAY (WHITE BACKGROUND) */}
+                  {isViewingPhoto && (
+                    <div className="absolute inset-0 z-30 bg-white text-[#111111] rounded-2xl p-4 flex flex-col justify-between shadow-2xl animate-in fade-in zoom-in-95 duration-200 border-2 border-[#D32F2F]">
+                      <div className="flex items-center justify-between border-b border-gray-100 pb-2 z-10">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] bg-red-50 px-2.5 py-0.5 rounded-full border border-red-100">
+                          Photo {cardPhotoModal.index + 1} of {cardPhotoModal.list.length}
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCardPhotoModal(null);
+                          }}
+                          className="w-7 h-7 rounded-full bg-gray-100 hover:bg-[#D32F2F] text-gray-600 hover:text-white flex items-center justify-center transition cursor-pointer"
+                          aria-label="Close photo"
+                        >
+                          <X size={15} />
+                        </button>
+                      </div>
+
+                      <div className="relative flex-1 flex items-center justify-center my-2 overflow-hidden bg-gray-50 rounded-xl p-2 border border-gray-100">
+                        <img
+                          src={cardPhotoModal.imgSrc}
+                          alt="Enlarged event photo"
+                          className="max-h-full max-w-full object-contain rounded-lg shadow-md"
+                        />
+
+                        {cardPhotoModal.list.length > 1 && (
+                          <>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const prevIdx = (cardPhotoModal.index - 1 + cardPhotoModal.list.length) % cardPhotoModal.list.length;
+                                setCardPhotoModal({
+                                  ...cardPhotoModal,
+                                  index: prevIdx,
+                                  imgSrc: cardPhotoModal.list[prevIdx],
+                                });
+                              }}
+                              className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#111111]/80 hover:bg-[#D32F2F] text-white transition cursor-pointer shadow-lg"
+                            >
+                              <ChevronLeft size={18} />
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const nextIdx = (cardPhotoModal.index + 1) % cardPhotoModal.list.length;
+                                setCardPhotoModal({
+                                  ...cardPhotoModal,
+                                  index: nextIdx,
+                                  imgSrc: cardPhotoModal.list[nextIdx],
+                                });
+                              }}
+                              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#111111]/80 hover:bg-[#D32F2F] text-white transition cursor-pointer shadow-lg"
+                            >
+                              <ChevronRight size={18} />
+                            </button>
+                          </>
+                        )}
+                      </div>
+
+                      <div className="text-center text-[10px] text-gray-500 font-bold z-10">
+                        Click X to close photo
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="space-y-3 flex-1 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between gap-2 flex-wrap">
+                        <span className="px-3 py-1 rounded-md bg-red-50 text-[#D32F2F] border border-red-100 text-[11px] font-extrabold flex items-center gap-1.5">
+                          <Calendar size={13} /> {event.date}
+                        </span>
+                        <span className="px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider">
+                          {event.category}
+                        </span>
+                      </div>
+
+                      <h3 className="text-base sm:text-lg font-extrabold text-[#111111] leading-snug group-hover:text-[#D32F2F] transition-colors">
+                        {event.title}
+                      </h3>
+
+                      <div className="space-y-2 pt-2 border-t border-gray-100">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 block">
+                          Key Highlights:
+                        </span>
+                        <ul className="space-y-1.5">
+                          {event.highlights.slice(0, 2).map((highlight, hIdx) => (
+                            <li key={hIdx} className="text-xs text-gray-700 font-medium leading-relaxed flex items-start gap-2">
+                              <CheckCircle2 size={14} className="text-[#D32F2F] shrink-0 mt-0.5" />
+                              <span className="line-clamp-2">{highlight}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* SMOOTH ANIMATED INLINE DETAILS EXPANDER */}
+                    <div
+                      className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                        isSelected
+                          ? "max-h-[1200px] opacity-100 mt-4 pt-4 border-t-2 border-[#D32F2F] bg-red-50/40 rounded-xl p-4 space-y-3"
+                          : "max-h-0 opacity-0 py-0 border-none"
+                      }`}
+                    >
+                      {event.description && (
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] block">
+                            Overview
+                          </span>
+                          <p className="text-xs text-gray-700 font-medium leading-relaxed">
+                            {event.description}
+                          </p>
+                        </div>
+                      )}
+
+                      {event.highlights && event.highlights.length > 2 && (
+                        <div className="space-y-1.5 pt-2 border-t border-gray-200/60">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-500 block">
+                            All Outcomes:
+                          </span>
+                          <ul className="space-y-1">
+                            {event.highlights.slice(2).map((hl, hIdx) => (
+                              <li key={hIdx} className="text-[11px] text-gray-700 flex items-start gap-1.5">
+                                <CheckCircle2 size={13} className="text-[#D32F2F] shrink-0 mt-0.5" />
+                                <span>{hl}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {event.images && event.images.length > 0 && (
+                        <div className="space-y-2 pt-2 border-t border-gray-200/60">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] flex items-center gap-1">
+                            <Camera size={13} /> Photo Showcase (Click to enlarge 🔍)
+                          </span>
+                          <div className="grid grid-cols-3 gap-2">
+                            {event.images.map((imgSrc, imgIdx) => (
+                              <div
+                                key={imgIdx}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setCardPhotoModal({
+                                    eventId: event.id,
+                                    imgSrc,
+                                    index: imgIdx,
+                                    list: event.images,
+                                  });
+                                }}
+                                className="group relative aspect-video rounded-lg overflow-hidden border border-gray-200 cursor-pointer hover:border-[#D32F2F] transition-all bg-gray-900"
+                              >
+                                <img src={imgSrc} alt="Event photo" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[9px] font-bold">
+                                  Enlarge
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
-                  <h3 className="text-base sm:text-lg font-extrabold text-[#111111] leading-snug group-hover:text-[#D32F2F] transition-colors">
-                    {event.title}
-                  </h3>
-
-                  <div className="space-y-2 pt-2 border-t border-gray-100">
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 block">
-                      Key Highlights:
-                    </span>
-                    <ul className="space-y-1.5">
-                      {event.highlights.slice(0, 2).map((highlight, hIdx) => (
-                        <li key={hIdx} className="text-xs text-gray-700 font-medium leading-relaxed flex items-start gap-2">
-                          <CheckCircle2 size={14} className="text-[#D32F2F] shrink-0 mt-0.5" />
-                          <span className="line-clamp-2">{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedDetailEvent(isSelected ? null : event);
+                      }}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer ${
+                        isSelected ? "bg-[#D32F2F] text-white shadow-sm" : "bg-gray-100 hover:bg-[#D32F2F] text-gray-700 hover:text-white"
+                      }`}
+                    >
+                      {isSelected ? "Hide Details" : "Full Details"} <ChevronDown size={14} className={`transition-transform duration-200 ${isSelected ? "rotate-180" : ""}`} />
+                    </button>
+                    <span className="text-gray-400 font-medium text-[11px]">Galactic 3D</span>
                   </div>
                 </div>
-
-                <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
-                  <button className="px-4 py-2 rounded-xl bg-gray-100 group-hover:bg-[#D32F2F] text-gray-700 group-hover:text-white text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer">
-                    Full Details <ChevronDown size={14} />
-                  </button>
-                  <span className="text-gray-400 font-medium text-[11px]">Galactic 3D</span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
         </div>
@@ -734,148 +1059,112 @@ export default function WorkshopsEventsPage() {
 
 
 
-      {/* EVENT DETAIL & GALLERY MODAL POPUP */}
-      {selectedDetailEvent && (
-        <div className="fixed inset-0 z-[200] bg-black/75 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200 font-sans">
-          <div className="bg-white rounded-3xl border border-gray-200 shadow-2xl w-full max-w-4xl overflow-hidden relative max-h-[90vh] flex flex-col my-auto">
-            
-            {/* MODAL HEADER */}
-            <div className="bg-[#111111] text-white p-6 sm:p-8 flex items-start justify-between gap-4 shrink-0 border-b border-zinc-800">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="px-3 py-1 rounded-md bg-[#D32F2F] text-white text-[10px] font-extrabold uppercase tracking-wider">
-                    {selectedDetailEvent.category}
-                  </span>
-                  <span className="px-3 py-1 rounded-md bg-zinc-800 text-zinc-300 text-[11px] font-bold flex items-center gap-1.5 border border-zinc-700">
-                    <Calendar size={13} className="text-[#D32F2F]" /> {selectedDetailEvent.date}
-                  </span>
-                </div>
-
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white leading-tight">
-                  {selectedDetailEvent.title}
-                </h3>
-              </div>
-
-              <button
-                onClick={() => setSelectedDetailEvent(null)}
-                className="p-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white transition cursor-pointer shrink-0"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* MODAL BODY */}
-            <div className="p-6 sm:p-8 space-y-6 overflow-y-auto">
-              
-              {/* DESCRIPTION */}
-              {selectedDetailEvent.description && (
-                <div className="space-y-2">
-                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#D32F2F] block">
-                    Event Overview
-                  </span>
-                  <p className="text-sm sm:text-base text-gray-700 font-medium leading-relaxed">
-                    {selectedDetailEvent.description}
-                  </p>
-                </div>
-              )}
-
-              {/* HIGHLIGHTS */}
-              <div className="space-y-3 pt-4 border-t border-gray-100">
-                <span className="text-[11px] font-extrabold uppercase tracking-wider text-gray-400 block">
-                  Key Highlights &amp; Outcomes:
-                </span>
-                <ul className="grid sm:grid-cols-2 gap-3">
-                  {selectedDetailEvent.highlights.map((highlight, hIdx) => (
-                    <li key={hIdx} className="text-xs sm:text-sm text-gray-800 font-medium leading-relaxed flex items-start gap-2.5 bg-gray-50 p-3.5 rounded-xl border border-gray-200/80">
-                      <CheckCircle2 size={16} className="text-[#D32F2F] shrink-0 mt-0.5" />
-                      <span>{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* EVENT PHOTO GALLERY */}
-              {selectedDetailEvent.images && selectedDetailEvent.images.length > 0 ? (
-                <div className="space-y-3 pt-6 border-t border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#D32F2F] flex items-center gap-1.5">
-                      <Camera size={14} /> Event Photo Gallery ({selectedDetailEvent.images.length} Photos)
-                    </span>
-                    <span className="text-xs text-gray-500 font-medium">Click any photo to enlarge</span>
-                  </div>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {selectedDetailEvent.images.map((imgSrc, imgIdx) => (
-                      <div
-                        key={imgIdx}
-                        onClick={() => setFullscreenPhoto(imgSrc)}
-                        className="group relative aspect-video rounded-xl overflow-hidden bg-gray-900 border border-gray-200 shadow-xs cursor-pointer hover:border-[#D32F2F] transition-all"
-                      >
-                        <img
-                          src={imgSrc}
-                          alt={`${selectedDetailEvent.title} photo ${imgIdx + 1}`}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1">
-                          <Sparkles size={14} /> Enlarge
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className="pt-4 border-t border-gray-100 text-xs text-gray-400 font-medium italic">
-                  Photo archive for this event will be published soon.
-                </div>
-              )}
-
-            </div>
-
-            {/* MODAL FOOTER */}
-            <div className="p-4 sm:p-6 bg-gray-50 border-t border-gray-200 flex items-center justify-between gap-4 shrink-0">
-              <span className="text-xs text-gray-500 font-bold">
-                Galactic 3D Official Event Archive
-              </span>
-              <button
-                onClick={() => setSelectedDetailEvent(null)}
-                className="px-6 py-2.5 rounded-xl bg-gray-900 hover:bg-black text-white text-xs font-bold uppercase tracking-wider transition cursor-pointer"
-              >
-                Close Details
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
-
-      {/* FULLSCREEN LIGHTBOX POPUP */}
-      {fullscreenPhoto && (
+      {/* FULLSCREEN LIGHTBOX POPUP - MOUNTED DIRECTLY TO document.body VIA PORTAL */}
+      {mounted && fullscreenPhoto && createPortal(
         <div
-          className="fixed inset-0 z-[250] bg-black/95 backdrop-blur-lg flex items-center justify-center p-4 animate-in fade-in duration-200"
-          onClick={() => setFullscreenPhoto(null)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.95)",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            zIndex: 999999,
+            margin: 0,
+            padding: "1rem",
+            boxSizing: "border-box",
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setFullscreenPhoto(null);
+            }
+          }}
         >
-          <button
-            onClick={() => setFullscreenPhoto(null)}
-            className="absolute top-6 right-6 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition cursor-pointer z-10"
+          <div
+            style={{
+              position: "relative",
+              margin: "auto",
+              width: "min(1000px, 92vw)",
+              maxHeight: "90vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={(e) => e.stopPropagation()}
           >
-            <X size={24} />
-          </button>
+            <button
+              onClick={() => setFullscreenPhoto(null)}
+              className="absolute -top-12 right-0 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition cursor-pointer z-10"
+              aria-label="Close modal"
+            >
+              <X size={24} />
+            </button>
 
-          <img
-            src={fullscreenPhoto}
-            alt="Event Detail Fullscreen"
-            className="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl border border-white/10"
-          />
-        </div>
+            <img
+              src={fullscreenPhoto}
+              alt="Event Detail Fullscreen"
+              className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl border border-white/10"
+            />
+          </div>
+        </div>,
+        document.body
       )}
 
-      {/* REGISTRATION MODAL POPUP */}
-      {showRegModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-2xl w-full max-w-lg overflow-hidden relative animate-fade-in-up">
+      {/* REGISTRATION MODAL POPUP - MOUNTED DIRECTLY TO document.body VIA PORTAL */}
+      {mounted && showRegModal && createPortal(
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
+            zIndex: 999999,
+            margin: 0,
+            padding: "1rem",
+            boxSizing: "border-box",
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowRegModal(false);
+            }
+          }}
+        >
+          <div
+            style={{
+              position: "relative",
+              margin: "auto",
+              width: "min(600px, 92vw)",
+              maxHeight: "85vh",
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "#ffffff",
+              borderRadius: "1rem",
+              border: "1px solid #e5e7eb",
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.35)",
+              overflow: "hidden",
+              textAlign: "left",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
             
             {/* MODAL HEADER */}
-            <div className="bg-[#111111] text-white p-6 flex items-center justify-between">
+            <div className="bg-[#111111] text-white p-6 flex items-center justify-between shrink-0 border-b border-gray-800">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#D32F2F] block">
                   Event Registration Pass
@@ -886,14 +1175,15 @@ export default function WorkshopsEventsPage() {
               </div>
               <button
                 onClick={() => setShowRegModal(false)}
-                className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition cursor-pointer"
+                className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition cursor-pointer shrink-0 ml-2"
+                aria-label="Close modal"
               >
                 <X size={20} />
               </button>
             </div>
 
             {/* MODAL BODY */}
-            <div className="p-6">
+            <div className="p-6 overflow-y-auto flex-1">
               {submitted ? (
                 <div className="text-center py-8 space-y-3">
                   <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto">
@@ -1007,7 +1297,8 @@ export default function WorkshopsEventsPage() {
             </div>
 
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </div>

@@ -58,11 +58,11 @@ export default function ServiceTabs() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8">
         
-        {/* SECTION HEADER MATCHING SCREENSHOT + DOWNLOAD BROCHURE BUTTON */}
+        {/* SECTION HEADER MATCHING "Industries We Serve" EXACT FONT, FONT-WEIGHT, AND STYLING WITH RED "SERVICES" */}
         <div className="border-b border-[#EAEAEA] pb-4 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-[800] uppercase tracking-tight text-[#111111] leading-none">
-              MANUFACTURING <span className="text-[#E53935]">SERVICES</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
+              Manufacturing <span className="text-[#D32F2F]">Services</span>
             </h2>
           </div>
 
@@ -72,15 +72,11 @@ export default function ServiceTabs() {
               download="Galactic_3D_Contract_Manufacturing_Brochure.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#E53935] hover:bg-[#D32F2F] text-white text-xs sm:text-sm font-extrabold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#D32F2F] hover:bg-[#B71C1C] text-white text-xs sm:text-sm font-extrabold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5"
             >
               <Download size={16} />
               <span>Download Brochure</span>
             </a>
-            
-            <span className="hidden md:inline-flex text-xs font-bold uppercase tracking-wider px-3.5 py-2.5 bg-red-50 text-[#E53935] rounded-xl border border-red-100 shrink-0">
-              Industrial Capabilities
-            </span>
           </div>
         </div>
 
@@ -92,7 +88,7 @@ export default function ServiceTabs() {
             return (
               <div
                 key={srv.id}
-                className="bg-white rounded-2xl border border-gray-200 hover:border-[#E53935] transition-all duration-300 flex flex-col justify-between overflow-hidden group shadow-sm hover:shadow-md"
+                className="bg-white rounded-2xl border border-gray-200 hover:border-[#D32F2F] transition-all duration-300 flex flex-col justify-between overflow-hidden group shadow-sm hover:shadow-md"
               >
                 <div>
                   {/* TOP IMAGE CONTAINER WITH OVERLAYS */}
@@ -105,51 +101,50 @@ export default function ServiceTabs() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
                     {/* BOTTOM-LEFT RED ICON BADGE */}
-                    <div className="absolute bottom-3 left-3 z-10 w-8 h-8 rounded-full bg-[#E53935] text-white flex items-center justify-center shadow-md">
+                    <div className="absolute bottom-3 left-3 z-10 w-8 h-8 rounded-full bg-[#D32F2F] text-white flex items-center justify-center shadow-md">
                       <Icon size={16} />
                     </div>
 
-                    {/* BOTTOM-RIGHT CATEGORY PILL BADGE */}
-                    <div className="absolute bottom-3 right-3 z-10">
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-black/80 text-white backdrop-blur-xs">
+                    {/* TOP-RIGHT CATEGORY TAG */}
+                    <div className="absolute top-3 right-3 z-10">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider bg-black/75 backdrop-blur-md text-white px-2.5 py-1 rounded-md border border-white/10 shadow-xs">
                         {srv.tag}
                       </span>
                     </div>
                   </div>
 
-                  {/* CARD BODY CONTENT */}
+                  {/* CARD TITLE & DESCRIPTION */}
                   <div className="p-5 space-y-3">
-                    <h3 className="text-xl font-extrabold tracking-tight text-[#111111] group-hover:text-[#E53935] transition-colors leading-tight">
+                    <h3 className="font-extrabold text-base text-[#111111] group-hover:text-[#D32F2F] transition-colors leading-tight">
                       {srv.title}
                     </h3>
-
-                    <p className="text-xs text-gray-600 leading-relaxed font-medium">
+                    <p className="text-xs text-gray-600 leading-relaxed line-clamp-4 font-medium">
                       {srv.desc}
                     </p>
 
-                    {/* FEATURE TAGS */}
-                    <div className="pt-2 flex flex-wrap gap-1.5">
-                      {srv.features.map((feat, idx) => (
+                    {/* KEY FEATURE BADGES */}
+                    <div className="pt-1 flex flex-wrap gap-1.5">
+                      {srv.features.map((feat, fIdx) => (
                         <span
-                          key={idx}
-                          className="text-[10px] font-bold text-gray-700 bg-gray-50 border border-gray-200 px-2 py-0.5 rounded-md flex items-center gap-1"
+                          key={fIdx}
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-gray-50 border border-gray-200 text-[10px] font-bold text-gray-700"
                         >
-                          <CheckCircle2 size={10} className="text-[#E53935]" />
-                          {feat}
+                          <CheckCircle2 size={11} className="text-[#D32F2F]" />
+                          <span>{feat}</span>
                         </span>
                       ))}
                     </div>
                   </div>
                 </div>
 
-                {/* BOTTOM EXPLORE BUTTON */}
-                <div className="px-5 pb-5 pt-2">
+                {/* BOTTOM ACTION BUTTON */}
+                <div className="p-5 pt-0">
                   <Link
                     href="/contact"
-                    className="w-full py-2.5 px-4 rounded-xl bg-gray-50 group-hover:bg-red-50 text-gray-800 group-hover:text-[#E53935] font-extrabold text-xs flex items-center justify-between border border-gray-200 group-hover:border-red-200 transition-all cursor-pointer shadow-xs"
+                    className="w-full py-2.5 px-4 rounded-xl bg-gray-50 hover:bg-[#D32F2F] hover:text-white border border-gray-200 hover:border-[#D32F2F] text-xs font-extrabold text-[#111111] transition-all duration-200 flex items-center justify-between group/btn cursor-pointer shadow-xs"
                   >
                     <span>Explore Service</span>
-                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
                   </Link>
                 </div>
 

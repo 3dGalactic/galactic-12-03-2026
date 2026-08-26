@@ -1,17 +1,35 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { motion } from 'motion/react'
-import { Search, Filter, Upload, ShoppingCart, User, CheckCircle2, Download, ArrowRight, Star, Clock, Tag, Grid3X3, ListFilter } from 'lucide-react'
+import { Search, Filter, Upload, ShoppingCart, User, CheckCircle2, Download, ArrowRight, Star, Clock, Tag, Grid3X3, ListFilter, X } from 'lucide-react'
 
 export default function MarketplacePage() {
+  const [mounted, setMounted] = useState(false)
+  const [selectedDesign, setSelectedDesign] = useState(null)
   // State for user login status (simulated)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   // State for active tab in user account area
   const [activeTab, setActiveTab] = useState('orders')
   // State for active category filter
   const [activeCategory, setActiveCategory] = useState('all')
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (selectedDesign) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "auto"
+    }
+    return () => {
+      document.body.style.overflow = "auto"
+    }
+  }, [selectedDesign])
   
   // Sample design data
   const designs = [
@@ -191,9 +209,12 @@ export default function MarketplacePage() {
                   >
                     <div className="relative aspect-square overflow-hidden">
                       <img src={design.image} alt={design.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-4">
-                        <button className="bg-primary hover:bg-secondary text-white font-['test'] px-4 py-2 rounded-md transition transform translate-y-4 group-hover:translate-y-0">View Details</button>
-                      </div>
+                        <button
+                          onClick={() => setSelectedDesign(design)}
+                          className="bg-[#D32F2F] hover:bg-[#B71C1C] text-white font-bold text-xs px-4 py-2 rounded-md transition transform translate-y-4 group-hover:translate-y-0 cursor-pointer shadow-lg"
+                        >
+                          View Details
+                        </button>
                       {design.isFree && (
                         <div className="absolute top-3 left-3 bg-green-500 text-white text-xs font-bold font-['test'] px-2 py-1 rounded-md">FREE</div>
                       )}
@@ -644,6 +665,110 @@ export default function MarketplacePage() {
           </div>
         </div>
       </section>
+
+      {/* DESIGN DETAILS MODAL POPUP */}
+      {mounted && selectedDesign && createPortal(
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
+            zIndex: 999999,
+            margin: 0,
+            padding: "1rem",
+            boxSizing: "border-box",
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setSelectedDesign(null);
+            }
+          }}
+        >
+          <div
+            style={{
+              position: "relative",
+              margin: "auto",
+              width: "min(650px, 92vw)",
+              maxHeight: "85vh",
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "#111111",
+              color: "#ffffff",
+              borderRadius: "1.5rem",
+              border: "1px solid #333333",
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.7)",
+              overflow: "hidden",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* MODAL HEADER */}
+            <div className="bg-gradient-to-r from-[#1a1a1a] to-[#111111] p-5 border-b border-zinc-800 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] bg-red-950/60 px-2.5 py-1 rounded-md border border-red-800/40">
+                  {selectedDesign.category}
+                </span>
+                <h3 className="text-lg font-extrabold text-white mt-1">{selectedDesign.title}</h3>
+              </div>
+              <button
+                onClick={() => setSelectedDesign(null)}
+                className="p-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white transition cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* MODAL BODY */}
+            <div className="p-6 overflow-y-auto space-y-4 font-sans text-xs">
+              <div className="relative aspect-video rounded-xl overflow-hidden border border-zinc-800">
+                <img src={selectedDesign.image} alt={selectedDesign.title} className="w-full h-full object-cover" />
+              </div>
+              <div className="flex items-center justify-between pt-2">
+                <div>
+                  <span className="text-zinc-400 block">Designer:</span>
+                  <span className="text-sm font-bold text-[#D32F2F]">{selectedDesign.designer}</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-zinc-400 block">Price:</span>
+                  <span className="text-base font-extrabold text-[#D32F2F]">
+                    {selectedDesign.isFree ? "FREE" : `$${selectedDesign.price.toFixed(2)}`}
+                  </span>
+                </div>
+              </div>
+              <p className="text-zinc-300 leading-relaxed pt-2 border-t border-zinc-800">
+                Industrial-grade additive manufacturing 3D CAD design optimized for metal DMLS and high-precision polymer production. Fully compliant with ISO/ASTM 52900 additive manufacturing standards.
+              </p>
+            </div>
+
+            {/* MODAL FOOTER */}
+            <div className="p-4 bg-zinc-900 border-t border-zinc-800 flex items-center justify-between gap-3">
+              <button
+                onClick={() => setSelectedDesign(null)}
+                className="px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs transition cursor-pointer"
+              >
+                Close
+              </button>
+              <Link
+                href="/contact"
+                onClick={() => setSelectedDesign(null)}
+                className="px-5 py-2.5 rounded-xl bg-[#D32F2F] hover:bg-[#B71C1C] text-white font-bold text-xs transition flex items-center gap-2 cursor-pointer shadow-lg"
+              >
+                Order 3D Print <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </main>
   )
 }

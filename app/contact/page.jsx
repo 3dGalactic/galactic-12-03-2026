@@ -13,7 +13,6 @@ import {
   MessageSquare,
   MessageCircle,
 } from "lucide-react";
-import ConsentBox from "../components/ConsentBox";
 import { motion } from "framer-motion";
 import {
   MapPinIcon,
@@ -84,12 +83,6 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!consentValid) {
-      setConsentError(true);
-      return;
-    }
-    setConsentError(false);
-
     const validation = validate();
     if (Object.keys(validation).length > 0) {
       setErrors(validation);
@@ -112,7 +105,6 @@ export default function Contact() {
 
       setStatus("success");
       setSubmittedMessage("Thank you for contacting Galactic 3D.\n\nYour submission has been received successfully.\n\nOur team will review your information and get back to you shortly via email, phone, or WhatsApp.");
-      setConsent(false);
 
       setForm({
         name: "",
@@ -311,17 +303,6 @@ export default function Contact() {
                     </p>
                   )}
                 </div>
-
-                {/* CONSENT NOTICE & MANDATORY WRITE SPACE */}
-                <ConsentBox
-                  value={consentText}
-                  onChange={(val, isValid) => {
-                    setConsentText(val);
-                    setConsentValid(isValid);
-                    if (isValid) setConsentError(false);
-                  }}
-                  error={consentError}
-                />
 
                 {submittedMessage && (
                   <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-2 text-[#111111] text-xs font-bold whitespace-pre-line shadow-sm my-4">

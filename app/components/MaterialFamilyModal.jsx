@@ -1,14 +1,51 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { X, Eye, Download, ShieldCheck } from "lucide-react";
 
 export default function MaterialFamilyModal({ title, slug, materials, onClose }) {
-  if (!materials) return null;
+  const [mounted, setMounted] = useState(false);
 
-  return (
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (materials) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [materials]);
+
+  if (!materials || !mounted) return null;
+
+  return createPortal(
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 sm:p-6 overflow-y-auto"
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
+        zIndex: 999999,
+        margin: 0,
+        padding: "1rem",
+        boxSizing: "border-box",
+      }}
       onClick={onClose}
     >
       <div
@@ -92,6 +129,7 @@ export default function MaterialFamilyModal({ title, slug, materials, onClose })
           </Link>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

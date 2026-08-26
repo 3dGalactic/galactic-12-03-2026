@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import {
   GraduationCap,
@@ -12,6 +13,7 @@ import {
   ShieldCheck,
   Zap,
   Users,
+  Camera,
   CheckCircle,
   X,
   FileText,
@@ -33,19 +35,45 @@ import {
 import ConsentBox from "../components/ConsentBox";
 
 export default function TrainingPage() {
+  const [mounted, setMounted] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [showEnrollModal, setShowEnrollModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedPartnerModal, setSelectedPartnerModal] = useState(null);
+  const [hoveredPartnerId, setHoveredPartnerId] = useState(null);
+  const [selectedProgramDetail, setSelectedProgramDetail] = useState(null);
+  const [activeEnrollId, setActiveEnrollId] = useState(null);
+  const [enrollSuccessId, setEnrollSuccessId] = useState(null);
   
   // DIRECT PHOTO LIGHTBOX VIEWER STATE
   const [photoLightbox, setPhotoLightbox] = useState(null); // { src, caption, list, index, title }
+  const [cardPhotoModal, setCardPhotoModal] = useState(null); // { partnerId, index, imgSrc, caption, list }
+  const [animateIn, setAnimateIn] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [consentText, setConsentText] = useState("");
   const [consentValid, setConsentValid] = useState(false);
   const [consentError, setConsentError] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Lock body scroll when any modal is open and trigger 300ms entry animation
+  useEffect(() => {
+    if (selectedPartnerModal || showEnrollModal || photoLightbox || selectedProgramDetail) {
+      document.body.style.overflow = "hidden";
+      const timer = setTimeout(() => setAnimateIn(true), 10);
+      return () => clearTimeout(timer);
+    } else {
+      setAnimateIn(false);
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [selectedPartnerModal, showEnrollModal, photoLightbox, selectedProgramDetail]);
 
   // Close modals on Escape key
   useEffect(() => {
@@ -54,6 +82,7 @@ export default function TrainingPage() {
         setPhotoLightbox(null);
         setSelectedPartnerModal(null);
         setShowEnrollModal(false);
+        setSelectedProgramDetail(null);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -148,33 +177,7 @@ export default function TrainingPage() {
     },
   };
 
-  // AUTOMATIC SMOOTH SCROLL & BRIEF HIGHLIGHT FOR HASH TARGETS (#schools, #colleges, #industry)
-  useEffect(() => {
-    const handleHashScroll = () => {
-      const hash = window.location.hash.replace("#", "");
-      if (!hash) return;
 
-      let targetId = hash;
-      if (hash === "schools") targetId = "school-training";
-      if (hash === "colleges") targetId = "college-training";
-      if (hash === "industry") targetId = "industry-training";
-
-      setTimeout(() => {
-        const el = document.getElementById(targetId) || document.getElementById(hash);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-          el.classList.add("ring-4", "ring-[#D32F2F]/60", "transition-all", "duration-500");
-          setTimeout(() => {
-            el.classList.remove("ring-4", "ring-[#D32F2F]/60");
-          }, 2500);
-        }
-      }, 300);
-    };
-
-    handleHashScroll();
-    window.addEventListener("hashchange", handleHashScroll);
-    return () => window.removeEventListener("hashchange", handleHashScroll);
-  }, []);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -470,9 +473,6 @@ export default function TrainingPage() {
                     <span className="text-xs font-bold text-[#111111] block">Hands-On Expert Mentorship</span>
                     <span className="text-[11px] text-gray-600">Students and researchers interacting directly with industrial equipment.</span>
                   </div>
-                  <span className="text-xs font-bold text-white bg-[#D32F2F] px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1.5 shrink-0 ml-2">
-                    <Maximize2 size={13} /> View Photo 🔍
-                  </span>
                 </div>
               </div>
             </div>
@@ -511,9 +511,6 @@ export default function TrainingPage() {
                     alt="Industry-aligned curriculum"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-2 right-2 bg-[#D32F2F] text-white px-2 py-0.5 rounded text-[10px] font-extrabold flex items-center gap-1">
-                    <Maximize2 size={11} /> View Photo
-                  </div>
                 </div>
                 <h3 className="text-base font-bold text-[#111111] mb-2">Industry-Aligned Curriculum</h3>
                 <p className="text-xs text-gray-600 leading-relaxed">
@@ -540,9 +537,6 @@ export default function TrainingPage() {
                     alt="Hands-on Industrial Exposure"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-2 right-2 bg-[#D32F2F] text-white px-2 py-0.5 rounded text-[10px] font-extrabold flex items-center gap-1">
-                    <Maximize2 size={11} /> View Photo
-                  </div>
                 </div>
                 <h3 className="text-base font-bold text-[#111111] mb-2">Hands-on Industrial Exposure</h3>
                 <p className="text-xs text-gray-600 leading-relaxed">
@@ -569,9 +563,6 @@ export default function TrainingPage() {
                     alt="Ph.D & Expert Faculty"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-2 right-2 bg-[#D32F2F] text-white px-2 py-0.5 rounded text-[10px] font-extrabold flex items-center gap-1">
-                    <Maximize2 size={11} /> View Photo
-                  </div>
                 </div>
                 <h3 className="text-base font-bold text-[#111111] mb-2">Ph.D &amp; Expert Faculty</h3>
                 <p className="text-xs text-gray-600 leading-relaxed">
@@ -598,9 +589,6 @@ export default function TrainingPage() {
                     alt="End-to-End Skill Pathways"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-2 right-2 bg-[#D32F2F] text-white px-2 py-0.5 rounded text-[10px] font-extrabold flex items-center gap-1">
-                    <Maximize2 size={11} /> View Photo
-                  </div>
                 </div>
                 <h3 className="text-base font-bold text-[#111111] mb-2">End-to-End Skill Pathways</h3>
                 <p className="text-xs text-gray-600 leading-relaxed">
@@ -675,38 +663,133 @@ export default function TrainingPage() {
                 Introduces students to age-appropriate 3D printing learning modules through hands-on, STREAM-based learning. It nurtures creativity, problem-solving, and technical skills, preparing young minds for real-world applications.
               </p>
 
-              <div className="grid md:grid-cols-3 gap-6">
-                {SCHOOL_PROGRAMS.map((prog) => (
-                  <div
-                    key={prog.id}
-                    className="corporate-card bg-white rounded-xl border border-[#EAEAEA] p-6 flex flex-col justify-between hover:border-[#D32F2F] transition-all shadow-sm"
-                  >
-                    <div>
-                      <h4 className="text-base font-bold text-[#111111] mb-2">{prog.title}</h4>
-                      <p className="text-xs text-gray-600 leading-relaxed mb-4">{prog.description}</p>
-                      
-                      <div className="space-y-1.5 mb-6">
-                        {prog.topics.map((t, idx) => (
-                          <div key={idx} className="flex items-center gap-2 text-[11px] text-gray-700">
-                            <CheckCircle size={12} className="text-[#D32F2F] shrink-0" />
-                            <span>{t}</span>
+              <div className="grid md:grid-cols-3 gap-6 items-start">
+                {SCHOOL_PROGRAMS.map((prog) => {
+                  const isSelected = selectedProgramDetail?.id === prog.id;
+                  const isEnrolling = activeEnrollId === prog.id;
+                  return (
+                    <div
+                      key={prog.id}
+                      className="relative corporate-card bg-white rounded-2xl border border-gray-200 p-6 flex flex-col justify-start transition-all duration-300 shadow-xs hover:shadow-xl hover:-translate-y-1 overflow-hidden hover:border-[#D32F2F]"
+                    >
+                      {/* IN-PLACE POP-UP ENROLLMENT SUBMISSION FORM */}
+                      {isEnrolling && (
+                        <div className="absolute inset-0 z-30 bg-[#111111] text-white rounded-2xl p-5 flex flex-col justify-between shadow-2xl animate-in fade-in zoom-in-95 duration-200 border-2 border-[#D32F2F]">
+                          <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                            <div>
+                              <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F]">
+                                Quick Enrollment Form
+                              </span>
+                              <h4 className="text-xs sm:text-sm font-extrabold text-white line-clamp-1">
+                                {prog.title}
+                              </h4>
+                            </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveEnrollId(null);
+                              }}
+                              className="w-7 h-7 rounded-full bg-zinc-800 hover:bg-[#D32F2F] text-gray-300 hover:text-white flex items-center justify-center transition cursor-pointer shrink-0 ml-2"
+                              aria-label="Close form"
+                            >
+                              <X size={15} />
+                            </button>
                           </div>
-                        ))}
+
+                          {enrollSuccessId === prog.id ? (
+                            <div className="my-auto text-center py-4 space-y-2 bg-emerald-950/80 p-4 rounded-xl border border-emerald-700 text-emerald-100">
+                              <CheckCircle2 size={32} className="text-emerald-400 mx-auto" />
+                              <h5 className="text-sm font-extrabold">Enrollment Submitted!</h5>
+                              <p className="text-xs text-zinc-300">
+                                Our academic coordinator will contact you for <strong>{prog.title}</strong>.
+                              </p>
+                              <button
+                                onClick={() => {
+                                  setActiveEnrollId(null);
+                                  setEnrollSuccessId(null);
+                                }}
+                                className="mt-2 px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition cursor-pointer"
+                              >
+                                Done
+                              </button>
+                            </div>
+                          ) : (
+                            <form
+                              onSubmit={(e) => {
+                                e.preventDefault();
+                                setEnrollSuccessId(prog.id);
+                              }}
+                              className="space-y-2.5 my-auto"
+                            >
+                              <div>
+                                <label className="block text-[10px] font-bold text-zinc-300 mb-0.5">Full Name *</label>
+                                <input
+                                  type="text"
+                                  required
+                                  placeholder="e.g. Rahul Sharma"
+                                  className="w-full px-3 py-1.5 text-xs rounded-lg bg-zinc-800 border border-zinc-700 text-white focus:border-[#D32F2F] focus:outline-hidden"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[10px] font-bold text-zinc-300 mb-0.5">Phone / WhatsApp *</label>
+                                <input
+                                  type="tel"
+                                  required
+                                  placeholder="+91 98765 43210"
+                                  className="w-full px-3 py-1.5 text-xs rounded-lg bg-zinc-800 border border-zinc-700 text-white focus:border-[#D32F2F] focus:outline-hidden"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[10px] font-bold text-zinc-300 mb-0.5">School / Institution</label>
+                                <input
+                                  type="text"
+                                  placeholder="School Name"
+                                  className="w-full px-3 py-1.5 text-xs rounded-lg bg-zinc-800 border border-zinc-700 text-white focus:border-[#D32F2F] focus:outline-hidden"
+                                />
+                              </div>
+                              <button
+                                type="submit"
+                                className="w-full py-2.5 bg-[#D32F2F] hover:bg-red-700 text-white text-xs font-extrabold uppercase tracking-wider rounded-xl transition shadow-md cursor-pointer mt-1"
+                              >
+                                Confirm Enrollment
+                              </button>
+                            </form>
+                          )}
+                        </div>
+                      )}
+
+                      <div>
+                        <h4 className="text-base font-extrabold text-[#111111] mb-2 leading-snug">{prog.title}</h4>
+                        <p className="text-xs text-gray-600 leading-relaxed mb-4">{prog.description}</p>
+                        
+                        <div className="space-y-2 mb-4">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 block">
+                            Core Modules:
+                          </span>
+                          {prog.topics.slice(0, 3).map((topic, idx) => (
+                            <div key={idx} className="flex items-center gap-2 text-xs text-gray-700 font-medium">
+                              <CheckCircle2 size={13} className="text-[#D32F2F] shrink-0" />
+                              <span className="line-clamp-1">{topic}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="mt-5 pt-3 border-t border-gray-100">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveEnrollId(prog.id);
+                          }}
+                          className="w-full py-3 px-4 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer bg-[#111111] hover:bg-black text-white hover:shadow-md"
+                        >
+                          <span>Enroll Now</span>
+                          <ArrowRight size={14} />
+                        </button>
                       </div>
                     </div>
-
-                    <button
-                      onClick={() => {
-                        setSelectedCourse(prog);
-                        setShowEnrollModal(true);
-                      }}
-                      className="w-full py-2 px-3 rounded-lg bg-gray-50 border border-gray-200 text-xs font-bold text-[#111111] hover:bg-[#D32F2F] hover:text-white transition flex items-center justify-between cursor-pointer"
-                    >
-                      <span>Enroll Program</span>
-                      <ArrowRight size={13} />
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* SCHOOL TRAINING COLLABORATION BADGE */}
@@ -745,38 +828,133 @@ export default function TrainingPage() {
                 Comprehensive curriculum guiding students from design basics to advanced additive manufacturing machine building, Industry 4.0 integration, GenAI, ChatGPT, ML, EOSPRINT, and metal DMLS specialization.
               </p>
 
-              <div className="grid md:grid-cols-3 gap-6">
-                {INSTITUTION_PROGRAMS.map((prog) => (
-                  <div
-                    key={prog.id}
-                    className="corporate-card bg-white rounded-xl border border-[#EAEAEA] p-6 flex flex-col justify-between hover:border-[#D32F2F] transition-all shadow-sm"
-                  >
-                    <div>
-                      <h4 className="text-base font-bold text-[#111111] mb-2">{prog.title}</h4>
-                      <p className="text-xs text-gray-600 leading-relaxed mb-4">{prog.description}</p>
-                      
-                      <div className="space-y-1.5 mb-6">
-                        {prog.topics.map((t, idx) => (
-                          <div key={idx} className="flex items-center gap-2 text-[11px] text-gray-700">
-                            <CheckCircle size={12} className="text-[#D32F2F] shrink-0" />
-                            <span>{t}</span>
+              <div className="grid md:grid-cols-3 gap-6 items-start">
+                {INSTITUTION_PROGRAMS.map((prog) => {
+                  const isSelected = selectedProgramDetail?.id === prog.id;
+                  const isEnrolling = activeEnrollId === prog.id;
+                  return (
+                    <div
+                      key={prog.id}
+                      className="relative corporate-card bg-white rounded-2xl border border-gray-200 p-6 flex flex-col justify-start transition-all duration-300 shadow-xs hover:shadow-xl hover:-translate-y-1 overflow-hidden hover:border-[#D32F2F]"
+                    >
+                      {/* IN-PLACE POP-UP ENROLLMENT SUBMISSION FORM */}
+                      {isEnrolling && (
+                        <div className="absolute inset-0 z-30 bg-[#111111] text-white rounded-2xl p-5 flex flex-col justify-between shadow-2xl animate-in fade-in zoom-in-95 duration-200 border-2 border-[#D32F2F]">
+                          <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                            <div>
+                              <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F]">
+                                Quick Enrollment Form
+                              </span>
+                              <h4 className="text-xs sm:text-sm font-extrabold text-white line-clamp-1">
+                                {prog.title}
+                              </h4>
+                            </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveEnrollId(null);
+                              }}
+                              className="w-7 h-7 rounded-full bg-zinc-800 hover:bg-[#D32F2F] text-gray-300 hover:text-white flex items-center justify-center transition cursor-pointer shrink-0 ml-2"
+                              aria-label="Close form"
+                            >
+                              <X size={15} />
+                            </button>
                           </div>
-                        ))}
+
+                          {enrollSuccessId === prog.id ? (
+                            <div className="my-auto text-center py-4 space-y-2 bg-emerald-950/80 p-4 rounded-xl border border-emerald-700 text-emerald-100">
+                              <CheckCircle2 size={32} className="text-emerald-400 mx-auto" />
+                              <h5 className="text-sm font-extrabold">Enrollment Submitted!</h5>
+                              <p className="text-xs text-zinc-300">
+                                Our academic team will contact you for <strong>{prog.title}</strong>.
+                              </p>
+                              <button
+                                onClick={() => {
+                                  setActiveEnrollId(null);
+                                  setEnrollSuccessId(null);
+                                }}
+                                className="mt-2 px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition cursor-pointer"
+                              >
+                                Done
+                              </button>
+                            </div>
+                          ) : (
+                            <form
+                              onSubmit={(e) => {
+                                e.preventDefault();
+                                setEnrollSuccessId(prog.id);
+                              }}
+                              className="space-y-2.5 my-auto"
+                            >
+                              <div>
+                                <label className="block text-[10px] font-bold text-zinc-300 mb-0.5">Full Name *</label>
+                                <input
+                                  type="text"
+                                  required
+                                  placeholder="e.g. Rahul Sharma"
+                                  className="w-full px-3 py-1.5 text-xs rounded-lg bg-zinc-800 border border-zinc-700 text-white focus:border-[#D32F2F] focus:outline-hidden"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[10px] font-bold text-zinc-300 mb-0.5">Phone / WhatsApp *</label>
+                                <input
+                                  type="tel"
+                                  required
+                                  placeholder="+91 98765 43210"
+                                  className="w-full px-3 py-1.5 text-xs rounded-lg bg-zinc-800 border border-zinc-700 text-white focus:border-[#D32F2F] focus:outline-hidden"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[10px] font-bold text-zinc-300 mb-0.5">Institution / College</label>
+                                <input
+                                  type="text"
+                                  placeholder="College Name"
+                                  className="w-full px-3 py-1.5 text-xs rounded-lg bg-zinc-800 border border-zinc-700 text-white focus:border-[#D32F2F] focus:outline-hidden"
+                                />
+                              </div>
+                              <button
+                                type="submit"
+                                className="w-full py-2.5 bg-[#D32F2F] hover:bg-red-700 text-white text-xs font-extrabold uppercase tracking-wider rounded-xl transition shadow-md cursor-pointer mt-1"
+                              >
+                                Confirm Enrollment
+                              </button>
+                            </form>
+                          )}
+                        </div>
+                      )}
+
+                      <div>
+                        <h4 className="text-base font-extrabold text-[#111111] mb-2 leading-snug">{prog.title}</h4>
+                        <p className="text-xs text-gray-600 leading-relaxed mb-4">{prog.description}</p>
+                        
+                        <div className="space-y-2 mb-4">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 block">
+                            Curriculum Highlights:
+                          </span>
+                          {prog.topics.slice(0, 3).map((topic, idx) => (
+                            <div key={idx} className="flex items-center gap-2 text-xs text-gray-700 font-medium">
+                              <CheckCircle2 size={13} className="text-[#D32F2F] shrink-0" />
+                              <span className="line-clamp-1">{topic}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="mt-5 pt-3 border-t border-gray-100">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveEnrollId(prog.id);
+                          }}
+                          className="w-full py-3 px-4 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer bg-[#111111] hover:bg-black text-white hover:shadow-md"
+                        >
+                          <span>Enroll Now</span>
+                          <ArrowRight size={14} />
+                        </button>
                       </div>
                     </div>
-
-                    <button
-                      onClick={() => {
-                        setSelectedCourse(prog);
-                        setShowEnrollModal(true);
-                      }}
-                      className="w-full py-2 px-3 rounded-lg bg-gray-50 border border-gray-200 text-xs font-bold text-[#111111] hover:bg-[#D32F2F] hover:text-white transition flex items-center justify-between cursor-pointer"
-                    >
-                      <span>Enroll Program</span>
-                      <ArrowRight size={13} />
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* INSTITUTIONAL TRAINING COLLABORATIONS */}
@@ -788,72 +966,265 @@ export default function TrainingPage() {
                   </h4>
                 </div>
 
-                <div className="grid sm:grid-cols-3 gap-3">
-                  {/* NMIT - OPENS PHOTO LIGHTBOX DIRECTLY */}
+                <div className="grid sm:grid-cols-3 gap-4 items-start">
+                  {/* NMIT */}
                   <div
-                    onClick={() => {
-                      setPhotoLightbox({
-                        title: PARTNER_DETAILS.nmit.name,
-                        src: PARTNER_DETAILS.nmit.images[0].src,
-                        caption: PARTNER_DETAILS.nmit.images[0].caption,
-                        list: PARTNER_DETAILS.nmit.images,
-                        index: 0,
-                      });
-                    }}
-                    className="p-4 rounded-xl bg-white border border-[#D32F2F]/40 hover:border-[#D32F2F] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+                    onClick={() => setHoveredPartnerId(hoveredPartnerId === "nmit" ? null : "nmit")}
+                    className={`relative p-4 rounded-xl bg-white border transition-all duration-300 cursor-pointer group flex flex-col justify-start shadow-xs hover:shadow-xl hover:-translate-y-1 overflow-hidden ${
+                      hoveredPartnerId === "nmit" ? "border-[#D32F2F] ring-2 ring-red-100" : "border-gray-200 hover:border-[#D32F2F]"
+                    }`}
                   >
+                    {/* IN-PLACE POP-UP LARGE PHOTO OVERLAY (WHITE BACKGROUND) */}
+                    {cardPhotoModal?.partnerId === "nmit" && (
+                      <div className="absolute inset-0 z-30 bg-white text-[#111111] rounded-xl p-4 flex flex-col justify-between shadow-2xl animate-in fade-in zoom-in-95 duration-200 border-2 border-[#D32F2F]">
+                        <div className="flex items-center justify-between border-b border-gray-100 pb-2 z-10">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] bg-red-50 px-2.5 py-0.5 rounded-full border border-red-100">
+                            Photo {cardPhotoModal.index + 1} of {cardPhotoModal.list.length}
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCardPhotoModal(null);
+                            }}
+                            className="w-7 h-7 rounded-full bg-gray-100 hover:bg-[#D32F2F] text-gray-600 hover:text-white flex items-center justify-center transition cursor-pointer"
+                            aria-label="Close photo"
+                          >
+                            <X size={15} />
+                          </button>
+                        </div>
+
+                        <div className="relative flex-1 flex items-center justify-center my-2 overflow-hidden bg-gray-50 rounded-xl p-2 border border-gray-100 min-h-[220px]">
+                          <img
+                            src={cardPhotoModal.imgSrc}
+                            alt={cardPhotoModal.caption || "Enlarged photo"}
+                            className="max-h-full max-w-full object-contain rounded-lg shadow-md"
+                          />
+
+                          {cardPhotoModal.list.length > 1 && (
+                            <>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  const prevIdx = (cardPhotoModal.index - 1 + cardPhotoModal.list.length) % cardPhotoModal.list.length;
+                                  setCardPhotoModal({
+                                    ...cardPhotoModal,
+                                    index: prevIdx,
+                                    imgSrc: cardPhotoModal.list[prevIdx].src || cardPhotoModal.list[prevIdx],
+                                    caption: cardPhotoModal.list[prevIdx].caption || "",
+                                  });
+                                }}
+                                className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#111111]/80 hover:bg-[#D32F2F] text-white transition cursor-pointer shadow-lg z-20"
+                              >
+                                <ChevronLeft size={18} />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  const nextIdx = (cardPhotoModal.index + 1) % cardPhotoModal.list.length;
+                                  setCardPhotoModal({
+                                    ...cardPhotoModal,
+                                    index: nextIdx,
+                                    imgSrc: cardPhotoModal.list[nextIdx].src || cardPhotoModal.list[nextIdx],
+                                    caption: cardPhotoModal.list[nextIdx].caption || "",
+                                  });
+                                }}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#111111]/80 hover:bg-[#D32F2F] text-white transition cursor-pointer shadow-lg z-20"
+                              >
+                                <ChevronRight size={18} />
+                              </button>
+                            </>
+                          )}
+                        </div>
+
+                        {cardPhotoModal.caption && (
+                          <div className="text-[11px] text-center text-gray-700 font-bold pt-1 truncate bg-gray-50 px-2 py-1 rounded-md border border-gray-200">
+                            {cardPhotoModal.caption}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     <div>
                       <span className="text-xs sm:text-sm font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block mb-1 leading-tight">
                         Nitte Meenakshi Institute of Technology (NMIT)
                       </span>
-                      <p className="text-[11px] text-gray-500 line-clamp-1">Hands-on CAD &amp; DfAM lab sessions</p>
+                      <p className="text-[11px] text-gray-500 font-medium">Hands-on CAD &amp; DfAM lab sessions</p>
+
+                      {/* SMOOTH INLINE HOVER DRAWER */}
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                          hoveredPartnerId === "nmit"
+                            ? "max-h-[1200px] opacity-100 mt-3 pt-3 border-t border-red-100 bg-red-50/40 rounded-xl p-3 space-y-2 text-left"
+                            : "max-h-0 opacity-0 py-0 border-none"
+                        }`}
+                      >
+                        <p className="text-xs text-gray-700 font-medium leading-relaxed">
+                          {PARTNER_DETAILS.nmit.description}
+                        </p>
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] block">
+                            Key Outcomes &amp; Modules:
+                          </span>
+                          <ul className="space-y-1">
+                            {PARTNER_DETAILS.nmit.highlights.map((hl, idx) => (
+                              <li key={idx} className="text-[11px] text-gray-800 flex items-start gap-1.5 font-medium">
+                                <CheckCircle2 size={13} className="text-[#D32F2F] shrink-0 mt-0.5" />
+                                <span>{hl}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {PARTNER_DETAILS.nmit.images && PARTNER_DETAILS.nmit.images.length > 0 && (
+                          <div className="space-y-2 pt-2 border-t border-red-200/60">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] flex items-center gap-1.5">
+                                <Camera size={13} /> NMIT Lab Showcase ({PARTNER_DETAILS.nmit.images.length} Photos)
+                              </span>
+                              <span className="text-[10px] font-bold text-gray-500">Click photo to enlarge 🔍</span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2.5">
+                              {PARTNER_DETAILS.nmit.images.map((img, i) => (
+                                <div
+                                  key={i}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setCardPhotoModal({
+                                      partnerId: "nmit",
+                                      index: i,
+                                      imgSrc: img.src,
+                                      caption: img.caption,
+                                      list: PARTNER_DETAILS.nmit.images,
+                                    });
+                                  }}
+                                  className="group relative rounded-xl overflow-hidden border-2 border-gray-200 hover:border-[#D32F2F] shadow-sm cursor-pointer transition-all bg-gray-900"
+                                >
+                                  <img
+                                    src={img.src}
+                                    alt={img.caption || "NMIT lab photo"}
+                                    className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                                  />
+                                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[11px] font-extrabold gap-1">
+                                    <Maximize2 size={14} /> Enlarge High-Res
+                                  </div>
+                                  <div className="absolute bottom-1 left-1 right-1 bg-black/70 backdrop-blur-xs text-white text-[9px] font-medium px-2 py-1 rounded-md truncate">
+                                    {img.caption}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
+
                     <div className="flex items-center justify-between text-[11px] text-gray-500 mt-3 pt-2 border-t border-gray-100">
                       <span className="font-extrabold text-[#D32F2F]">2024 – 2025</span>
-                      <span className="inline-flex items-center gap-1 font-extrabold text-white bg-[#D32F2F] px-2.5 py-1 rounded-lg shadow-2xs text-[11px] hover:bg-[#b71c1c] transition">
-                        📸 2 Photos &rarr;
+                      <span className={`font-bold transition-colors flex items-center gap-1 ${
+                        hoveredPartnerId === "nmit" ? "text-[#D32F2F]" : "text-gray-700 group-hover:text-[#D32F2F]"
+                      }`}>
+                        {hoveredPartnerId === "nmit" ? "Hide Details" : "View Details"} &rarr;
                       </span>
                     </div>
                   </div>
 
                   {/* ALLIANCE UNIVERSITY */}
                   <div
-                    onClick={() => {
-                      setSelectedPartnerModal(PARTNER_DETAILS.alliance);
-                    }}
-                    className="p-4 rounded-xl bg-white border border-gray-200 hover:border-[#D32F2F]/60 hover:shadow-sm transition-all cursor-pointer group flex flex-col justify-between"
+                    onClick={() => setHoveredPartnerId(hoveredPartnerId === "alliance" ? null : "alliance")}
+                    className={`p-4 rounded-xl bg-white border transition-all duration-300 cursor-pointer group flex flex-col justify-start shadow-xs hover:shadow-xl hover:-translate-y-1 ${
+                      hoveredPartnerId === "alliance" ? "border-[#D32F2F] ring-2 ring-red-100" : "border-gray-200 hover:border-[#D32F2F]"
+                    }`}
                   >
                     <div>
                       <span className="text-xs sm:text-sm font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block mb-1 leading-tight">
                         Alliance University
                       </span>
-                      <p className="text-[11px] text-gray-500 line-clamp-1">3D printing &amp; build preparation track</p>
+                      <p className="text-[11px] text-gray-500 font-medium">3D printing &amp; build preparation track</p>
+
+                      {/* SMOOTH INLINE HOVER DRAWER */}
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                          hoveredPartnerId === "alliance"
+                            ? "max-h-[1200px] opacity-100 mt-3 pt-3 border-t border-red-100 bg-red-50/40 rounded-xl p-3 space-y-2 text-left"
+                            : "max-h-0 opacity-0 py-0 border-none"
+                        }`}
+                      >
+                        <p className="text-xs text-gray-700 font-medium leading-relaxed">
+                          {PARTNER_DETAILS.alliance.description}
+                        </p>
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] block">
+                            Key Outcomes &amp; Modules:
+                          </span>
+                          <ul className="space-y-1">
+                            {PARTNER_DETAILS.alliance.highlights.map((hl, idx) => (
+                              <li key={idx} className="text-[11px] text-gray-800 flex items-start gap-1.5 font-medium">
+                                <CheckCircle2 size={13} className="text-[#D32F2F] shrink-0 mt-0.5" />
+                                <span>{hl}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
                     </div>
+
                     <div className="flex items-center justify-between text-[11px] text-gray-500 mt-3 pt-2 border-t border-gray-100">
                       <span className="font-extrabold text-[#D32F2F]">2024 – 2025</span>
-                      <span className="font-bold text-gray-700 group-hover:text-[#D32F2F] transition-colors flex items-center gap-1">
-                        View Details &rarr;
+                      <span className={`font-bold transition-colors flex items-center gap-1 ${
+                        hoveredPartnerId === "alliance" ? "text-[#D32F2F]" : "text-gray-700 group-hover:text-[#D32F2F]"
+                      }`}>
+                        {hoveredPartnerId === "alliance" ? "Hide Details" : "View Details"} &rarr;
                       </span>
                     </div>
                   </div>
 
                   {/* CAMBRIDGE INSTITUTE OF TECHNOLOGY (CIT) */}
                   <div
-                    onClick={() => {
-                      setSelectedPartnerModal(PARTNER_DETAILS.cit);
-                    }}
-                    className="p-4 rounded-xl bg-white border border-gray-200 hover:border-[#D32F2F]/60 hover:shadow-sm transition-all cursor-pointer group flex flex-col justify-between"
+                    onClick={() => setHoveredPartnerId(hoveredPartnerId === "cit" ? null : "cit")}
+                    className={`p-4 rounded-xl bg-white border transition-all duration-300 cursor-pointer group flex flex-col justify-start shadow-xs hover:shadow-xl hover:-translate-y-1 ${
+                      hoveredPartnerId === "cit" ? "border-[#D32F2F] ring-2 ring-red-100" : "border-gray-200 hover:border-[#D32F2F]"
+                    }`}
                   >
                     <div>
                       <span className="text-xs sm:text-sm font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors block mb-1 leading-tight">
                         Cambridge Institute of Technology (CIT)
                       </span>
-                      <p className="text-[11px] text-gray-500 line-clamp-1">Industry 4.0 Skill Center Partner</p>
+                      <p className="text-[11px] text-gray-500 font-medium">Industry 4.0 Skill Center Partner</p>
+
+                      {/* SMOOTH INLINE HOVER DRAWER */}
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                          hoveredPartnerId === "cit"
+                            ? "max-h-[1200px] opacity-100 mt-3 pt-3 border-t border-red-100 bg-red-50/40 rounded-xl p-3 space-y-2 text-left"
+                            : "max-h-0 opacity-0 py-0 border-none"
+                        }`}
+                      >
+                        <p className="text-xs text-gray-700 font-medium leading-relaxed">
+                          {PARTNER_DETAILS.cit.description}
+                        </p>
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] block">
+                            Key Outcomes &amp; Modules:
+                          </span>
+                          <ul className="space-y-1">
+                            {PARTNER_DETAILS.cit.highlights.map((hl, idx) => (
+                              <li key={idx} className="text-[11px] text-gray-800 flex items-start gap-1.5 font-medium">
+                                <CheckCircle2 size={13} className="text-[#D32F2F] shrink-0 mt-0.5" />
+                                <span>{hl}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
                     </div>
+
                     <div className="flex items-center justify-between text-[11px] text-gray-500 mt-3 pt-2 border-t border-gray-100">
                       <span className="font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">2024 – Present</span>
-                      <span className="font-bold text-gray-700 group-hover:text-[#D32F2F] transition-colors flex items-center gap-1">
-                        View Details &rarr;
+                      <span className={`font-bold transition-colors flex items-center gap-1 ${
+                        hoveredPartnerId === "cit" ? "text-[#D32F2F]" : "text-gray-700 group-hover:text-[#D32F2F]"
+                      }`}>
+                        {hoveredPartnerId === "cit" ? "Hide Details" : "View Details"} &rarr;
                       </span>
                     </div>
                   </div>
@@ -875,38 +1246,133 @@ export default function TrainingPage() {
                 Tailored for SME/MSME needs with expert-led learning, driving innovation, cost efficiency, and real-world AM implementation across aerospace, automotive, and medical manufacturing sectors.
               </p>
 
-              <div className="grid md:grid-cols-3 gap-6">
-                {INDUSTRY_PROGRAMS.map((prog) => (
-                  <div
-                    key={prog.id}
-                    className="corporate-card bg-white rounded-xl border border-[#EAEAEA] p-6 flex flex-col justify-between hover:border-[#D32F2F] transition-all shadow-sm"
-                  >
-                    <div>
-                      <h4 className="text-base font-bold text-[#111111] mb-2">{prog.title}</h4>
-                      <p className="text-xs text-gray-600 leading-relaxed mb-4">{prog.description}</p>
-                      
-                      <div className="space-y-1.5 mb-6">
-                        {prog.topics.map((t, idx) => (
-                          <div key={idx} className="flex items-center gap-2 text-[11px] text-gray-700">
-                            <CheckCircle size={12} className="text-[#D32F2F] shrink-0" />
-                            <span>{t}</span>
+              <div className="grid md:grid-cols-3 gap-6 items-start">
+                {INDUSTRY_PROGRAMS.map((prog) => {
+                  const isSelected = selectedProgramDetail?.id === prog.id;
+                  const isEnrolling = activeEnrollId === prog.id;
+                  return (
+                    <div
+                      key={prog.id}
+                      className="relative corporate-card bg-white rounded-2xl border border-gray-200 p-6 flex flex-col justify-start transition-all duration-300 shadow-xs hover:shadow-xl hover:-translate-y-1 overflow-hidden hover:border-[#D32F2F]"
+                    >
+                      {/* IN-PLACE POP-UP ENROLLMENT SUBMISSION FORM */}
+                      {isEnrolling && (
+                        <div className="absolute inset-0 z-30 bg-[#111111] text-white rounded-2xl p-5 flex flex-col justify-between shadow-2xl animate-in fade-in zoom-in-95 duration-200 border-2 border-[#D32F2F]">
+                          <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                            <div>
+                              <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F]">
+                                Quick Enrollment Form
+                              </span>
+                              <h4 className="text-xs sm:text-sm font-extrabold text-white line-clamp-1">
+                                {prog.title}
+                              </h4>
+                            </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveEnrollId(null);
+                              }}
+                              className="w-7 h-7 rounded-full bg-zinc-800 hover:bg-[#D32F2F] text-gray-300 hover:text-white flex items-center justify-center transition cursor-pointer shrink-0 ml-2"
+                              aria-label="Close form"
+                            >
+                              <X size={15} />
+                            </button>
                           </div>
-                        ))}
+
+                          {enrollSuccessId === prog.id ? (
+                            <div className="my-auto text-center py-4 space-y-2 bg-emerald-950/80 p-4 rounded-xl border border-emerald-700 text-emerald-100">
+                              <CheckCircle2 size={32} className="text-emerald-400 mx-auto" />
+                              <h5 className="text-sm font-extrabold">Enrollment Submitted!</h5>
+                              <p className="text-xs text-zinc-300">
+                                Our industry team will contact you for <strong>{prog.title}</strong>.
+                              </p>
+                              <button
+                                onClick={() => {
+                                  setActiveEnrollId(null);
+                                  setEnrollSuccessId(null);
+                                }}
+                                className="mt-2 px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition cursor-pointer"
+                              >
+                                Done
+                              </button>
+                            </div>
+                          ) : (
+                            <form
+                              onSubmit={(e) => {
+                                e.preventDefault();
+                                setEnrollSuccessId(prog.id);
+                              }}
+                              className="space-y-2.5 my-auto"
+                            >
+                              <div>
+                                <label className="block text-[10px] font-bold text-zinc-300 mb-0.5">Full Name *</label>
+                                <input
+                                  type="text"
+                                  required
+                                  placeholder="e.g. Rahul Sharma"
+                                  className="w-full px-3 py-1.5 text-xs rounded-lg bg-zinc-800 border border-zinc-700 text-white focus:border-[#D32F2F] focus:outline-hidden"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[10px] font-bold text-zinc-300 mb-0.5">Phone / WhatsApp *</label>
+                                <input
+                                  type="tel"
+                                  required
+                                  placeholder="+91 98765 43210"
+                                  className="w-full px-3 py-1.5 text-xs rounded-lg bg-zinc-800 border border-zinc-700 text-white focus:border-[#D32F2F] focus:outline-hidden"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[10px] font-bold text-zinc-300 mb-0.5">Company / Organization</label>
+                                <input
+                                  type="text"
+                                  placeholder="Company Name"
+                                  className="w-full px-3 py-1.5 text-xs rounded-lg bg-zinc-800 border border-zinc-700 text-white focus:border-[#D32F2F] focus:outline-hidden"
+                                />
+                              </div>
+                              <button
+                                type="submit"
+                                className="w-full py-2.5 bg-[#D32F2F] hover:bg-red-700 text-white text-xs font-extrabold uppercase tracking-wider rounded-xl transition shadow-md cursor-pointer mt-1"
+                              >
+                                Confirm Enrollment
+                              </button>
+                            </form>
+                          )}
+                        </div>
+                      )}
+
+                      <div>
+                        <h4 className="text-base font-extrabold text-[#111111] mb-2 leading-snug">{prog.title}</h4>
+                        <p className="text-xs text-gray-600 leading-relaxed mb-4">{prog.description}</p>
+                        
+                        <div className="space-y-2 mb-4">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 block">
+                            Specialized Modules:
+                          </span>
+                          {prog.topics.slice(0, 3).map((topic, idx) => (
+                            <div key={idx} className="flex items-center gap-2 text-xs text-gray-700 font-medium">
+                              <CheckCircle2 size={13} className="text-[#D32F2F] shrink-0" />
+                              <span className="line-clamp-1">{topic}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="mt-5 pt-3 border-t border-gray-100">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveEnrollId(prog.id);
+                          }}
+                          className="w-full py-3 px-4 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer bg-[#111111] hover:bg-black text-white hover:shadow-md"
+                        >
+                          <span>Enroll Now</span>
+                          <ArrowRight size={14} />
+                        </button>
                       </div>
                     </div>
-
-                    <button
-                      onClick={() => {
-                        setSelectedCourse(prog);
-                        setShowEnrollModal(true);
-                      }}
-                      className="w-full py-2 px-3 rounded-lg bg-gray-50 border border-gray-200 text-xs font-bold text-[#111111] hover:bg-[#D32F2F] hover:text-white transition flex items-center justify-between cursor-pointer"
-                    >
-                      <span>Enroll Program</span>
-                      <ArrowRight size={13} />
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* INDUSTRY TRAINING COLLABORATION BADGE */}
@@ -935,302 +1401,135 @@ export default function TrainingPage() {
         </div>
       </section>
 
-      {/* ENROLLMENT MODAL POPUP */}
-      {showEnrollModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-2xl w-full max-w-lg overflow-hidden relative">
-            
-            {/* MODAL HEADER */}
-            <div className="bg-[#111111] text-white p-6 flex items-center justify-between">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#D32F2F] block">
-                  Galactic 3D Additive Academy
-                </span>
-                <h3 className="text-lg font-extrabold text-white mt-0.5">
-                  {selectedCourse ? selectedCourse.title : "Program Enrollment"}
-                </h3>
-              </div>
-              <button
-                onClick={() => setShowEnrollModal(false)}
-                className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition cursor-pointer"
-              >
-                <X size={20} />
-              </button>
-            </div>
 
-            {/* MODAL BODY */}
-            <div className="p-6 space-y-4">
-              {submitted ? (
-                <div className="text-center py-8 space-y-3">
-                  <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto">
-                    <CheckCircle2 size={28} />
-                  </div>
-                  <h4 className="text-xl font-extrabold text-[#111111]">Registration Received!</h4>
-                  <p className="text-xs text-gray-600 max-w-xs mx-auto">
-                    Your registration details have been delivered to <strong className="text-emerald-600">admin@galactic-3d.com</strong>. Our academic coordinator will contact you shortly.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleEnrollSubmit} className="space-y-3">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Full Name *</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="e.g. Rahul Sharma"
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-gray-300 focus:border-[#D32F2F] focus:outline-hidden"
-                    />
-                  </div>
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Email *</label>
-                      <input
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="rahul@example.com"
-                        className="w-full px-3 py-2 text-xs rounded-lg border border-gray-300 focus:border-[#D32F2F] focus:outline-hidden"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Phone *</label>
-                      <input
-                        type="tel"
-                        required
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="+91 98765 43210"
-                        className="w-full px-3 py-2 text-xs rounded-lg border border-gray-300 focus:border-[#D32F2F] focus:outline-hidden"
-                      />
-                    </div>
-                  </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Institution / Company *</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.institution}
-                      onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
-                      placeholder="College or Company Name"
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-gray-300 focus:border-[#D32F2F] focus:outline-hidden"
-                    />
-                  </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Specific Interests / Questions</label>
-                    <textarea
-                      rows={2}
-                      value={formData.interests}
-                      onChange={(e) => setFormData({ ...formData, interests: e.target.value })}
-                      placeholder="Tell us about your learning goals or lab requirements..."
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-gray-300 focus:border-[#D32F2F] focus:outline-hidden"
-                    />
-                  </div>
-
-                  <ConsentBox
-                    value={consentText}
-                    onChange={(val, isValid) => {
-                      setConsentText(val);
-                      setConsentValid(isValid);
-                      if (isValid) setConsentError(false);
-                    }}
-                    error={consentError}
-                  />
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-3 rounded-lg bg-[#D32F2F] hover:bg-[#b71c1c] text-white text-xs font-bold uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 cursor-pointer mt-4"
-                  >
-                    {isSubmitting ? "Submitting..." : "Submit Registration & Get Syllabus"}
-                  </button>
-                </form>
-              )}
-            </div>
-
-          </div>
-        </div>
-      )}
-
-      {/* TEXT DETAILS MODAL (FOR ALLIANCE, CIT, CAMBRIDGE SCHOOL, IMTMA) */}
-      {selectedPartnerModal && (
+      {/* DIRECT PHOTO LIGHTBOX VIEWER - MOUNTED DIRECTLY TO document.body VIA PORTAL */}
+      {mounted && photoLightbox && createPortal(
         <div
-          className="fixed inset-0 z-[500] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 overflow-hidden animate-in fade-in duration-150"
-          onClick={() => setSelectedPartnerModal(null)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.9)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            zIndex: 999999,
+            margin: 0,
+            padding: "1rem",
+            boxSizing: "border-box",
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setPhotoLightbox(null);
+            }
+          }}
         >
           <div
-            className="bg-white rounded-2xl border border-gray-200 shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-150 my-auto"
+            style={{
+              position: "relative",
+              margin: "auto",
+              width: "min(1000px, 92vw)",
+              maxHeight: "90vh",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* MODAL HEADER */}
-            <div className="bg-[#111111] text-white p-5 sm:p-6 flex items-start justify-between shrink-0 border-b border-gray-800">
-              <div>
-                <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F] bg-red-950/60 border border-red-900/60 px-2.5 py-0.5 rounded-full mb-1.5">
-                  <GraduationCap size={13} /> {selectedPartnerModal.type}
-                </span>
-                <h3 className="text-lg sm:text-2xl font-extrabold text-white leading-tight">
-                  {selectedPartnerModal.name}
-                </h3>
-                <p className="text-xs text-gray-400 mt-1">
-                  📍 {selectedPartnerModal.location} &bull; <strong className="text-white">{selectedPartnerModal.years}</strong>
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  setSelectedPartnerModal(null);
-                }}
-                className="w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:text-white hover:bg-[#D32F2F] flex items-center justify-center transition cursor-pointer shrink-0 ml-3"
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            {/* MODAL BODY */}
-            <div className="p-5 sm:p-6 space-y-6 overflow-y-auto flex-1">
-              <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-2">
-                <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111] flex items-center gap-2">
-                  <BookOpen size={15} className="text-[#D32F2F]" /> Program Overview
-                </h4>
-                <p className="text-xs text-gray-700 leading-relaxed font-medium">
-                  {selectedPartnerModal.description}
-                </p>
-              </div>
-
-              {selectedPartnerModal.highlights && (
-                <div>
-                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111] mb-3 flex items-center gap-2">
-                    <CheckCircle2 size={16} className="text-[#D32F2F]" /> Program Highlights &amp; Outcomes
-                  </h4>
-                  <div className="space-y-2">
-                    {selectedPartnerModal.highlights.map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-gray-700 bg-white p-2.5 rounded-lg border border-gray-200">
-                        <CheckCircle size={14} className="text-emerald-600 shrink-0 mt-0.5" />
-                        <span className="font-medium">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 bg-gray-50 shrink-0">
-              <button
-                onClick={() => {
-                  const name = selectedPartnerModal.name;
-                  setSelectedPartnerModal(null);
-                  setSelectedCourse({ title: `Training Program for ${name}` });
-                  setShowEnrollModal(true);
-                }}
-                className="btn-corporate-primary flex items-center gap-2 text-xs py-2.5 px-4 cursor-pointer"
-              >
-                <span>Enroll Similar Program for Your Institution</span>
-                <ArrowRight size={14} />
-              </button>
-
-              <button
-                onClick={() => setSelectedPartnerModal(null)}
-                className="py-2 px-4 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs font-bold transition cursor-pointer"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* DIRECT PHOTO LIGHTBOX VIEWER - OPENS THE ACTUAL PHOTO DIRECTLY! */}
-      {photoLightbox && (
-        <div
-          className="fixed inset-0 z-[99999] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 animate-in fade-in duration-150 select-none"
-          onClick={() => setPhotoLightbox(null)}
-        >
-          {/* HEADER */}
-          <div
-            className="w-full max-w-5xl flex items-center justify-between text-white mb-3 px-2"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div>
-              <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest block">
-                {photoLightbox.title || "Galactic 3D Training Photo"}
-              </span>
-              {photoLightbox.list && (
-                <span className="text-xs text-gray-300 font-extrabold">
-                  Photo {photoLightbox.index + 1} of {photoLightbox.list.length}
-                </span>
-              )}
-            </div>
-            <button
-              onClick={() => setPhotoLightbox(null)}
-              className="p-2 rounded-full bg-white/20 hover:bg-[#D32F2F] text-white transition flex items-center gap-2 text-xs font-bold px-4 cursor-pointer"
+            {/* HEADER */}
+            <div
+              className="w-full max-w-5xl flex items-center justify-between text-white mb-3 px-2 shrink-0"
+              onClick={(e) => e.stopPropagation()}
             >
-              <X size={16} />
-              <span>Close (Esc)</span>
-            </button>
-          </div>
-
-          {/* MAIN PHOTO DISPLAY */}
-          <div
-            className="relative max-w-5xl w-full flex-1 flex flex-col items-center justify-center my-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              src={photoLightbox.src}
-              alt={photoLightbox.caption || photoLightbox.title}
-              className="max-w-full max-h-[72vh] w-auto h-auto object-contain rounded-2xl shadow-2xl border border-white/20"
-            />
-
-            {/* PREVIOUS ARROW */}
-            {photoLightbox.list && photoLightbox.list.length > 1 && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const newIdx = (photoLightbox.index - 1 + photoLightbox.list.length) % photoLightbox.list.length;
-                  setPhotoLightbox({
-                    ...photoLightbox,
-                    src: photoLightbox.list[newIdx].src,
-                    caption: photoLightbox.list[newIdx].caption,
-                    index: newIdx,
-                  });
-                }}
-                className="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/60 hover:bg-[#D32F2F] text-white transition shadow-2xl border border-white/20 cursor-pointer"
-              >
-                <ChevronLeft size={28} />
-              </button>
-            )}
-
-            {/* NEXT ARROW */}
-            {photoLightbox.list && photoLightbox.list.length > 1 && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const newIdx = (photoLightbox.index + 1) % photoLightbox.list.length;
-                  setPhotoLightbox({
-                    ...photoLightbox,
-                    src: photoLightbox.list[newIdx].src,
-                    caption: photoLightbox.list[newIdx].caption,
-                    index: newIdx,
-                  });
-                }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/60 hover:bg-[#D32F2F] text-white transition shadow-2xl border border-white/20 cursor-pointer"
-              >
-                <ChevronRight size={28} />
-              </button>
-            )}
-
-            {/* CAPTION BAR */}
-            {photoLightbox.caption && (
-              <div className="mt-3 max-w-2xl text-center bg-zinc-900/90 text-white px-5 py-2 rounded-xl border border-zinc-800 text-xs sm:text-sm font-medium shadow-xl">
-                {photoLightbox.caption}
+              <div>
+                <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest block">
+                  {photoLightbox.title || "Galactic 3D Training Photo"}
+                </span>
+                {photoLightbox.list && (
+                  <span className="text-xs text-gray-300 font-extrabold">
+                    Photo {photoLightbox.index + 1} of {photoLightbox.list.length}
+                  </span>
+                )}
               </div>
-            )}
-          </div>
+              <button
+                onClick={() => setPhotoLightbox(null)}
+                className="p-2 rounded-full bg-white/20 hover:bg-[#D32F2F] text-white transition flex items-center gap-2 text-xs font-bold px-4 cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X size={16} />
+                <span>Close (Esc)</span>
+              </button>
+            </div>
 
-        </div>
+            {/* MAIN PHOTO DISPLAY */}
+            <div
+              className="relative max-w-5xl w-full flex-1 flex flex-col items-center justify-center overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={photoLightbox.src}
+                alt={photoLightbox.caption || photoLightbox.title}
+                className="max-w-full max-h-[72vh] w-auto h-auto object-contain rounded-2xl shadow-2xl border border-white/20"
+              />
+
+              {/* PREVIOUS ARROW */}
+              {photoLightbox.list && photoLightbox.list.length > 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const newIdx = (photoLightbox.index - 1 + photoLightbox.list.length) % photoLightbox.list.length;
+                    setPhotoLightbox({
+                      ...photoLightbox,
+                      src: photoLightbox.list[newIdx].src,
+                      caption: photoLightbox.list[newIdx].caption,
+                      index: newIdx,
+                    });
+                  }}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/60 hover:bg-[#D32F2F] text-white transition shadow-2xl border border-white/20 cursor-pointer"
+                >
+                  <ChevronLeft size={28} />
+                </button>
+              )}
+
+              {/* NEXT ARROW */}
+              {photoLightbox.list && photoLightbox.list.length > 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const newIdx = (photoLightbox.index + 1) % photoLightbox.list.length;
+                    setPhotoLightbox({
+                      ...photoLightbox,
+                      src: photoLightbox.list[newIdx].src,
+                      caption: photoLightbox.list[newIdx].caption,
+                      index: newIdx,
+                    });
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/60 hover:bg-[#D32F2F] text-white transition shadow-2xl border border-white/20 cursor-pointer"
+                >
+                  <ChevronRight size={28} />
+                </button>
+              )}
+
+              {/* CAPTION BAR */}
+              {photoLightbox.caption && (
+                <div className="mt-3 max-w-2xl text-center bg-zinc-900/90 text-white px-5 py-2 rounded-xl border border-zinc-800 text-xs sm:text-sm font-medium shadow-xl shrink-0">
+                  {photoLightbox.caption}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>,
+        document.body
       )}
 
     </div>

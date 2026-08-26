@@ -8,9 +8,9 @@ export default function TrainingProgramsNav() {
     <section className="py-16 lg:py-24 bg-white text-[#222222] border-t border-[#EAEAEA] font-sans relative">
       <div className="mx-auto max-w-7xl px-4 sm:px-8">
         
-        {/* SECTION HEADER */}
+        {/* SECTION HEADER MATCHING "Industries We Serve" EXACT FONT FAMILY, FONT WEIGHT & SIZE */}
         <div className="mb-10 border-b border-[#EAEAEA] pb-6">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#111111] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
             Training &amp; Industry Programs
           </h2>
         </div>
@@ -58,149 +58,119 @@ export default function TrainingProgramsNav() {
             </div>
           </div>
 
-          {/* CENTER COLUMN (5 COLUMNS): 3 CLICKABLE NAVIGATION CARDS STACKED VERTICALLY */}
-          <div className="lg:col-span-5 flex flex-col gap-4 justify-between">
+          {/* CENTER SIDE (5 COLUMNS): 3 DESTINATION NAVIGATION CARDS */}
+          <div className="lg:col-span-5 flex flex-col justify-between gap-4">
             
-            {/* CARD 1: SCHOOLS */}
+            {/* DESTINATION 1: SCHOOLS */}
             <Link
-              href="/training#schools"
-              className="group bg-white hover:bg-gray-50/80 rounded-2xl border border-[#EAEAEA] hover:border-[#D32F2F] p-5 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-between shadow-sm hover:shadow-md"
+              href="/training"
+              className="p-5 rounded-2xl bg-white border border-[#EAEAEA] hover:border-[#D32F2F] transition-all duration-200 shadow-xs hover:shadow-md group flex items-start gap-4"
             >
-              <div className="flex items-start gap-4">
-                <div className="p-3 rounded-xl bg-red-50 text-[#D32F2F] border border-red-100 group-hover:bg-[#D32F2F] group-hover:text-white group-hover:border-[#D32F2F] transition-colors shrink-0">
-                  <School size={22} />
-                </div>
-
-                <div>
-                  <h3 className="text-base font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors flex items-center gap-2">
+              <div className="w-12 h-12 rounded-xl bg-red-50 text-[#D32F2F] flex items-center justify-center shrink-0 group-hover:bg-[#D32F2F] group-hover:text-white transition-colors">
+                <School size={22} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <h4 className="text-base font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors">
                     Schools
-                  </h3>
-                  <p className="text-xs text-gray-600 leading-relaxed mt-1">
-                    STEM, innovation, and 3D printing exposure programs for school students.
-                  </p>
-                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#D32F2F] mt-2 group-hover:underline">
-                    View Details <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                  </span>
+                  </h4>
+                  <ArrowRight size={16} className="text-gray-400 group-hover:text-[#D32F2F] group-hover:translate-x-1 transition-all" />
                 </div>
+                <p className="text-xs text-gray-600 leading-relaxed mb-2">
+                  STEM, innovation, and 3D printing exposure programs for school students.
+                </p>
+                <span className="text-[11px] font-bold text-[#D32F2F] inline-flex items-center gap-1 group-hover:underline">
+                  Explore Programs &rarr;
+                </span>
               </div>
-
-              <ArrowRight size={18} className="text-gray-400 group-hover:text-[#D32F2F] group-hover:translate-x-1 transition-all shrink-0 ml-3" />
             </Link>
 
-            {/* CARD 2: COLLEGES & UNIVERSITIES */}
+            {/* DESTINATION 2: COLLEGES & UNIVERSITIES */}
             <Link
-              href="/training#colleges"
-              className="group bg-white hover:bg-gray-50/80 rounded-2xl border border-[#EAEAEA] hover:border-[#D32F2F] p-5 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-between shadow-sm hover:shadow-md"
+              href="/training"
+              className="p-5 rounded-2xl bg-white border border-[#EAEAEA] hover:border-[#D32F2F] transition-all duration-200 shadow-xs hover:shadow-md group flex items-start gap-4"
             >
-              <div className="flex items-start gap-4">
-                <div className="p-3 rounded-xl bg-red-50 text-[#D32F2F] border border-red-100 group-hover:bg-[#D32F2F] group-hover:text-white group-hover:border-[#D32F2F] transition-colors shrink-0">
-                  <GraduationCap size={22} />
-                </div>
-
-                <div>
-                  <h3 className="text-base font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors flex items-center gap-2">
+              <div className="w-12 h-12 rounded-xl bg-red-50 text-[#D32F2F] flex items-center justify-center shrink-0 group-hover:bg-[#D32F2F] group-hover:text-white transition-colors">
+                <GraduationCap size={22} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <h4 className="text-base font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors">
                     Colleges &amp; Universities
-                  </h3>
-                  <p className="text-xs text-gray-600 leading-relaxed mt-1">
-                    Workshops, internships, faculty development programs, research support, and AM curriculum integration.
-                  </p>
-                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#D32F2F] mt-2 group-hover:underline">
-                    View Details <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                  </span>
+                  </h4>
+                  <ArrowRight size={16} className="text-gray-400 group-hover:text-[#D32F2F] group-hover:translate-x-1 transition-all" />
                 </div>
+                <p className="text-xs text-gray-600 leading-relaxed mb-2">
+                  Workshops, internships, faculty development programs, research support, and AM curriculum integration.
+                </p>
+                <span className="text-[11px] font-bold text-[#D32F2F] inline-flex items-center gap-1 group-hover:underline">
+                  Explore Programs &rarr;
+                </span>
               </div>
-
-              <ArrowRight size={18} className="text-gray-400 group-hover:text-[#D32F2F] group-hover:translate-x-1 transition-all shrink-0 ml-3" />
             </Link>
 
-            {/* CARD 3: INDUSTRY */}
+            {/* DESTINATION 3: INDUSTRY */}
             <Link
-              href="/training#industry"
-              className="group bg-white hover:bg-gray-50/80 rounded-2xl border border-[#EAEAEA] hover:border-[#D32F2F] p-5 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-between shadow-sm hover:shadow-md"
+              href="/training"
+              className="p-5 rounded-2xl bg-white border border-[#EAEAEA] hover:border-[#D32F2F] transition-all duration-200 shadow-xs hover:shadow-md group flex items-start gap-4"
             >
-              <div className="flex items-start gap-4">
-                <div className="p-3 rounded-xl bg-red-50 text-[#D32F2F] border border-red-100 group-hover:bg-[#D32F2F] group-hover:text-white group-hover:border-[#D32F2F] transition-colors shrink-0">
-                  <Building2 size={22} />
-                </div>
-
-                <div>
-                  <h3 className="text-base font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors flex items-center gap-2">
-                    Industry
-                  </h3>
-                  <p className="text-xs text-gray-600 leading-relaxed mt-1">
-                    DfAM training, AM implementation, production readiness, process optimization, and workforce upskilling.
-                  </p>
-                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#D32F2F] mt-2 group-hover:underline">
-                    View Details <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </div>
+              <div className="w-12 h-12 rounded-xl bg-red-50 text-[#D32F2F] flex items-center justify-center shrink-0 group-hover:bg-[#D32F2F] group-hover:text-white transition-colors">
+                <Building2 size={22} />
               </div>
-
-              <ArrowRight size={18} className="text-gray-400 group-hover:text-[#D32F2F] group-hover:translate-x-1 transition-all shrink-0 ml-3" />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <h4 className="text-base font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors">
+                    Industry
+                  </h4>
+                  <ArrowRight size={16} className="text-gray-400 group-hover:text-[#D32F2F] group-hover:translate-x-1 transition-all" />
+                </div>
+                <p className="text-xs text-gray-600 leading-relaxed mb-2">
+                  SME and corporate training for additive manufacturing design, production optimization, and workforce upskilling.
+                </p>
+                <span className="text-[11px] font-bold text-[#D32F2F] inline-flex items-center gap-1 group-hover:underline">
+                  Explore Programs &rarr;
+                </span>
+              </div>
             </Link>
 
           </div>
 
-          {/* RIGHT COLUMN (3 COLUMNS): STRATEGIC PARTNERS SIDEBAR CARD */}
+          {/* RIGHT SIDE (3 COLUMNS): STRATEGIC PARTNERS + CTA */}
           <div className="lg:col-span-3 bg-white rounded-2xl border border-[#EAEAEA] p-6 flex flex-col justify-between shadow-sm">
-            <div>
-              <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111] mb-4 border-b border-gray-100 pb-2.5">
-                Strategic Partners
-              </h4>
+            <div className="space-y-4">
+              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">
+                STRATEGIC PARTNERS
+              </span>
 
-              {/* PARTNER CARDS */}
-              <div className="space-y-4 mb-6">
-                
-                {/* PARTNER 1: EOS */}
-                <a
-                  href="https://www.eos.info"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.open("https://www.eos.info", "_blank", "noopener,noreferrer");
-                  }}
-                  className="block bg-white rounded-xl p-3 border border-gray-200 shadow-sm flex items-center justify-center h-24 overflow-hidden group hover:border-[#D32F2F] transition-all"
-                  aria-label="Visit EOS website"
-                >
-                  <img 
-                    src="/eos.png" 
-                    alt="EOS Logo" 
-                    className="w-full h-full max-h-18 object-contain transition-transform duration-300 group-hover:scale-105" 
-                  />
-                </a>
+              {/* LOGO 1: EOS */}
+              <div className="p-4 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center h-20 hover:border-red-200 transition-colors">
+                <img
+                  src="/hero/eos.svg"
+                  alt="EOS Ecosystem Partner"
+                  className="h-10 w-auto object-contain"
+                />
+              </div>
 
-                {/* PARTNER 2: MATERIALISE */}
-                <a
-                  href="https://www.materialise.com/en"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.open("https://www.materialise.com/en", "_blank", "noopener,noreferrer");
-                  }}
-                  className="block bg-white rounded-xl p-3 border border-gray-200 shadow-sm flex items-center justify-center h-28 overflow-hidden group hover:border-[#D32F2F] transition-all"
-                  aria-label="Visit Materialise website"
-                >
-                  <img 
-                    src="/Materialise-Logo.jpg" 
-                    alt="Materialise Logo" 
-                    className="w-full h-full max-h-24 object-contain transition-transform duration-300 group-hover:scale-105" 
-                  />
-                </a>
-
+              {/* LOGO 2: MATERIALISE */}
+              <div className="p-4 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center h-20 hover:border-red-200 transition-colors">
+                <img
+                  src="/hero/materialise.svg"
+                  alt="Materialise Partner"
+                  className="h-10 w-auto object-contain"
+                />
               </div>
             </div>
 
-            {/* CTA BUTTON: EXPLORE TRAINING PROGRAMS */}
-            <Link
-              href="/training"
-              className="w-full py-3.5 px-4 rounded-xl bg-[#D32F2F] hover:bg-[#b71c1c] text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg group cursor-pointer"
-            >
-              <span>Explore Training Programs</span>
-              <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-
+            {/* ACTION CTA BUTTON */}
+            <div className="pt-6 mt-6 border-t border-gray-100">
+              <Link
+                href="/training"
+                className="w-full py-3 px-4 rounded-xl bg-[#D32F2F] hover:bg-[#B71C1C] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-2 group cursor-pointer"
+              >
+                <span>Explore All Programs</span>
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
           </div>
 
         </div>

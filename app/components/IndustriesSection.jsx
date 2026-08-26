@@ -76,7 +76,7 @@ export const INDUSTRIES_DATA = [
     title: "Education & Research",
     category: "Education",
     icon: GraduationCap,
-    image: "/aboutgrp.jpg",
+    image: "/images/education-classroom-lab.jpg",
     shortDesc: "Advanced DfAM research models, mechanical testing specimens, fluid dynamics test rigs, and university additive lab training.",
     overview: "Supporting academic institutions, engineering universities, and R&D centers with industrial additive manufacturing access, metallurgical test specimens, and DfAM training.",
     challenges: "Access to industrial-grade AM machinery, complex lattice research, faculty technical upskilling.",
