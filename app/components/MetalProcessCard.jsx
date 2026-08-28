@@ -121,9 +121,10 @@ export default function MetalProcessCard() {
       </div>
 
       {activeTag && activeFamily && (
-        <MaterialFamilyModal
-          family={activeFamily}
-          isOpen={true}
+                <MaterialFamilyModal
+          title={activeTag.label}
+          slug={familySlug(activeFamily.family)}
+          materials={activeFamily.materials}
           onClose={() => setActiveTag(null)}
         />
       )}
