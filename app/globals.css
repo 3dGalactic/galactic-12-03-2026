@@ -34,8 +34,7 @@ html, body {
   font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  transform: translateZ(0);
-  backface-visibility: hidden;
+  
 }
 
 /* Defer offscreen section rendering for 60fps buttery smooth scroll */
