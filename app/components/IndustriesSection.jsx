@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   Plane,
   Car,
@@ -128,10 +129,43 @@ export const INDUSTRIES_DATA = [
 ];
 
 export default function IndustriesSection() {
+  return (
+    <Suspense fallback={null}>
+      <IndustriesSectionInner />
+    </Suspense>
+  );
+}
+
+function IndustriesSectionInner() {
   const [filter, setFilter] = useState("All");
   const [selectedIndustry, setSelectedIndustry] = useState(null);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const categories = ["All", "Aerospace", "Automotive", "Medical", "Education", "Electronics", "Energy"];
+
+ 
+  
+  useEffect(() => {
+    const industryId = searchParams.get("industry");
+    if (industryId) {
+      const match = INDUSTRIES_DATA.find((item) => item.id === industryId);
+      if (match) {
+        setSelectedIndustry(match);
+        setFilter(match.category);
+        return;
+      }
+    }
+    setSelectedIndustry(null);
+    setFilter("All");
+  }, [searchParams]);
+
+  const goToAllIndustries = () => {
+    setFilter("All");
+    setSelectedIndustry(null);
+    router.replace(pathname, { scroll: false });
+  };
 
   // Active industry selection based on filter tab or modal selection
   const activeIndustryInfo = filter !== "All"
@@ -245,10 +279,7 @@ export default function IndustriesSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10 z-[1]" />
               
               <button
-                onClick={() => {
-                  setFilter("All");
-                  setSelectedIndustry(null);
-                }}
+                onClick={goToAllIndustries}
                 className="absolute top-4 right-4 px-4 py-2 rounded-full bg-black/75 backdrop-blur-md text-white hover:bg-[#D32F2F] font-extrabold text-xs transition z-20 flex items-center gap-1.5 shadow-lg border border-white/20 cursor-pointer"
               >
                 <X size={14} /> Close &amp; View All Industries
@@ -365,10 +396,7 @@ export default function IndustriesSection() {
 
                 <div className="flex items-center gap-3 shrink-0">
                   <button
-                    onClick={() => {
-                      setFilter("All");
-                      setSelectedIndustry(null);
-                    }}
+                    onClick={goToAllIndustries}
                     className="px-4 py-2.5 rounded-lg border border-gray-300 text-xs font-bold text-gray-700 hover:bg-gray-100 transition"
                   >
                     View All Industries

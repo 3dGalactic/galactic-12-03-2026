@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowRight, Menu, X, ChevronDown, Wrench, MessageSquareText, Factory, FileText } from "lucide-react";
+import { ArrowRight, Menu, X, ChevronDown, Wrench, MessageSquareText } from "lucide-react";
+import { INDUSTRIES_DATA } from "./IndustriesSection";
 
 export default function GalacticNav() {
   const pathname = usePathname();
@@ -12,6 +13,8 @@ export default function GalacticNav() {
   const [mobileIndustriesOpen, setMobileIndustriesOpen] = useState(false);
   const [eventsDropdownOpen, setEventsDropdownOpen] = useState(false);
   const [mobileEventsOpen, setMobileEventsOpen] = useState(false);
+  const [contactDropdownOpen, setContactDropdownOpen] = useState(false);
+  const [mobileContactOpen, setMobileContactOpen] = useState(false);
 
   const isIndustriesActive =
     pathname === "/industries" ||
@@ -25,6 +28,8 @@ export default function GalacticNav() {
     pathname === "/forum" ||
     pathname.includes("workshop") ||
     pathname.includes("forum");
+
+  const isContactActive = pathname === "/contact" || pathname === "/careers";
 
   return (
     <header className="sticky top-0 z-[100] w-full bg-white/95 backdrop-blur-md shadow-sm border-b border-[#EAEAEA]">
@@ -72,29 +77,20 @@ export default function GalacticNav() {
                 {isIndustriesActive && <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#D32F2F] rounded-full" />}
               </Link>
 
-              {/* DROPDOWN MENU OPTIONS */}
+              {/* DROPDOWN MENU OPTIONS - MATCHES EVENTS DROPDOWN STYLE, NO ICONS */}
               {industriesDropdownOpen && (
-                <div className="absolute top-full left-0 w-52 bg-white rounded-2xl shadow-xl border border-gray-200 py-2.5 space-y-1 z-[110] animate-in fade-in slide-in-from-top-2 duration-150">
-                  <Link
-                    href="/industries"
-                    onClick={() => setIndustriesDropdownOpen(false)}
-                    className="px-4 py-2.5 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F] hover:bg-red-50/70 transition flex items-center justify-between group/item"
-                  >
-                    <span className="flex items-center gap-2">
-                      <Factory size={14} className="text-[#D32F2F]" /> All Industries
-                    </span>
-                    <ArrowRight size={12} className="transition-transform group-hover/item:translate-x-1" />
-                  </Link>
-                  <Link
-                    href="/casestudies"
-                    onClick={() => setIndustriesDropdownOpen(false)}
-                    className="px-4 py-2.5 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F] hover:bg-red-50/70 transition flex items-center justify-between group/item"
-                  >
-                    <span className="flex items-center gap-2">
-                      <FileText size={14} className="text-[#D32F2F]" /> Case Studies
-                    </span>
-                    <ArrowRight size={12} className="transition-transform group-hover/item:translate-x-1" />
-                  </Link>
+                <div className="absolute top-full left-0 w-56 bg-white rounded-2xl shadow-xl border border-gray-200 py-2.5 space-y-1 z-[110] animate-in fade-in slide-in-from-top-2 duration-150">
+                  {INDUSTRIES_DATA.map((ind) => (
+                    <Link
+                      key={ind.id}
+                      href={`/industries?industry=${ind.id}`}
+                      onClick={() => setIndustriesDropdownOpen(false)}
+                      className="px-4 py-2.5 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F] hover:bg-red-50/70 transition flex items-center justify-between group/item"
+                    >
+                      <span>{ind.title}</span>
+                      <ArrowRight size={12} className="transition-transform group-hover/item:translate-x-1 shrink-0" />
+                    </Link>
+                  ))}
                 </div>
               )}
             </div>
@@ -107,16 +103,6 @@ export default function GalacticNav() {
             >
               Training
               {pathname === "/training" && <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#D32F2F] rounded-full" />}
-            </Link>
-
-            <Link
-              href="/careers"
-              className={`px-3 py-2 text-xs font-semibold uppercase tracking-wider transition-colors relative ${
-                pathname === "/careers" ? "text-[#D32F2F] font-bold" : "text-[#222222] hover:text-[#D32F2F]"
-              }`}
-            >
-              Careers
-              {pathname === "/careers" && <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#D32F2F] rounded-full" />}
             </Link>
 
             {/* EVENTS NAVIGATION LINK & DROPDOWN MENU */}
@@ -165,15 +151,47 @@ export default function GalacticNav() {
               )}
             </div>
 
-            <Link
-              href="/contact"
-              className={`px-3 py-2 text-xs font-semibold uppercase tracking-wider transition-colors relative ${
-                pathname === "/contact" ? "text-[#D32F2F] font-bold" : "text-[#222222] hover:text-[#D32F2F]"
-              }`}
+            {/* CONTACT NAVIGATION LINK & DROPDOWN MENU (CONTACT + CAREERS) */}
+            <div
+              className="relative group flex items-center"
+              onMouseEnter={() => setContactDropdownOpen(true)}
+              onMouseLeave={() => setContactDropdownOpen(false)}
             >
-              Contact
-              {pathname === "/contact" && <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#D32F2F] rounded-full" />}
-            </Link>
+              {/* CLICKABLE DIRECT LINK TO CONTACT PAGE */}
+              <Link
+                href="/contact"
+                onClick={() => setContactDropdownOpen(false)}
+                className={`px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors relative flex items-center gap-1 cursor-pointer ${
+                  isContactActive ? "text-[#D32F2F]" : "text-[#222222] hover:text-[#D32F2F]"
+                }`}
+              >
+                <span>CONTACT</span>
+                <ChevronDown size={14} className="transition-transform group-hover:rotate-180 shrink-0" />
+                {isContactActive && <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#D32F2F] rounded-full" />}
+              </Link>
+
+              {/* DROPDOWN MENU OPTIONS */}
+              {contactDropdownOpen && (
+                <div className="absolute top-full left-0 w-48 bg-white rounded-2xl shadow-xl border border-gray-200 py-2.5 space-y-1 z-[110] animate-in fade-in slide-in-from-top-2 duration-150">
+                  <Link
+                    href="/contact"
+                    onClick={() => setContactDropdownOpen(false)}
+                    className="px-4 py-2.5 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F] hover:bg-red-50/70 transition flex items-center justify-between group/item"
+                  >
+                    <span>CONTACT</span>
+                    <ArrowRight size={12} className="transition-transform group-hover/item:translate-x-1" />
+                  </Link>
+                  <Link
+                    href="/careers"
+                    onClick={() => setContactDropdownOpen(false)}
+                    className="px-4 py-2.5 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F] hover:bg-red-50/70 transition flex items-center justify-between group/item"
+                  >
+                    <span>CAREERS</span>
+                    <ArrowRight size={12} className="transition-transform group-hover/item:translate-x-1" />
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* GET QUOTE PRIMARY RED BUTTON */}
@@ -242,20 +260,16 @@ export default function GalacticNav() {
 
               {mobileIndustriesOpen && (
                 <div className="pl-6 space-y-1 border-l-2 border-[#D32F2F] ml-4 py-1">
-                  <Link
-                    href="/industries"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F]"
-                  >
-                    → All Industries
-                  </Link>
-                  <Link
-                    href="/casestudies"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F]"
-                  >
-                    → Case Studies
-                  </Link>
+                  {INDUSTRIES_DATA.map((ind) => (
+                    <Link
+                      key={ind.id}
+                      href={`/industries?industry=${ind.id}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block px-3 py-2 text-xs font-bold text-gray-800 hover:text-[#D32F2F]"
+                    >
+                      → {ind.title}
+                    </Link>
+                  ))}
                 </div>
               )}
             </div>
@@ -268,16 +282,6 @@ export default function GalacticNav() {
               }`}
             >
               Training
-            </Link>
-
-            <Link
-              href="/careers"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors ${
-                pathname === "/careers" ? "bg-red-50 text-[#D32F2F]" : "text-gray-800 hover:bg-gray-50"
-              }`}
-            >
-              Careers
             </Link>
 
             {/* MOBILE EVENTS DROPDOWN & CLICKABLE LINK */}
@@ -321,15 +325,46 @@ export default function GalacticNav() {
               )}
             </div>
 
-            <Link
-              href="/contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors ${
-                pathname === "/contact" ? "bg-red-50 text-[#D32F2F]" : "text-gray-800 hover:bg-gray-50"
-              }`}
-            >
-              Contact
-            </Link>
+            {/* MOBILE CONTACT DROPDOWN & CLICKABLE LINK (CONTACT + CAREERS) */}
+            <div className="space-y-1">
+              <div className={`flex items-center justify-between rounded-lg transition-colors ${
+                isContactActive ? "bg-red-50 text-[#D32F2F]" : "hover:bg-gray-50 text-gray-800"
+              }`}>
+                <Link
+                  href="/contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex-1 px-4 py-2.5 text-xs font-bold uppercase tracking-wider"
+                >
+                  CONTACT
+                </Link>
+                <button
+                  onClick={() => setMobileContactOpen((prev) => !prev)}
+                  className="px-4 py-2.5 text-gray-600 hover:text-[#D32F2F] cursor-pointer"
+                  aria-label="Expand Contact Options"
+                >
+                  <ChevronDown size={14} className={`transition-transform ${mobileContactOpen ? "rotate-180" : ""}`} />
+                </button>
+              </div>
+
+              {mobileContactOpen && (
+                <div className="pl-6 space-y-1 border-l-2 border-[#D32F2F] ml-4 py-1">
+                  <Link
+                    href="/contact"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-3 py-2 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F]"
+                  >
+                    → CONTACT
+                  </Link>
+                  <Link
+                    href="/careers"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-3 py-2 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F]"
+                  >
+                    → CAREERS
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
