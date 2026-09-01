@@ -366,7 +366,7 @@ export default function TrainingPage() {
       <section className="bg-gradient-to-b from-[#F8F9FA] to-white py-16 lg:py-24 border-b border-[#EAEAEA]">
         <div className="mx-auto max-w-7xl px-4 sm:px-8 text-center">
           <div className="max-w-3xl mx-auto space-y-4">
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-[#111111] tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
               From Learning to Leading in Additive Manufacturing
             </h1>
             
@@ -407,7 +407,7 @@ export default function TrainingPage() {
             {/* VISION & OBJECTIVES */}
             <div className="lg:col-span-6 space-y-6">
               <div>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111]">
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
                   Pioneering Competence-Based 3D Printing Education
                 </h2>
               </div>
@@ -486,7 +486,7 @@ export default function TrainingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-8">
           
           <div className="text-center max-w-xl mx-auto mb-12">
-            <h2 className="text-3xl font-extrabold text-[#111111]">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
               Why Choose Galactic 3D Training?
             </h2>
           </div>
@@ -652,7 +652,7 @@ export default function TrainingPage() {
 
           {/* SCHOOL PROGRAM SCOPE */}
           {(selectedCategory === "all" || selectedCategory === "school") && (
-            <div id="schools" className="mb-16">
+            <div id="school" className="mb-16">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-1.5 h-6 bg-[#D32F2F] rounded-full" />
                 <h3 className="text-2xl font-extrabold text-[#111111]">
@@ -817,7 +817,7 @@ export default function TrainingPage() {
 
           {/* INSTITUTION PROGRAM SCOPE */}
           {(selectedCategory === "all" || selectedCategory === "institution") && (
-            <div id="colleges" className="mb-16">
+            <div id="institution" className="mb-16">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-1.5 h-6 bg-[#111111] rounded-full" />
                 <h3 className="text-2xl font-extrabold text-[#111111]">

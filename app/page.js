@@ -47,7 +47,7 @@ export default function Home() {
       <section className="py-20 bg-gray-50 text-[#111111] border-t border-[#EAEAEA]">
         <div className="mx-auto max-w-7xl px-4 sm:px-8 text-center">
           <div className="max-w-3xl mx-auto space-y-6">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#111111] tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
               Ready to Accelerate Your Manufacturing Production?
             </h2>
             <p className="text-gray-600 text-sm leading-relaxed">

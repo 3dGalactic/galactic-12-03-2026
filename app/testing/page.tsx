@@ -793,7 +793,7 @@ const TEAM_CORE = [
     name: "Bhramanandam", 
     role: "Finance Officer", 
     bio: "Managing the fiscal landscape of the enterprise, ensuring sustainable growth for advanced manufacturing initiatives.", 
-    img: "", 
+    img: "/bhramanandam.png", 
     left: "75%", 
     top: "50%", 
     width: "25%", 

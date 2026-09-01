@@ -144,7 +144,7 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <h2 className="text-4xl md:text-5xl font-extrabold uppercase tracking-tight mb-12 text-black">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-12 text-[#111111]">
               Send Us a Message
             </h2>
 
@@ -189,8 +189,7 @@ export default function Contact() {
                       id="name"
                       className={`w-full bg-transparent border-b-2 ${
                         errors.name ? "border-red-600" : "border-black"
-                      } py-3 text-black font-bold placeholder:text-gray-500 focus:outline-none focus:border-black transition`}
-                      placeholder="John Doe"
+                      } py-3 text-black font-bold focus:outline-none focus:border-black transition`}
                       value={form.name}
                       onChange={handleChange}
                     />
@@ -212,8 +211,7 @@ export default function Contact() {
                       id="email"
                       className={`w-full bg-transparent border-b-2 ${
                         errors.email ? "border-red-600" : "border-black"
-                      } py-3 text-black font-bold placeholder:text-gray-500 focus:outline-none focus:border-black transition`}
-                      placeholder="john@example.com"
+                      } py-3 text-black font-bold focus:outline-none focus:border-black transition`}
                       value={form.email}
                       onChange={handleChange}
                     />
@@ -235,8 +233,7 @@ export default function Contact() {
                     <input
                       type="text"
                       id="company"
-                      className="w-full bg-transparent border-b-2 border-black py-3 text-black font-bold placeholder:text-gray-500 focus:outline-none focus:border-black transition"
-                      placeholder="Your Company"
+                      className="w-full bg-transparent border-b-2 border-black py-3 text-black font-bold focus:outline-none focus:border-black transition"
                       value={form.company}
                       onChange={handleChange}
                     />
@@ -250,8 +247,7 @@ export default function Contact() {
                     <input
                       type="tel"
                       id="phone"
-                      className="w-full bg-transparent border-b-2 border-black py-3 text-black font-bold placeholder:text-gray-500 focus:outline-none focus:border-black transition"
-                      placeholder="+91 98765 43210"
+                      className="w-full bg-transparent border-b-2 border-black py-3 text-black font-bold focus:outline-none focus:border-black transition"
                       value={form.phone}
                       onChange={handleChange}
                     />
@@ -268,8 +264,7 @@ export default function Contact() {
                     id="subject"
                     className={`w-full bg-transparent border-b-2 ${
                       errors.subject ? "border-red-600" : "border-black"
-                    } py-3 text-black font-bold placeholder:text-gray-500 focus:outline-none focus:border-black transition`}
-                    placeholder="How can we help you?"
+                    } py-3 text-black font-bold focus:outline-none focus:border-black transition`}
                     value={form.subject}
                     onChange={handleChange}
                   />
@@ -291,8 +286,7 @@ export default function Contact() {
                     rows="4"
                     className={`w-full bg-transparent border-b-2 ${
                       errors.message ? "border-red-600" : "border-black"
-                    } py-3 text-black font-bold placeholder:text-gray-500 resize-none focus:outline-none focus:border-black transition`}
-                    placeholder="Tell us about your project..."
+                    } py-3 text-black font-bold resize-none focus:outline-none focus:border-black transition`}
                     value={form.message}
                     onChange={handleChange}
                   />
@@ -401,7 +395,7 @@ export default function Contact() {
           >
             {/* heading */}
             <div>
-              <h2 className="text-3xl font-extrabold uppercase tracking-tight text-black">
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#111111]">
                 Contact
               </h2>
 
@@ -482,7 +476,7 @@ export default function Contact() {
                   </p>
 
                   <p className="text-base text-black font-bold">
-                    Mon – Fri · 9:00 — 18:00
+                    Mon – Fri · 9:00 — 17:00
                   </p>
                 </div>
               </div>

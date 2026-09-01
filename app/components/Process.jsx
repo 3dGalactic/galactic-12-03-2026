@@ -3,7 +3,7 @@
 export default function Process() {
   return (
     <section className="py-20 bg-background/90 rounded-3xl shadow-2xl border border-dark-100 container mx-auto px-6 my-20 animate-fade-in-up">
-      <h2 className="text-3xl md:text-4xl font-extrabold mb-6 text-center font-['MonumentExtended']">
+      <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center tracking-tight">
         Our <span className="text-primary">Process</span>
       </h2>
       <p className="text-xl text-gray-400 text-center mb-16 max-w-3xl mx-auto font-['NeueMontreal']">

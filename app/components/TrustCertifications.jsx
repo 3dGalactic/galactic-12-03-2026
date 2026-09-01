@@ -72,8 +72,8 @@ export default function TrustCertifications() {
         {/* SECTION HEADER */}
         <div className="mb-10 border-b border-[#EAEAEA] pb-6 flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
           <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase text-[#111111] tracking-tight leading-none">
-              Certifications &amp; <span className="text-[#E53935]">Recognitions</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
+              Certifications &amp; <span className="text-[#D32F2F]">Recognitions</span>
             </h2>
           </div>
           {activeCert && (
@@ -211,7 +211,7 @@ export default function TrustCertifications() {
 
                 <div>
 
-                  <h3 className="text-2xl font-black uppercase text-[#111111] mb-4">
+                  <h3 className="text-2xl font-extrabold text-[#111111] mb-4">
                     {activeCert.title}
                   </h3>
 
@@ -269,7 +269,7 @@ export default function TrustCertifications() {
 
                       <div className="text-left space-y-2 flex-grow">
 
-                        <h3 className="text-xl font-black uppercase text-[#111111] group-hover:text-[#E53935] transition-colors leading-tight">
+                        <h3 className="text-xl font-extrabold text-[#111111] group-hover:text-[#D32F2F] transition-colors leading-tight">
                           {cert.title}
                         </h3>
 

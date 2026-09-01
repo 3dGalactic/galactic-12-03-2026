@@ -36,7 +36,7 @@ export default function IndustriesPage() {
       <section className="py-16 bg-white border-t border-[#EAEAEA] text-[#111111]">
         <div className="mx-auto max-w-7xl px-4 sm:px-8 text-center">
           <div className="max-w-3xl mx-auto space-y-6">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111]">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
               Need Industry-Specific Material Certifications or Batch Reports?
             </h2>
             <p className="text-gray-600 text-sm sm:text-base leading-relaxed">

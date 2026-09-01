@@ -58,11 +58,9 @@ export default function CorporateFooter() {
             </ul>
           </div>
 
-          {/* COL 3: QUICK LINKS - COLUMN 2 */}
+          {/* COL 3: QUICK LINKS - COLUMN 2 (NO REPEATED HEADING) */}
           <div>
-            <h4 className="text-white text-xs font-bold uppercase tracking-wider mb-4 border-l-2 border-[#D32F2F] pl-3">
-              Quick Links
-            </h4>
+            <div className="mb-4 h-5 hidden md:block" />
             <ul className="space-y-2.5 text-xs text-zinc-400">
               <li>
                 <Link href="/workshops-events" className="hover:text-white transition flex items-center gap-1.5">

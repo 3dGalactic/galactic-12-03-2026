@@ -3,7 +3,7 @@
 export default function Testimonials() {
   return (
     <section className="py-20 bg-background/90 rounded-3xl shadow-2xl border border-dark-100 container mx-auto px-6 my-20 animate-fade-in-up">
-      <h2 className="text-3xl md:text-4xl font-extrabold mb-6 text-center font-['MonumentExtended']">
+      <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center tracking-tight">
         What Our <span className="text-primary">Clients Say</span>
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">

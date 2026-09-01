@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowRight, Menu, X, ChevronDown, Wrench, MessageSquareText } from "lucide-react";
+import { ArrowRight, Menu, X, ChevronDown, Wrench, MessageSquareText, Factory, FileText, Newspaper, BookOpen, GraduationCap, School, Building2 } from "lucide-react";
 import { INDUSTRIES_DATA } from "./IndustriesSection";
 
 export default function GalacticNav() {
@@ -11,6 +11,10 @@ export default function GalacticNav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [industriesDropdownOpen, setIndustriesDropdownOpen] = useState(false);
   const [mobileIndustriesOpen, setMobileIndustriesOpen] = useState(false);
+  const [trainingDropdownOpen, setTrainingDropdownOpen] = useState(false);
+  const [mobileTrainingOpen, setMobileTrainingOpen] = useState(false);
+  const [blogsDropdownOpen, setBlogsDropdownOpen] = useState(false);
+  const [mobileBlogsOpen, setMobileBlogsOpen] = useState(false);
   const [eventsDropdownOpen, setEventsDropdownOpen] = useState(false);
   const [mobileEventsOpen, setMobileEventsOpen] = useState(false);
   const [contactDropdownOpen, setContactDropdownOpen] = useState(false);
@@ -22,6 +26,15 @@ export default function GalacticNav() {
     pathname === "/case-studies" ||
     pathname.includes("industr") ||
     pathname.includes("case");
+
+  const isTrainingActive = pathname === "/training" || pathname.includes("training");
+
+  const isBlogsActive =
+    pathname === "/blog" ||
+    pathname === "/newsletter" ||
+    pathname === "/casestudies" ||
+    pathname.includes("blog") ||
+    pathname.includes("newsletter");
 
   const isEventsActive =
     pathname === "/workshops-events" ||
@@ -95,14 +108,70 @@ export default function GalacticNav() {
               )}
             </div>
 
+            {/* TRAINING NAVIGATION LINK & DROPDOWN MENU */}
+            <div
+              className="relative group flex items-center"
+              onMouseEnter={() => setTrainingDropdownOpen(true)}
+              onMouseLeave={() => setTrainingDropdownOpen(false)}
+            >
+              {/* CLICKABLE DIRECT LINK TO TRAINING PAGE */}
+              <Link
+                href="/training"
+                onClick={() => setTrainingDropdownOpen(false)}
+                className={`px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors relative flex items-center gap-1 cursor-pointer ${
+                  isTrainingActive ? "text-[#D32F2F]" : "text-[#222222] hover:text-[#D32F2F]"
+                }`}
+              >
+                <span>TRAINING</span>
+                <ChevronDown size={14} className="transition-transform group-hover:rotate-180 shrink-0" />
+                {isTrainingActive && <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#D32F2F] rounded-full" />}
+              </Link>
+
+              {/* DROPDOWN MENU OPTIONS */}
+              {trainingDropdownOpen && (
+                <div className="absolute top-full left-0 w-56 bg-white rounded-2xl shadow-xl border border-gray-200 py-2.5 space-y-1 z-[110] animate-in fade-in slide-in-from-top-2 duration-150">
+                  <Link
+                    href="/training#school"
+                    onClick={() => setTrainingDropdownOpen(false)}
+                    className="px-4 py-2.5 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F] hover:bg-red-50/70 transition flex items-center justify-between group/item"
+                  >
+                    <span className="flex items-center gap-2">
+                      <School size={14} className="text-[#D32F2F]" /> SCHOOL PROGRAM
+                    </span>
+                    <ArrowRight size={12} className="transition-transform group-hover/item:translate-x-1" />
+                  </Link>
+                  <Link
+                    href="/training#institution"
+                    onClick={() => setTrainingDropdownOpen(false)}
+                    className="px-4 py-2.5 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F] hover:bg-red-50/70 transition flex items-center justify-between group/item"
+                  >
+                    <span className="flex items-center gap-2">
+                      <GraduationCap size={14} className="text-[#D32F2F]" /> INSTITUTION PROGRAM
+                    </span>
+                    <ArrowRight size={12} className="transition-transform group-hover/item:translate-x-1" />
+                  </Link>
+                  <Link
+                    href="/training#industry"
+                    onClick={() => setTrainingDropdownOpen(false)}
+                    className="px-4 py-2.5 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F] hover:bg-red-50/70 transition flex items-center justify-between group/item"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Building2 size={14} className="text-[#D32F2F]" /> INDUSTRY PROGRAM
+                    </span>
+                    <ArrowRight size={12} className="transition-transform group-hover/item:translate-x-1" />
+                  </Link>
+                </div>
+              )}
+            </div>
+
             <Link
-              href="/training"
-              className={`px-3 py-2 text-xs font-semibold uppercase tracking-wider transition-colors relative ${
-                pathname === "/training" ? "text-[#D32F2F] font-bold" : "text-[#222222] hover:text-[#D32F2F]"
+              href="/blog"
+              className={`px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors relative cursor-pointer ${
+                isBlogsActive ? "text-[#D32F2F]" : "text-[#222222] hover:text-[#D32F2F]"
               }`}
             >
-              Training
-              {pathname === "/training" && <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#D32F2F] rounded-full" />}
+              ARTICLES
+              {isBlogsActive && <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#D32F2F] rounded-full" />}
             </Link>
 
             {/* EVENTS NAVIGATION LINK & DROPDOWN MENU */}
@@ -274,15 +343,64 @@ export default function GalacticNav() {
               )}
             </div>
 
+            {/* MOBILE TRAINING DROPDOWN & CLICKABLE LINK */}
+            <div className="space-y-1">
+              <div className={`flex items-center justify-between rounded-lg transition-colors ${
+                isTrainingActive ? "bg-red-50 text-[#D32F2F]" : "hover:bg-gray-50 text-gray-800"
+              }`}>
+                <Link
+                  href="/training"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex-1 px-4 py-2.5 text-xs font-bold uppercase tracking-wider"
+                >
+                  TRAINING
+                </Link>
+                <button
+                  onClick={() => setMobileTrainingOpen((prev) => !prev)}
+                  className="px-4 py-2.5 text-gray-600 hover:text-[#D32F2F] cursor-pointer"
+                  aria-label="Expand Training Options"
+                >
+                  <ChevronDown size={14} className={`transition-transform ${mobileTrainingOpen ? "rotate-180" : ""}`} />
+                </button>
+              </div>
+
+              {mobileTrainingOpen && (
+                <div className="pl-6 space-y-1 border-l-2 border-[#D32F2F] ml-4 py-1">
+                  <Link
+                    href="/training#school"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-3 py-2 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F]"
+                  >
+                    → SCHOOL PROGRAM
+                  </Link>
+                  <Link
+                    href="/training#institution"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-3 py-2 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F]"
+                  >
+                    → INSTITUTION PROGRAM
+                  </Link>
+                  <Link
+                    href="/training#industry"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-3 py-2 text-xs font-extrabold uppercase tracking-wider text-gray-800 hover:text-[#D32F2F]"
+                  >
+                    → INDUSTRY PROGRAM
+                  </Link>
+                </div>
+              )}
+            </div>
+
             <Link
-              href="/training"
+              href="/blog"
               onClick={() => setMobileMenuOpen(false)}
               className={`px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors ${
-                pathname === "/training" ? "bg-red-50 text-[#D32F2F]" : "text-gray-800 hover:bg-gray-50"
+                isBlogsActive ? "bg-red-50 text-[#D32F2F]" : "text-gray-800 hover:bg-gray-50"
               }`}
             >
-              Training
+              ARTICLES
             </Link>
+
 
             {/* MOBILE EVENTS DROPDOWN & CLICKABLE LINK */}
             <div className="space-y-1">

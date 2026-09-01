@@ -88,7 +88,7 @@ export default function WhyGalactic() {
           
           <div className="space-y-3">
             {/* HEADLINE: Why choose Galactic? */}
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#111111]">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
               Why choose <span className="text-[#D32F2F]">Galactic?</span>
             </h2>
           </div>

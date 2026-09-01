@@ -129,7 +129,7 @@ export default function CapabilitiesShowcase() {
               {currentSlide.num} — {currentSlide.tag}
             </span>
 
-            <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white uppercase tracking-tight leading-none drop-shadow-lg">
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
               {currentSlide.title}
             </h2>
           </div>

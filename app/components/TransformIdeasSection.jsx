@@ -79,9 +79,9 @@ export default function TransformIdeasSection() {
             </div>
 
             {/* MAIN HEADING */}
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase text-[#111111] tracking-tight leading-[1.05]">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
               Transform Your Ideas <br />
-              <span className="text-[#E53935]">Into Reality</span>
+              <span className="text-[#D32F2F]">Into Reality</span>
             </h2>
 
             {/* RED ACCENT LINE */}

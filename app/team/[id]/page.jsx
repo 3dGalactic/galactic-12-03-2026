@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Award } from "lucide-react";
 import { useParams } from "next/navigation";
-import styles from "../team.module.css";
 import MEMBERS from "../members";
 
 export default function ProfilePage() {
@@ -14,67 +13,91 @@ export default function ProfilePage() {
 
   if (!member) {
     return (
-      <div style={{ padding: "60px 80px", background: "#2f1212", minHeight: "100vh", color: "white" }}>
-        <p>Member not found</p>
-        <Link href="/team" style={{ color: "#ef4444" }}>← Back to Team</Link>
+      <div className="min-h-screen bg-white text-[#111111] py-20 px-6 font-sans">
+        <div className="max-w-2xl mx-auto text-center space-y-4">
+          <h1 className="text-3xl font-extrabold text-[#111111]">Team Member Not Found</h1>
+          <p className="text-sm text-gray-600">The requested team profile could not be located.</p>
+          <Link href="/team" className="inline-flex items-center gap-2 text-xs font-bold text-[#D32F2F] hover:underline">
+            <ArrowLeft size={16} /> Back to Galactic Team
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ padding:"50px", background: "#2f1212", minHeight: "100vh" }}>
-      <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "60px 80px", color: "white" }}>
+    <div className="min-h-screen bg-white text-[#111111] font-sans py-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-8">
+        
+        {/* BACK TO TEAM LINK */}
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-gray-600 hover:text-[#D32F2F] mb-8 transition-colors"
+        >
+          <ArrowLeft size={16} /> Back to Home
+        </Link>
 
-        {/* TWO COLUMN LAYOUT: IMAGE ON LEFT, CONTENT ON RIGHT (equal-height) */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "40px", alignItems: "stretch", minHeight: "520px" }}>
-          {/* LEFT: FULL IMAGE */}
-          <div style={{ position: "relative", height: "100%", borderRadius: "20px", overflow: "hidden" }}>
-            <Image
-              src={member.img}
-              alt={member.name}
-              fill
-              style={{ objectFit: "cover" }}
-            />
+        {/* TEAM MEMBER DETAIL CARD */}
+        <div className="bg-white rounded-3xl border border-gray-200 p-6 sm:p-10 shadow-xl grid md:grid-cols-12 gap-8 items-start">
+          
+          {/* LEFT: PHOTO */}
+          <div className="md:col-span-5">
+            <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden bg-gray-100 border border-gray-200 shadow-md">
+              {member.img ? (
+                <Image
+                  src={member.img}
+                  alt={member.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                  className="object-cover object-top"
+                  priority
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 font-extrabold text-5xl select-none">
+                  {member.name.charAt(0)}
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* RIGHT: NAME, ROLE, DESCRIPTION */}
-          <div style={{ height: "100%", overflowY: "auto", padding: "20px 10px" }}>
-            {/* NAME - HEADING */}
-            <h1 style={{ fontSize: "42px", fontWeight: "700", margin: "0 0 8px 0", color: "#fff" }}>
-              {member.name}
-            </h1>
+          {/* RIGHT: DETAILS */}
+          <div className="md:col-span-7 space-y-5">
+            <div>
+              <span className="inline-block px-3.5 py-1 rounded-full bg-red-50 border border-red-100 text-[#D32F2F] text-xs font-bold uppercase tracking-wider mb-2">
+                {member.role}
+              </span>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
+                {member.name}
+              </h1>
+            </div>
 
-            {/* ROLE - SUBHEADING */}
-            <p style={{ fontSize: "18px", color: "#ef4444", margin: "0 0 20px 0", fontWeight: "600", whiteSpace: "pre-line" }}>
-              {member.role}
-            </p>
-
-            {/* DESCRIPTION (summarised) */}
-            <p style={{ fontSize: "16px", lineHeight: "1.7", color: "#d1d5db" }}>
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-medium">
               {member.bio}
             </p>
-          </div>
-        </div>
 
-        {/* BACK LINK BELOW CONTENT */}
-        <div style={{ marginTop: "28px", textAlign: "left" }}>
-          <Link
-            href="/team"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              color: "#ef4444",
-              textDecoration: "none",
-              fontSize: "16px",
-              fontWeight: "600",
-              transition: "opacity 0.3s"
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.opacity = "0.8"}
-            onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
-          >
-            <ArrowLeft size={20} /> Back to Team
-          </Link>
+            {member.achievements && member.achievements.length > 0 && (
+              <div className="pt-4 border-t border-gray-100 space-y-3">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#D32F2F] flex items-center gap-1.5">
+                  <Award size={16} /> Key Achievements &amp; Focus
+                </h3>
+                <ul className="space-y-2">
+                  {member.achievements.map((ach, idx) => (
+                    <li key={idx} className="flex items-center gap-2 text-xs text-gray-700 font-medium">
+                      <CheckCircle2 size={14} className="text-[#D32F2F] shrink-0" />
+                      <span>{ach}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="pt-4 border-t border-gray-100 flex flex-wrap gap-3">
+              <Link href="/contact" className="btn-corporate-primary">
+                Contact Team Specialist &rarr;
+              </Link>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

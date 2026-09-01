@@ -7,7 +7,7 @@ export default function WhatWeDo() {
       <AnimatedText
         text1="What We"
         text2=" Do"
-        css="text-3xl md:text-4xl font-extrabold mb-6 text-center font-['MonumentExtended']"
+        css="text-3xl sm:text-4xl font-extrabold mb-6 text-center tracking-tight"
       />
       <p className="text-xl text-gray-400 text-center mb-12 max-w-3xl mx-auto font-['NeueMontreal']">
         Galactic 3D is your partner for advanced additive manufacturing, from

@@ -4,7 +4,7 @@ export default function FeaturedProjects() {
   return (
     <section className="py-20 bg-dark-200 relative overflow-hidden animate-fade-in-up">
       <div className="container mx-auto px-6 relative z-10">
-        <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center font-['MonumentExtended']">
+        <h2 className="text-3xl sm:text-4xl font-extrabold mb-16 text-center tracking-tight">
           <span className="relative inline-block">
             Featured <span className="text-primary">Projects</span>
             <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-primary/0 via-primary to-primary/0"></span>

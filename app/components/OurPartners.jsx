@@ -13,7 +13,7 @@ export default function OurPartners() {
   return (
     <div className="py-12 overflow-hidden">
       <div className="container mx-auto text-center mb-8">
-        <h2 className="text-xl md:text-xl font-extrabold mb-6 text-center font-['MonumentExtended']">
+        <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 text-center tracking-tight">
           Trusted By <span className="text-primary">Industry Leaders</span>
         </h2>
       </div>

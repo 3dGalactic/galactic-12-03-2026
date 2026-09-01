@@ -5,7 +5,7 @@ export default function CTA() {
   return (
     <section className="py-20 bg-primary text-white text-center animate-fade-in-up">
       <div className="container mx-auto px-6">
-        <h2 className="text-3xl md:text-4xl font-extrabold mb-6 font-['MonumentExtended']">
+        <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 tracking-tight">
           Ready to Start Your Project?
         </h2>
         <p className="text-xl mb-8 max-w-2xl mx-auto font-['NeueMontreal']">

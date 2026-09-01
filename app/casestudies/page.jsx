@@ -85,9 +85,6 @@ export default function CaseStudiesPage() {
 
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#EAEAEA] pb-8 mb-12">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-red-50 text-[#D32F2F] text-xs font-bold uppercase tracking-wider mb-3">
-              Technical Documentation
-            </div>
             <h1 className="text-3xl sm:text-5xl font-extrabold text-[#111111] tracking-tight">
               Industrial Case Studies
             </h1>
