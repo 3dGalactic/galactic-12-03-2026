@@ -198,11 +198,13 @@ export default function Blog() {
           href="https://www.linkedin.com/company/galactic-3d/posts/?feedView=articles"
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-[#0A66C2] hover:bg-[#084e96] text-white text-sm font-bold transition-all shadow-sm hover:shadow shrink-0 w-fit"
+          className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#0A66C2] hover:bg-[#084e96] text-white text-base font-extrabold transition-all shadow-md hover:shadow-lg shrink-0 w-fit group border border-blue-400/30"
         >
-          <Linkedin size={18} />
+          <div className="w-8 h-8 rounded-lg bg-white text-[#0A66C2] flex items-center justify-center font-black text-xl tracking-tighter leading-none shrink-0 shadow-sm transition-transform group-hover:scale-105 select-none">
+            in
+          </div>
           <span>Follow on LinkedIn</span>
-          <ExternalLink size={14} />
+          <ExternalLink size={16} className="opacity-80 group-hover:opacity-100" />
         </a>
       </div>
 
@@ -273,9 +275,9 @@ export default function Blog() {
                   target="_blank"
                   rel="noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0A66C2] hover:underline bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200"
+                  className="inline-flex items-center gap-2 text-xs font-bold text-[#0A66C2] hover:underline bg-blue-50 px-3.5 py-1.5 rounded-lg border border-blue-200"
                 >
-                  <Linkedin size={13} /> Read on LinkedIn <ExternalLink size={11} />
+                  <Linkedin size={18} className="shrink-0" /> Read on LinkedIn <ExternalLink size={12} />
                 </a>
               </div>
             </article>
@@ -343,8 +345,8 @@ export default function Blog() {
               {/* LINKEDIN REFERENCE BUTTON BANNER */}
               <div className="p-4 rounded-2xl bg-blue-50/80 border border-blue-200 flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#0A66C2] text-white flex items-center justify-center font-bold shrink-0">
-                    <Linkedin size={20} />
+                  <div className="w-11 h-11 rounded-xl bg-[#0A66C2] text-white flex items-center justify-center font-black text-2xl tracking-tighter shrink-0 shadow-sm select-none">
+                    in
                   </div>
                   <div>
                     <h4 className="text-xs font-extrabold text-[#111111]">Official Galactic 3D LinkedIn Reference</h4>
@@ -355,10 +357,53 @@ export default function Blog() {
                   href={selectedPost.linkedinUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-4 py-2 rounded-xl bg-[#0A66C2] hover:bg-[#084e96] text-white text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm"
+                  className="px-4 py-2.5 rounded-xl bg-[#0A66C2] hover:bg-[#084e96] text-white text-xs font-extrabold flex items-center gap-2 transition-colors shadow-sm"
                 >
-                  Read on LinkedIn <ExternalLink size={12} />
+                  <div className="w-5 h-5 rounded bg-white text-[#0A66C2] flex items-center justify-center font-black text-xs tracking-tighter select-none">in</div>
+                  <span>Read on LinkedIn</span>
+                  <ExternalLink size={13} />
                 </a>
+              </div>
+
+              {/* INTERNAL LINKING & TECHNICAL SERVICES MATRIX */}
+              <div className="p-5 rounded-2xl bg-gray-50 border border-gray-200 space-y-3">
+                <h4 className="text-xs font-extrabold uppercase tracking-wider text-[#111111]">
+                  Explore Galactic 3D Manufacturing Capabilities in Bangalore:
+                </h4>
+                <div className="grid sm:grid-cols-2 gap-2 text-xs font-bold">
+                  <Link
+                    href="/services"
+                    onClick={() => setSelectedPost(null)}
+                    className="p-2.5 rounded-xl bg-white border border-gray-200 text-gray-800 hover:text-[#D32F2F] hover:border-[#D32F2F] transition-all flex items-center justify-between"
+                  >
+                    <span>Metal 3D Printing & DMLS Services</span>
+                    <ArrowRight size={13} />
+                  </Link>
+                  <Link
+                    href="/materials"
+                    onClick={() => setSelectedPost(null)}
+                    className="p-2.5 rounded-xl bg-white border border-gray-200 text-gray-800 hover:text-[#D32F2F] hover:border-[#D32F2F] transition-all flex items-center justify-between"
+                  >
+                    <span>Titanium, Inconel & AlSi10Mg Alloys</span>
+                    <ArrowRight size={13} />
+                  </Link>
+                  <Link
+                    href="/machines"
+                    onClick={() => setSelectedPost(null)}
+                    className="p-2.5 rounded-xl bg-white border border-gray-200 text-gray-800 hover:text-[#D32F2F] hover:border-[#D32F2F] transition-all flex items-center justify-between"
+                  >
+                    <span>EOS M290 20-40 Micron Printing</span>
+                    <ArrowRight size={13} />
+                  </Link>
+                  <Link
+                    href="/upload"
+                    onClick={() => setSelectedPost(null)}
+                    className="p-2.5 rounded-xl bg-[#D32F2F] text-white hover:bg-[#b71c1c] transition-all flex items-center justify-between shadow-sm"
+                  >
+                    <span>Instant CAD Quote (Bangalore 24h)</span>
+                    <ArrowRight size={13} />
+                  </Link>
+                </div>
               </div>
 
               {/* FOOTER ACTION */}

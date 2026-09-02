@@ -137,44 +137,46 @@ export default function TrainingProgramsNav() {
 
           {/* RIGHT SIDE (3 COLUMNS): STRATEGIC PARTNERS + CTA */}
           <div className="lg:col-span-3 bg-white rounded-2xl border border-[#EAEAEA] p-6 flex flex-col justify-between shadow-sm">
-            <div className="space-y-4">
-              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">
+            <div className="flex-1 flex flex-col">
+              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-3">
                 STRATEGIC PARTNERS
               </span>
 
-              {/* LOGO 1: EOS */}
-              <a
-                href="https://www.eos.info"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Visit EOS Official Website"
-                className="p-3 rounded-xl border border-gray-100 bg-white flex items-center justify-center h-20 hover:border-red-300 hover:shadow-md transition-all cursor-pointer group"
-              >
-                <img
-                  src="/eos.png"
-                  alt="EOS Ecosystem Partner"
-                  className="max-h-12 w-auto object-contain group-hover:scale-105 transition-transform"
-                />
-              </a>
+              <div className="grid grid-rows-2 gap-4 flex-1 my-1">
+                {/* LOGO 1: EOS */}
+                <a
+                  href="https://www.eos.info"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Visit EOS Official Website"
+                  className="p-4 rounded-xl border-2 border-gray-200 bg-gray-50/60 hover:bg-white flex items-center justify-center h-full hover:border-[#D32F2F] hover:shadow-md transition-all cursor-pointer group"
+                >
+                  <img
+                    src="/eos.png"
+                    alt="EOS Ecosystem Partner"
+                    className="max-h-16 max-w-[85%] w-auto object-contain group-hover:scale-105 transition-transform"
+                  />
+                </a>
 
-              {/* LOGO 2: MATERIALISE */}
-              <a
-                href="https://www.materialise.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Visit Materialise Official Website"
-                className="p-3 rounded-xl border border-gray-100 bg-white flex items-center justify-center h-20 hover:border-red-300 hover:shadow-md transition-all cursor-pointer group"
-              >
-                <img
-                  src="/Materialise-Logo.jpg"
-                  alt="Materialise Partner"
-                  className="max-h-12 w-auto object-contain group-hover:scale-105 transition-transform"
-                />
-              </a>
+                {/* LOGO 2: MATERIALISE */}
+                <a
+                  href="https://www.materialise.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Visit Materialise Official Website"
+                  className="p-4 rounded-xl border-2 border-gray-200 bg-gray-50/60 hover:bg-white flex items-center justify-center h-full hover:border-[#D32F2F] hover:shadow-md transition-all cursor-pointer group"
+                >
+                  <img
+                    src="/Materialise-Logo.jpg"
+                    alt="Materialise Partner"
+                    className="max-h-16 max-w-[85%] w-auto object-contain group-hover:scale-105 transition-transform"
+                  />
+                </a>
+              </div>
             </div>
 
             {/* ACTION CTA BUTTON */}
-            <div className="pt-6 mt-6 border-t border-gray-100">
+            <div className="pt-4 mt-4 border-t border-gray-100">
               <Link
                 href="/training"
                 className="w-full py-3 px-4 rounded-xl bg-[#D32F2F] hover:bg-[#B71C1C] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-2 group cursor-pointer"
