@@ -82,7 +82,7 @@ const SOFTWARE = [
 ];
 
 export const metadata = {
-  title: "EOS M290 | Galactic 3D",
+  title: "EOS M290",
   description: "Technical specifications for the EOS M290 metal 3D printer.",
 };
 
