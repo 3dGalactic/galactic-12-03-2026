@@ -12,7 +12,7 @@ const MEMBERS = [
     name: "Aabid Husen Hakeem",
     role: "Head of Business Development",
     email: "aabid@galactic-3d.com",
-    img: "/abid.jpg",
+    img: "/abid_new.jpg",
     bio: "Aabid Husen Hakeem is a business and technology leader specializing in advanced manufacturing, aerospace materials, and sustainable industrial development. As Head of Business Development at Galactic 3D, he builds strategic partnerships and expands the company's footprint in metal and polymer additive manufacturing. With an academic background including an MSc in Aerospace Materials, an MSc in Sustainable Manufacturing, and an EngD in Sustainable Materials & Manufacturing from institutions such as Cranfield University, the University of Warwick, and the University of Exeter, Aabid blends deep technical expertise with sustainability-driven commercial strategy. He also brings entrepreneurial experience as Managing Partner in hospitality and services and a background in editorial leadership, enabling strong communication and stakeholder engagement across industry and academia.",
   },
   {
@@ -47,7 +47,7 @@ const MEMBERS = [
     name: "Bhaskaran P",
     role: "Application Engineer",
     email: "bhaskaran@galactic-3d.com",
-    img: "/bhaskaran.jpg",
+    img: "/bhaskaran_suit.jpg",
     bio: "Research-driven approach to advanced material development and testing.",
     achievements: ["PhD in Materials Science", "6 Published Papers", "Materials Lab Director"]
   },

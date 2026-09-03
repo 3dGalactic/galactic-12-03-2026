@@ -11,15 +11,15 @@ const TEAM = [
     role: "Director & CEO",
     email: "ceo@galactic-3d.com",
     img: "/nithin.jpg",
-    objectPos: "object-top",
+    objectPos: "center top",
     desc: "Leading Galactic 3D's vision for advanced additive manufacturing, strategic partnerships, and industrial innovation.",
   },
   {
     name: "Aabid Husen Hakeem",
     role: "Head of Business Development",
     email: "aabid@galactic-3d.com",
-    img: "/abid.jpg",
-    objectPos: "object-top",
+    img: "/abid_new.jpg",
+    objectPos: "center top",
     desc: "Driving enterprise expansion, industrial client partnerships, and additive manufacturing adoption across aerospace and defense sectors.",
   },
   {
@@ -27,7 +27,7 @@ const TEAM = [
     role: "Head of Training",
     email: "training@galactic-3d.com",
     img: "/dipak.jpg",
-    objectPos: "object-top",
+    objectPos: "center top",
     desc: "Spearheading technical education, DfAM curriculum development, and workforce upskilling programs for schools, colleges, and industry.",
   },
   {
@@ -35,15 +35,15 @@ const TEAM = [
     role: "Head of Production",
     email: "production@galactic-3d.com",
     img: "/selvam.jpg",
-    objectPos: "object-top",
+    objectPos: "center top",
     desc: "Managing precision DMLS, SLS, and polymer production floors to deliver zero-defect aerospace components.",
   },
   {
     name: "Bhaskaran P",
     role: "Application Engineer",
     email: "bhaskaran@galactic-3d.com",
-    img: "/bhaskaran.jpg",
-    objectPos: "object-top",
+    img: "/bhaskaran_suit.jpg",
+    objectPos: "center top",
     desc: "Optimizing laser parameters, build orientations, and DfAM lattice structures for complex high-temperature metal parts.",
   },
   {
@@ -51,7 +51,7 @@ const TEAM = [
     role: "Business Development Executive",
     email: "contact@galactic-3d.com",
     img: "/brth.png",
-    objectPos: "object-top",
+    objectPos: "center top",
     desc: "Engaging industrial clients, providing technical consultation, and coordinating rapid turn-around project deliveries.",
   },
   {
@@ -59,7 +59,7 @@ const TEAM = [
     role: "Finance Officer",
     email: "accounts@galactic-3d.com",
     img: "/bhramanandam.png",
-    objectPos: "object-top",
+    objectPos: "center top",
     desc: "Overseeing financial operations, capital investment in advanced AM infrastructure, and fiscal compliance.",
   },
   {
@@ -67,7 +67,7 @@ const TEAM = [
     role: "Application Research Engineer",
     email: "contact@galactic-3d.com",
     img: "/tushar.jpg",
-    objectPos: "object-top",
+    objectPos: "center top",
     desc: "Conducting additive manufacturing research, DfAM parameter optimization, and advanced engineering application development.",
   },
 ];
@@ -100,21 +100,22 @@ export default function TeamCarousel() {
               <div
                 key={member.name}
                 onMouseEnter={() => setActive(index)}
-                className={`group relative text-left p-3.5 sm:p-4 rounded-2xl border transition-all duration-300 overflow-hidden flex flex-col justify-between ${
+                className={`group relative text-left p-3.5 sm:p-4 rounded-2xl border transition-all duration-300 overflow-hidden flex flex-col justify-between h-full ${
                   isActive
                     ? "bg-gray-50 border-[#D32F2F] shadow-md ring-2 ring-[#D32F2F]/20"
                     : "bg-white border-[#EAEAEA] hover:border-[#D32F2F]/60 hover:bg-gray-50/80 shadow-sm"
                 }`}
               >
-                {/* MEMBER PHOTO CONTAINER WITH PROPER HEIGHT AND TOP-ALIGNED HEADSHOTS */}
-                <div className="relative aspect-[4/3.5] w-full overflow-hidden rounded-xl bg-gray-100 border border-gray-200 mb-3 shadow-inner">
+                {/* Keep every portrait inside the exact same 3/4 portrait aspect ratio frame */}
+                <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-100 border border-gray-200 mb-3 shadow-inner">
                   {member.img ? (
                     <Image
                       src={member.img}
                       alt={member.name}
                       fill
                       sizes="(max-width: 768px) 50vw, 25vw"
-                      className={`object-cover ${member.objectPos || "object-top"} transition-all duration-500 group-hover:scale-105`}
+                      className="object-cover object-top transition-all duration-500 group-hover:scale-105"
+                      style={{ objectPosition: member.objectPos || "center top" }}
                     />
                   ) : (
                     <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 font-extrabold text-2xl select-none">
