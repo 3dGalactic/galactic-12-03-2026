@@ -44,8 +44,17 @@ export default function Home() {
       <TeamCarousel />
 
       {/* 8. ENTERPRISE CONTACT CTA BANNER - CLEAN LIGHT THEME */}
-      <section className="py-20 bg-gray-50 text-[#111111] border-t border-[#EAEAEA]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8 text-center">
+      <section className="py-20 bg-gray-50 text-[#111111] border-t border-[#EAEAEA] relative overflow-hidden">
+        {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY */}
+        <div
+          className="absolute inset-0 opacity-40 pointer-events-none z-0"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+            backgroundSize: '48px 48px'
+          }}
+        />
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 text-center">
           <div className="max-w-3xl mx-auto space-y-6">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
               Ready to Accelerate Your Manufacturing Production?

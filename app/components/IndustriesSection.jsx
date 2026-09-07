@@ -173,8 +173,17 @@ function IndustriesSectionInner() {
     : selectedIndustry;
 
   return (
-    <section className="py-16 lg:py-20 bg-transparent border-t border-[#EAEAEA] font-sans relative">
-      <div className="mx-auto max-w-7xl px-4 sm:px-8">
+    <section className="py-16 lg:py-20 bg-transparent border-t border-[#EAEAEA] font-sans relative overflow-hidden">
+      {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY */}
+      <div
+        className="absolute inset-0 opacity-40 pointer-events-none z-0"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+          backgroundSize: '48px 48px'
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8">
         
         {/* SECTION TITLE & FILTER TABS */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#EAEAEA] pb-6 mb-8">

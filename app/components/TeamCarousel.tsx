@@ -76,8 +76,17 @@ export default function TeamCarousel() {
   const [active, setActive] = useState(0);
 
   return (
-    <section className="py-16 lg:py-24 bg-white text-[#222222] border-t border-[#EAEAEA] font-sans relative">
-      <div className="mx-auto max-w-7xl px-4 sm:px-8">
+    <section className="py-16 lg:py-24 bg-white text-[#222222] border-t border-[#EAEAEA] font-sans relative overflow-hidden">
+      {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY */}
+      <div
+        className="absolute inset-0 opacity-40 pointer-events-none z-0"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+          backgroundSize: '48px 48px'
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8">
         
         {/* SECTION HEADER */}
         <div className="mb-12 border-b border-[#EAEAEA] pb-6 flex items-center justify-between">
