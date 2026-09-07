@@ -292,8 +292,16 @@ export default function WorkshopsEventsPage() {
     <div className="min-h-screen bg-white text-[#222222] font-sans">
       
       {/* WORKSHOPS SECTION (BLOCK 1) */}
-      <section id="workshops" className="scroll-mt-24 py-6 sm:py-8 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-6">
+      <section id="workshops" className="scroll-mt-24 py-6 sm:py-8 bg-white relative overflow-hidden">
+        {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY */}
+        <div
+          className="absolute inset-0 opacity-40 pointer-events-none z-0"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+            backgroundSize: '48px 48px'
+          }}
+        />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 space-y-6">
           
           {/* PAGE HEADER & SECTION SELECTOR */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-gray-100">
@@ -851,8 +859,16 @@ export default function WorkshopsEventsPage() {
       </section>
 
       {/* DEDICATED FORUMS SECTION (BLOCK 2) */}
-      <section id="forums" className="scroll-mt-24 py-12 sm:py-16 bg-gray-50 border-t border-gray-200">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-8">
+      <section id="forums" className="scroll-mt-24 py-12 sm:py-16 bg-gray-50 border-t border-gray-200 relative overflow-hidden">
+        {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY */}
+        <div
+          className="absolute inset-0 opacity-40 pointer-events-none z-0"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+            backgroundSize: '48px 48px'
+          }}
+        />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 space-y-8">
           
           <div>
             <h2 className="text-xl sm:text-2xl font-extrabold text-[#111111] flex items-center gap-2">

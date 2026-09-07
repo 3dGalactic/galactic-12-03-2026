@@ -181,9 +181,17 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen bg-white text-[#111111] pt-12 pb-20 relative overflow-hidden font-sans">
+      {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY */}
+      <div
+        className="absolute inset-0 opacity-40 pointer-events-none z-0"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+          backgroundSize: '48px 48px'
+        }}
+      />
       
       {/* ARTICLES HEADER */}
-      <div className="container mx-auto px-6 mb-12 relative flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div className="relative z-10 container mx-auto px-6 mb-12 relative flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <h1 className="text-3xl sm:text-4xl font-extrabold mb-4 tracking-tight text-[#111111]">
             <span>Galactic 3D </span>
@@ -209,7 +217,7 @@ export default function Blog() {
       </div>
 
       {/* CATEGORY FILTER TABS */}
-      <div className="container mx-auto px-6 mb-12">
+      <div className="relative z-10 container mx-auto px-6 mb-12">
         <div className="flex items-center gap-2 overflow-x-auto pb-3 scrollbar-none border-b border-gray-200">
           {categories.map((cat) => (
             <button
@@ -228,7 +236,7 @@ export default function Blog() {
       </div>
 
       {/* ARTICLES GRID */}
-      <div className="container mx-auto px-6">
+      <div className="relative z-10 container mx-auto px-6">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredPosts.map((post) => (
             <article

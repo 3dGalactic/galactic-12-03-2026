@@ -363,8 +363,16 @@ export default function TrainingPage() {
     <div className="min-h-screen bg-transparent text-[#222222] font-sans">
       
       {/* HERO SECTION */}
-      <section className="bg-gradient-to-b from-[#F8F9FA] to-white py-16 lg:py-24 border-b border-[#EAEAEA]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8 text-center">
+      <section className="bg-gradient-to-b from-[#F8F9FA] to-white py-16 lg:py-24 border-b border-[#EAEAEA] relative overflow-hidden">
+        {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY */}
+        <div
+          className="absolute inset-0 opacity-40 pointer-events-none z-0"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+            backgroundSize: '48px 48px'
+          }}
+        />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 text-center">
           <div className="max-w-3xl mx-auto space-y-4">
             <h1 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
               From Learning to Leading in Additive Manufacturing
@@ -399,8 +407,16 @@ export default function TrainingPage() {
       </section>
 
       {/* OVERVIEW SECTION */}
-      <section className="py-16 bg-white border-b border-[#EAEAEA]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-12">
+      <section className="py-16 bg-white border-b border-[#EAEAEA] relative overflow-hidden">
+        {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY */}
+        <div
+          className="absolute inset-0 opacity-40 pointer-events-none z-0"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+            backgroundSize: '48px 48px'
+          }}
+        />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 space-y-12">
           
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             
@@ -482,8 +498,16 @@ export default function TrainingPage() {
       </section>
 
       {/* WHY CHOOSE US */}
-      <section className="py-16 bg-[#F8F9FA] border-b border-[#EAEAEA]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8">
+      <section className="py-16 bg-[#F8F9FA] border-b border-[#EAEAEA] relative overflow-hidden">
+        {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY */}
+        <div
+          className="absolute inset-0 opacity-40 pointer-events-none z-0"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+            backgroundSize: '48px 48px'
+          }}
+        />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8">
           
           <div className="text-center max-w-xl mx-auto mb-12">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
@@ -603,8 +627,16 @@ export default function TrainingPage() {
       </section>
 
       {/* PROGRAM SCOPE MATRIX */}
-      <section className="py-20 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8">
+      <section className="py-20 bg-white relative overflow-hidden">
+        {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY */}
+        <div
+          className="absolute inset-0 opacity-40 pointer-events-none z-0"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+            backgroundSize: '48px 48px'
+          }}
+        />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8">
           
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#EAEAEA] pb-8 mb-12">
             <div>

@@ -130,8 +130,17 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen text-black bg-white relative overflow-hidden">
+      {/* SUBTLE ENGINEERING GRID BACKGROUND PATTERN OVERLAY */}
+      <div
+        className="absolute inset-0 opacity-40 pointer-events-none z-0"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+          backgroundSize: '48px 48px'
+        }}
+      />
+
       {/* Main Content Layout */}
-      <div className="container mx-auto px-6 pt-28 pb-16 grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div className="relative z-10 container mx-auto px-6 pt-28 pb-16 grid grid-cols-1 lg:grid-cols-3 gap-12">
         {/* Contact Form Card */}
         <main
           id="contact-form"
