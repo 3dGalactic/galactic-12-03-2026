@@ -13,7 +13,6 @@ import {
   ArrowRight,
   CheckCircle2,
   X,
-  ShieldCheck,
   Sparkles,
 } from "lucide-react";
 
@@ -30,11 +29,7 @@ export const INDUSTRIES_DATA = [
     solutions: "DfAM topology optimization yielding 30%+ mass reduction, DMLS Inconel 718 / Titanium Ti6Al4V printing, metallurgical vacuum stress-relief, and full CMM inspection.",
     services: ["DMLS Metal Printing", "DfAM Topology Optimization", "Vacuum Stress Relief"],
     materials: ["Titanium Ti6Al4V", "Inconel 718", "Aluminum AlSi10Mg", "ULTEM 9085"],
-    tech: ["EOS M 290 DMLS", "Fortus 450mc FDM"],
-    caseStudy: {
-      title: "Satellite Structural Bracket Mass Reduction",
-      result: "32% Mass Reduction while exceeding stiffness requirements for Indian Space payloads.",
-    },
+    tech: ["EOS M 290 DMLS"],
   },
   {
     id: "automotive",
@@ -48,11 +43,7 @@ export const INDUSTRIES_DATA = [
     solutions: "High-temperature FDM thermoplastic printing, continuous carbon-fiber tooling, supportless SLS duct consolidation from multi-part assemblies into single components.",
     services: ["Rapid Prototyping", "Carbon-Fiber Composite Tooling", "Low-Volume Production"],
     materials: ["Carbon-Fiber Nylon", "ULTEM 9085", "Aluminum AlSi10Mg", "ABS-M30"],
-    tech: ["Fortus 450mc FDM", "EOS P 396 SLS"],
-    caseStudy: {
-      title: "Integrated Intake Manifold Consolidation",
-      result: "Reduced assembly parts from 14 to 1 while improving fluid airflow efficiency by 18%.",
-    },
+    tech: ["EOS M 290 DMLS"],
   },
   {
     id: "medical-healthcare",
@@ -66,11 +57,7 @@ export const INDUSTRIES_DATA = [
     solutions: "Patient-matched DMLS titanium printing with trabecular lattice structures for fast osseo-integration, high-detail surgical guides.",
     services: ["DMLS Medical Implants", "Surgical Guide Fabrication", "Anatomical Modeling"],
     materials: ["Titanium Grade 5 (Ti6Al4V ELI)", "PEEK", "Medical-Grade Resin"],
-    tech: ["EOS M 290 DMLS", "High-Precision SLA"],
-    caseStudy: {
-      title: "Patient-Specific Cranial Implant",
-      result: "Custom Ti6Al4V cranial plate implant reduced operating room setup time by 40%.",
-    },
+    tech: ["EOS M 290 DMLS"],
   },
   {
     id: "education-research",
@@ -84,11 +71,7 @@ export const INDUSTRIES_DATA = [
     solutions: "University research partnerships, standardized tensile & fatigue specimens, and certified DfAM training cohorts.",
     services: ["Academic Research Support", "Material Specimen Printing", "Additive Training"],
     materials: ["Titanium Ti6Al4V", "Inconel 718", "Stainless Steel 316L", "PA12 Nylon"],
-    tech: ["EOS M 290 DMLS", "EOS P 396 SLS", "Fortus 450mc FDM"],
-    caseStudy: {
-      title: "Micro-Lattice Energy Absorption Study",
-      result: "Fabricated DMLS titanium test matrices for university aerospace impact research.",
-    },
+    tech: ["EOS M 290 DMLS"],
   },
   {
     id: "electronics",
@@ -102,11 +85,7 @@ export const INDUSTRIES_DATA = [
     solutions: "Copper and aluminum DMLS heat sinks with internal micro-channel cooling, ESD-safe thermoplastic component trays.",
     services: ["Thermal Management DfAM", "ESD-Safe Fixture Printing"],
     materials: ["Pure Copper", "Aluminum AlSi10Mg", "ABS-ESD7 Thermoplastic"],
-    tech: ["EOS M 290 DMLS", "Fortus 450mc FDM"],
-    caseStudy: {
-      title: "Micro-Fin Copper Heat Sink",
-      result: "Improved thermal heat dissipation by 38% in dense power electronics enclosures.",
-    },
+    tech: ["EOS M 290 DMLS"],
   },
   {
     id: "energy-power",
@@ -120,11 +99,7 @@ export const INDUSTRIES_DATA = [
     solutions: "DMLS Inconel 718 swirl combustion nozzles with internal fuel mixing passages, heat-treated cobalt-chrome components.",
     services: ["Superalloy DMLS Printing", "Thermal Barrier Heat Treatment"],
     materials: ["Inconel 718", "Stainless Steel 316L", "Cobalt-Chrome"],
-    tech: ["EOS M 290 DMLS", "Vacuum Furnace"],
-    caseStudy: {
-      title: "Swirl Combustion Fuel Nozzle",
-      result: "Extended turbine maintenance service interval by 2x while lowering NOx emissions.",
-    },
+    tech: ["EOS M 290 DMLS"],
   },
 ];
 
@@ -378,22 +353,6 @@ function IndustriesSectionInner() {
                       </span>
                     ))}
                   </div>
-                </div>
-              </div>
-
-              {/* FEATURED CASE STUDY */}
-              <div className="p-5 rounded-xl bg-red-50/80 border border-red-100 flex items-start gap-4 shadow-xs">
-                <ShieldCheck size={24} className="text-[#D32F2F] shrink-0 mt-0.5" />
-                <div className="space-y-1">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#D32F2F]">
-                    Featured Industry Success Story
-                  </span>
-                  <h5 className="text-sm sm:text-base font-extrabold text-[#111111]">
-                    {activeIndustryInfo.caseStudy.title}
-                  </h5>
-                  <p className="text-xs sm:text-sm text-gray-700 font-medium">
-                    {activeIndustryInfo.caseStudy.result}
-                  </p>
                 </div>
               </div>
 
