@@ -12,7 +12,7 @@ export default function MachinesPage() {
         {/* Background video */}
         <div className="absolute inset-0 -z-20 overflow-hidden">
           <video className="w-full h-full object-cover" autoPlay muted loop playsInline preload="metadata" loading="lazy" poster="https://images.unsplash.com/photo-1581091215367-59ab6d0051d4?q=80&w=1600&auto=format&fit=crop">
-            <source src="/galactic-bg.mp4" type="video/mp4" />
+            <source src="/galactic-bg.webm" type="video/webm" />
             <source src="https://videos.pexels.com/video-files/6819731/6819731-hd_1920_1080_24fps.mp4" type="video/mp4" />
           </video>
         </div>

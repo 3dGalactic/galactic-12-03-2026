@@ -78,7 +78,7 @@ export default function ResourcesPage() {
         {/* Background video */}
         <div className="absolute inset-0 -z-20 overflow-hidden">
           <video className="w-full h-full object-cover" autoPlay muted loop playsInline preload="metadata" loading="lazy" poster="https://images.unsplash.com/photo-1581091215367-59ab6d0051d4?q=80&w=1600&auto=format&fit=crop">
-            <source src="/galactic-bg.mp4" type="video/mp4" />
+            <source src="/galactic-bg.webm" type="video/webm" />
           </video>
         </div>
         {/* Animated mesh gradient */}

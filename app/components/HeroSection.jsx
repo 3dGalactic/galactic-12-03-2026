@@ -6,12 +6,12 @@ const HERO_VIDEOS = [
   {
     id: 0,
     title: "Facility Overview",
-    src: "/galactic-bg.mp4",
+    src: "/galactic-bg.webm",
   },
   {
     id: 1,
     title: "Advanced Production",
-    src: "/bharath.mp4",
+    src: "/bharath.webm",
   },
 ];
 
@@ -44,7 +44,7 @@ export default function HeroSection() {
             currentVideo === idx ? "opacity-100 z-0 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
           }`}
         >
-          <source src={video.src} type="video/mp4" />
+          <source src={video.src} type="video/webm" />
           Your browser does not support the video tag.
         </video>
       ))}
