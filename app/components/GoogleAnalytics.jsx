@@ -92,6 +92,53 @@ export default function GoogleAnalytics() {
           `,
         }}
       />
+            {/* B2B Company Visitor Tracker */}
+      <Script
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-0GQEQ033G3"
+      />
+      <Script
+        id="b2b-company-visitor-tracker"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-0GQEQ033G3');
+
+            document.addEventListener('DOMContentLoaded', function() {
+              document.addEventListener('click', function(e) {
+                const target = e.target.closest('a, button');
+                if (!target) return;
+                const href = target.getAttribute('href') || '';
+                const text = (target.innerText || '').trim().toLowerCase();
+
+                if (href.startsWith('mailto:')) {
+                  gtag('event', 'email_click', { email: href.replace('mailto:', '') });
+                } else if (href.startsWith('tel:')) {
+                  gtag('event', 'phone_click', { phone: href.replace('tel:', '') });
+                } else if (href.includes('wa.me') || href.includes('whatsapp')) {
+                  gtag('event', 'whatsapp_click', { url: href });
+                } else if (href.includes('linkedin.com')) {
+                  gtag('event', 'linkedin_click', { url: href });
+                } else if (href.match(/\\.(pdf|zip|docx?)$/i) || text.includes('brochure') || text.includes('catalog')) {
+                  gtag('event', 'brochure_download', { file: href });
+                }
+              });
+
+              document.addEventListener('submit', function(e) {
+                const formText = (e.target.innerText || '').toLowerCase();
+                if (formText.includes('rfq') || formText.includes('quote') || formText.includes('enquiry')) {
+                  gtag('event', 'rfq_submit');
+                } else {
+                  gtag('event', 'contact_form_submit');
+                }
+              });
+            });
+          `,
+        }}
+      />
     </>
   );
 }
