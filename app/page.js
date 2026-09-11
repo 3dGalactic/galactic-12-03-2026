@@ -12,6 +12,7 @@ import IndustriesSection from "./components/IndustriesSection";
 import EmailTeamModal from "./components/EmailTeamModal";
 import WhyGalactic from "./components/whygalactic";
 import MetalProcessCard from "./components/MetalProcessCard";
+import MaterialVendors from "./components/MaterialVendors";
 
 export default function Home() {
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
@@ -27,6 +28,9 @@ export default function Home() {
 
       {/* 2.5 METAL MATERIAL FAMILY CARD */}
       <MetalProcessCard />
+
+      {/* 2.7 OUR MATERIAL VENDORS */}
+      <MaterialVendors />
 
       {/* 3. MANUFACTURING SERVICES MATRIX */}
       <ServiceTabs />
