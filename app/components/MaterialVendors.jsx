@@ -19,7 +19,7 @@ export default function MaterialVendors() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8">
         <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111111] mb-8">
-          We precure our <span className="text-[#D32F2F]">materials from</span>
+          We Precure Our <span className="text-[#D32F2F]">Materials From</span>
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
