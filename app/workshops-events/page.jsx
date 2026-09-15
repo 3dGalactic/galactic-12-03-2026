@@ -127,6 +127,44 @@ const PAST_FORUMS = [
   },
 ];
 
+function EventCoverImage({ images, title, date, category }) {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!images || images.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrent((previous) => (previous + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [images]);
+
+  if (!images || images.length === 0) return null;
+
+  return (
+    <div className="relative -mx-6 -mt-6 aspect-[16/10] bg-gray-900 overflow-hidden shrink-0">
+      {images.map((src, index) => (
+        <img
+          key={src}
+          src={src}
+          alt={title}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${
+            index === current ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ))}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+      <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white">
+        <span className="px-3 py-1 rounded-md bg-black/70 backdrop-blur-xs text-white border border-white/20 text-[11px] font-extrabold flex items-center gap-1.5">
+          <Calendar size={13} /> {date}
+        </span>
+        <span className="px-2.5 py-0.5 rounded-full bg-[#D32F2F] text-white text-[10px] font-bold uppercase tracking-wider">
+          {category}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function WorkshopsEventsPage() {
   const [mounted, setMounted] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -207,6 +245,7 @@ export default function WorkshopsEventsPage() {
               {PAST_WORKSHOPS.map((event, idx) => {
                 const isSelected = selectedDetailEvent?.id === event.id;
                 const isViewingPhoto = cardPhotoModal?.eventId === event.id;
+                const hasImages = event.images && event.images.length > 0;
                 return (
                   <div
                     key={idx}
@@ -215,6 +254,15 @@ export default function WorkshopsEventsPage() {
                       isSelected || isViewingPhoto ? "border-[#D32F2F] ring-2 ring-red-100" : "border-gray-200 hover:border-[#D32F2F]"
                     }`}
                   >
+                    {hasImages && (
+                      <EventCoverImage
+                        images={event.images}
+                        title={event.title}
+                        date={event.date}
+                        category={event.category}
+                      />
+                    )}
+
                     {/* IN-PLACE POP-UP LARGE PHOTO LIGHTBOX OVERLAY (WHITE BACKGROUND) */}
                     {isViewingPhoto && (
                       <div className="absolute inset-0 z-30 bg-white text-[#111111] rounded-2xl p-4 flex flex-col justify-between shadow-2xl animate-in fade-in zoom-in-95 duration-200 border-2 border-[#D32F2F]">
@@ -423,6 +471,7 @@ export default function WorkshopsEventsPage() {
             {PAST_FORUMS.map((event, idx) => {
               const isSelected = selectedDetailEvent?.id === event.id;
               const isViewingPhoto = cardPhotoModal?.eventId === event.id;
+              const hasImages = event.images && event.images.length > 0;
               return (
                 <div
                   key={idx}
@@ -431,6 +480,15 @@ export default function WorkshopsEventsPage() {
                     isSelected || isViewingPhoto ? "border-[#D32F2F] ring-2 ring-red-100" : "border-gray-200 hover:border-[#D32F2F]"
                   }`}
                 >
+                  {hasImages && (
+                    <EventCoverImage
+                      images={event.images}
+                      title={event.title}
+                      date={event.date}
+                      category={event.category}
+                    />
+                  )}
+
                   {/* IN-PLACE POP-UP LARGE PHOTO LIGHTBOX OVERLAY (WHITE BACKGROUND) */}
                   {isViewingPhoto && (
                     <div className="absolute inset-0 z-30 bg-white text-[#111111] rounded-2xl p-4 flex flex-col justify-between shadow-2xl animate-in fade-in zoom-in-95 duration-200 border-2 border-[#D32F2F]">
