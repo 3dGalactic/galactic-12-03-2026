@@ -1,12 +1,18 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { MessageCircle } from "lucide-react";
 
 export default function FloatingWhatsApp() {
+  const pathname = usePathname();
   const whatsappNumber = "+919740331995";
   const defaultMessage = encodeURIComponent(
     "Hello Galactic 3D! I am interested in custom 3D printing and engineering services."
   );
+
+  if (pathname && pathname.startsWith("/admin")) {
+    return null;
+  }
 
   return (
     <a

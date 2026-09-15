@@ -44,6 +44,10 @@ export default function GalacticNav() {
 
   const isContactActive = pathname === "/contact" || pathname === "/careers";
 
+  if (pathname && pathname.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <header className="sticky top-0 z-[100] w-full bg-white/95 backdrop-blur-md shadow-sm border-b border-[#EAEAEA]">
       {/* MAIN NAVIGATION HEADER CONTAINER */}
