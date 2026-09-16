@@ -1,23 +1,96 @@
 import { NextResponse } from 'next/server';
 import { connectToDatabase, getLocalDB, saveLocalDB } from '../../lib/db';
-import { sendEmail } from '../../lib/sendEmail';
+import {
+  sendSmtpMail,
+  validateEmail,
+  sanitizeString,
+  isBlockedEmailDomain,
+  isHoneypotTripped,
+  isGibberish,
+  checkRateLimit,
+  checkHourlyRateLimit,
+  ADMIN_EMAIL,
+} from '../../lib/sendEmail';
 
 export async function POST(req) {
   try {
-    const body = await req.json();
-    const {
-      name,
-      email,
-      phone,
-      company = 'N/A',
-      requirement = 'General Inquiry / Prototyping',
-      source = 'AI Chatbot Assistant',
-      sessionId,
-    } = body;
+    const ip = req.headers.get('x-forwarded-for') || 'leads_ip';
 
+    // Rate limiting
+    if (!checkRateLimit(ip, 2, 60 * 1000)) {
+      return NextResponse.json(
+        { error: 'Too many submissions. Please wait a minute.' },
+        { status: 429 }
+      );
+    }
+    if (!checkHourlyRateLimit(ip, 3)) {
+      return NextResponse.json(
+        { error: 'You have reached the submission limit. Please try again later.' },
+        { status: 429 }
+      );
+    }
+
+    const body = await req.json();
+    const name        = sanitizeString(body.name || '');
+    const email       = sanitizeString(body.email || '');
+    const phone       = sanitizeString(body.phone || '');
+    const company     = sanitizeString(body.company || 'N/A');
+    const requirement = sanitizeString(body.requirement || 'General Inquiry / Prototyping');
+    const source      = sanitizeString(body.source || 'AI Chatbot Assistant');
+    const { sessionId } = body;
+
+    // Basic required fields
     if (!name || !email) {
       return NextResponse.json(
         { error: 'Name and Email are required fields' },
+        { status: 400 }
+      );
+    }
+
+    if (!validateEmail(email)) {
+      return NextResponse.json(
+        { error: 'Valid email address is required.' },
+        { status: 400 }
+      );
+    }
+
+    // Honeypot
+    if (isHoneypotTripped(body)) {
+      console.warn(`[SPAM BLOCKED - leads] Honeypot triggered from: ${ip}`);
+      return NextResponse.json({
+        success: true,
+        message: 'Thank you! Your requirement has been received by our engineering team. We will contact you within 24 hours.',
+      });
+    }
+
+    // Blocked email domain
+    if (isBlockedEmailDomain(email)) {
+      console.warn(`[SPAM BLOCKED - leads] Disposable email: ${email}`);
+      return NextResponse.json(
+        { error: 'Please use a valid business or personal email address.' },
+        { status: 400 }
+      );
+    }
+
+    // Gibberish detection
+    if (isGibberish(name)) {
+      console.warn(`[SPAM BLOCKED - leads] Gibberish name: ${name}`);
+      return NextResponse.json(
+        { error: 'Please enter your real full name.' },
+        { status: 400 }
+      );
+    }
+    if (company !== 'N/A' && isGibberish(company)) {
+      console.warn(`[SPAM BLOCKED - leads] Gibberish company: ${company}`);
+      return NextResponse.json(
+        { error: 'Please enter a valid company or organization name.' },
+        { status: 400 }
+      );
+    }
+    if (requirement && isGibberish(requirement)) {
+      console.warn(`[SPAM BLOCKED - leads] Gibberish requirement from: ${email}`);
+      return NextResponse.json(
+        { error: 'Please describe your requirement clearly.' },
         { status: 400 }
       );
     }
@@ -28,18 +101,17 @@ export async function POST(req) {
     const leadRecord = {
       name: name.trim(),
       email: email.trim().toLowerCase(),
-      phone: (phone || '').trim(),
+      phone: phone.trim(),
       company: company.trim(),
       requirement: requirement.trim(),
       source,
       sessionId: sessionId || null,
-      status: 'New', // New | Contacted | Qualified | Closed
+      status: 'New',
       createdAt: new Date().toISOString(),
     };
 
     const insertResult = await leadsColl.insertOne(leadRecord);
 
-    // Update session if sessionId present
     if (sessionId) {
       const sessionsColl = db.collection('chat_sessions');
       await sessionsColl.updateOne(
@@ -48,7 +120,6 @@ export async function POST(req) {
       );
     }
 
-    // Update analytics
     const localDb = getLocalDB();
     if (!localDb.analytics) {
       localDb.analytics = { totalConversations: 0, totalLeads: 0, topQuestions: {}, serviceRequests: {} };
@@ -56,10 +127,10 @@ export async function POST(req) {
     localDb.analytics.totalLeads = (localDb.analytics.totalLeads || 0) + 1;
     saveLocalDB(localDb);
 
-    // Trigger email notification to Galactic 3D Sales & Engineering Team
     try {
-      await sendEmail({
-        to: process.env.ADMIN_EMAIL || 'info@galactic-3d.com',
+      await sendSmtpMail({
+        to: ADMIN_EMAIL,
+        fromName: 'Galactic 3D Website Portal',
         subject: `🚀 New Galactic 3D Lead Captured: ${name} (${company || 'Direct Visitor'})`,
         text: `New Lead captured via Galactic 3D AI Assistant:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone || 'N/A'}\nCompany: ${company}\nRequirement: ${requirement}\nSource: ${source}\nCaptured At: ${new Date().toLocaleString()}`,
         html: `
