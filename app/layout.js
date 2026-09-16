@@ -115,6 +115,17 @@ export default function RootLayout({ children }) {
             `,
           }}
         />
+          <Script
+  id="leadfeeder-tracker"
+  strategy="afterInteractive"
+  dangerouslySetInnerHTML={{
+    __html: `
+     
+      (function(ss,ex){ window.ldfdr=window.ldfdr||function(){(ldfdr._q=ldfdr._q||[]).push([].slice.call(arguments));}; (function(d,s){ fs=d.getElementsByTagName(s)[0]; function ce(src){ var cs=d.createElement(s); cs.src=src; cs.async=1; fs.parentNode.insertBefore(cs,fs); }; ce('https://sc.lfeeder.com/lftracker_v1_'+ss+(ex?'_'+ex:'')+'.js'); })(document,'script'); })('3P1w24d3Kgk7mY5n'); 
+  
+    `,
+  }}
+/>
       </head>
       <body className="bg-white text-black antialiased selection:bg-[#D32F2F] selection:text-white font-sans">
         <ToastProvider>
