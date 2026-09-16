@@ -9048,6 +9048,41 @@
       ],
       "intent": "GENERAL_INQUIRY",
       "timestamp": "2026-09-15T09:52:08.643Z"
+    },
+    {
+      "_id": "17895546494909udea",
+      "sessionId": "sess_1789554602147_j4ucz",
+      "role": "user",
+      "content": "Industries",
+      "timestamp": "2026-09-16T10:30:49.490Z"
+    },
+    {
+      "_id": "1789554649507yav8n",
+      "sessionId": "sess_1789554602147_j4ucz",
+      "role": "assistant",
+      "content": "**Galactic 3D Industries We Serve:**\n\nDelivering advanced manufacturing and 3D printing solutions across multiple industries:\n\n1. **Aerospace & Defence (Aerospace):**\n   • High-performance lightweight flight components, DMLS titanium brackets, heat exchangers, and certified defense hardware.\n\n2. **Automotive & Motorsport (Automotive & EV):**\n   • Rapid functional prototyping, intake manifolds, lightweight brake calipers, and ergonomic assembly jigs for agile automotive engineering.\n\n3. **Medical & Healthcare (Medical):**\n   • Biocompatible titanium orthopedic implants, patient-specific surgical guides, and anatomical planning models.\n\n4. **Education & Research (Education):**\n   • Advanced DfAM research models, mechanical testing specimens, fluid dynamics test rigs, and university additive lab training.\n\n5. **Electronics & Semiconductors (Electronics):**\n   • ESD-safe component trays, custom heat sinks with internal micro-fins, RF shielding housings, and wafer-handling tools.\n\n6. **Energy & Power (Energy):**\n   • Gas turbine combustion nozzles, heat exchangers, wind turbine sensor brackets, and high-pressure oil & gas valves.",
+      "citations": [
+        {
+          "title": "Industries We Serve | Aerospace, Automotive, Medical & More",
+          "url": "https://www.galactic-3d.com/industries",
+          "category": "Industries",
+          "relevance": 34
+        },
+        {
+          "title": "About Galactic 3D | Facility, Engineering & Credibility",
+          "url": "https://www.galactic-3d.com/about",
+          "category": "About",
+          "relevance": 16
+        },
+        {
+          "title": "Manufacturing Services | Galactic 3D",
+          "url": "https://www.galactic-3d.com/services",
+          "category": "Services",
+          "relevance": 8
+        }
+      ],
+      "intent": "GENERAL_INQUIRY",
+      "timestamp": "2026-09-16T10:30:49.507Z"
     }
   ],
   "knowledge_chunks": [
@@ -10857,12 +10892,12 @@
   "website_embeddings": [],
   "leads": [],
   "analytics": {
-    "totalConversations": 265,
+    "totalConversations": 266,
     "totalLeads": 0,
     "satisfactionSum": 0,
     "satisfactionCount": 0,
     "topQuestions": {
-      "GENERAL_INQUIRY": 245,
+      "GENERAL_INQUIRY": 246,
       "QUOTE_REQUEST": 7,
       "CAD_DFAM": 7,
       "CONTACT_EXPERT": 1,

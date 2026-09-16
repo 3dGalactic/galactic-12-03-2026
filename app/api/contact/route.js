@@ -4,8 +4,12 @@ import path from "path";
 import {
   ADMIN_EMAIL,
   checkRateLimit,
+  checkHourlyRateLimit,
   validateEmail,
   sanitizeString,
+  isBlockedEmailDomain,
+  isHoneypotTripped,
+  isGibberish,
   processCentralizedSubmission,
 } from "../../lib/sendEmail";
 
@@ -67,10 +71,72 @@ export async function POST(req) {
       );
     }
 
-    const rateLimitKey = `${req.headers.get("x-forwarded-for") || "anonymous"}:${sourcePage}`;
-    if (!checkRateLimit(rateLimitKey, 5, 60 * 1000)) {
+    // LAYER 1: Block disposable / fake email domains
+    if (isBlockedEmailDomain(email)) {
+      console.warn(`[SPAM BLOCKED] Disposable email domain: ${email}`);
+      return NextResponse.json(
+        { success: false, message: "Please use a valid business or personal email address." },
+        { status: 400 }
+      );
+    }
+
+    // LAYER 2: Honeypot — if hidden field is filled, it's a bot
+    if (isHoneypotTripped(payload)) {
+      console.warn(`[SPAM BLOCKED] Honeypot triggered from: ${req.headers.get("x-forwarded-for")}`);
+      return NextResponse.json(
+        { success: true, message: "Thank you! Your message has been sent successfully." },
+        { status: 200 }
+      );
+    }
+
+    // LAYER 3: Gibberish detection on all text fields
+    if (isGibberish(name)) {
+      console.warn(`[SPAM BLOCKED] Gibberish name: ${name}`);
+      return NextResponse.json(
+        { success: false, message: "Please enter your real full name." },
+        { status: 400 }
+      );
+    }
+    if (isGibberish(subject)) {
+      console.warn(`[SPAM BLOCKED] Gibberish subject: ${subject}`);
+      return NextResponse.json(
+        { success: false, message: "Please enter a valid subject for your enquiry." },
+        { status: 400 }
+      );
+    }
+    if (isGibberish(company)) {
+      console.warn(`[SPAM BLOCKED] Gibberish company: ${company}`);
+      return NextResponse.json(
+        { success: false, message: "Please enter a valid company or organization name." },
+        { status: 400 }
+      );
+    }
+    if (!message || message.length < 10) {
+      return NextResponse.json(
+        { success: false, message: "Please provide a meaningful message (at least 10 characters)." },
+        { status: 400 }
+      );
+    }
+    if (isGibberish(message)) {
+      console.warn(`[SPAM BLOCKED] Gibberish message from: ${email}`);
+      return NextResponse.json(
+        { success: false, message: "Your message appears to be invalid. Please describe your enquiry clearly." },
+        { status: 400 }
+      );
+    }
+
+    // LAYER 4: Rate limiting — 2 per minute, 3 per hour per IP
+    const ip = req.headers.get("x-forwarded-for") || "anonymous";
+    const rateLimitKey = `${ip}:${sourcePage}`;
+    if (!checkRateLimit(rateLimitKey, 2, 60 * 1000)) {
       return NextResponse.json(
         { success: false, message: "Too many submissions. Please try again in a minute." },
+        { status: 429 }
+      );
+    }
+    if (!checkHourlyRateLimit(ip, 3)) {
+      return NextResponse.json(
+        { success: false, message: "You have reached the submission limit. Please try again later." },
         { status: 429 }
       );
     }
