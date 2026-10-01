@@ -220,7 +220,12 @@ function getLocalDBWrapper() {
 
 function matchQuery(item, query) {
   if (!query || Object.keys(query).length === 0) return true;
+  if (query.$or && Array.isArray(query.$or)) {
+    const orMatches = query.$or.some((subQuery) => matchQuery(item, subQuery));
+    if (!orMatches) return false;
+  }
   for (const [key, val] of Object.entries(query)) {
+    if (key === '$or') continue;
     if (typeof val === 'object' && val !== null) {
       if (val.$in && Array.isArray(val.$in)) {
         if (!val.$in.includes(item[key])) return false;

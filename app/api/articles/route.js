@@ -3,69 +3,78 @@ import fs from 'fs';
 import path from 'path';
 import { DEFAULT_ARTICLES } from '../../lib/defaultArticles';
 import { scrapeLinkedInArticle } from '../../lib/linkedinScraper';
-import { getLocalDB, saveLocalDB } from '../../lib/db';
+import { connectToDatabase, getLocalDB, saveLocalDB } from '../../lib/db';
 
 const DATA_DIR = path.join(process.cwd(), '.data');
 const ARTICLES_FILE = path.join(DATA_DIR, 'articles.json');
 
-function ensureArticlesFile() {
+function loadFallbackArticles() {
+  try {
+    if (fs.existsSync(ARTICLES_FILE)) {
+      const raw = fs.readFileSync(ARTICLES_FILE, 'utf-8');
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (err) {
+    // Read-only filesystem on Vercel
+  }
+  return DEFAULT_ARTICLES;
+}
+
+function syncLocalFile(articles) {
   try {
     if (!fs.existsSync(DATA_DIR)) {
       fs.mkdirSync(DATA_DIR, { recursive: true });
     }
-    if (!fs.existsSync(ARTICLES_FILE)) {
-      fs.writeFileSync(ARTICLES_FILE, JSON.stringify(DEFAULT_ARTICLES, null, 2), 'utf-8');
-    }
-  } catch (err) {
-    console.error('Error ensuring articles file:', err);
-  }
-}
-
-function loadArticles() {
-  ensureArticlesFile();
-  try {
-    const raw = fs.readFileSync(ARTICLES_FILE, 'utf-8');
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed) && parsed.length > 0) {
-      return parsed;
-    }
-    return DEFAULT_ARTICLES;
-  } catch (err) {
-    console.error('Error reading articles file:', err);
-    return DEFAULT_ARTICLES;
-  }
-}
-
-function saveArticles(articles) {
-  ensureArticlesFile();
-  try {
     fs.writeFileSync(ARTICLES_FILE, JSON.stringify(articles, null, 2), 'utf-8');
-    // Also sync to main galactic_ai_db.json
     try {
       const db = getLocalDB();
       db.articles = articles;
       saveLocalDB(db);
     } catch (e) {}
-    return true;
   } catch (err) {
-    console.error('Error saving articles file:', err);
-    return false;
+    // Read-only filesystem on serverless (Vercel), ignore
   }
+}
+
+async function getArticlesCollection() {
+  const { isAtlas, db } = await connectToDatabase();
+  const articlesColl = db.collection('articles');
+  return { isAtlas, articlesColl };
 }
 
 export async function GET() {
   try {
-    const articles = loadArticles();
+    const { isAtlas, articlesColl } = await getArticlesCollection();
+    let articles = await articlesColl.find({}).toArray();
+
+    // If MongoDB / local collection is empty, seed with fallback articles
+    if (!articles || articles.length === 0) {
+      const initial = loadFallbackArticles();
+      if (initial && initial.length > 0) {
+        try {
+          await articlesColl.insertMany(initial);
+          articles = initial;
+        } catch (e) {
+          articles = initial;
+        }
+      }
+    }
+
     return NextResponse.json({
       success: true,
-      articles
+      articles: articles || [],
+      isAtlas
     });
   } catch (error) {
     console.error('GET /api/articles error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to load articles', articles: DEFAULT_ARTICLES },
-      { status: 500 }
-    );
+    const fallback = loadFallbackArticles();
+    return NextResponse.json({
+      success: true,
+      articles: fallback
+    });
   }
 }
 
@@ -73,13 +82,11 @@ export async function POST(req) {
   try {
     const body = await req.json().catch(() => ({}));
     const { linkedinUrl, url, ...customFields } = body;
-
     const targetUrl = linkedinUrl || url || customFields.link;
 
     let newArticle;
 
     if (targetUrl) {
-      // Scrape from LinkedIn with optional category override
       const overrideCat = customFields.category && customFields.category !== 'auto' && customFields.category !== 'All Posts'
         ? customFields.category
         : null;
@@ -91,9 +98,8 @@ export async function POST(req) {
         id: customFields.id || Date.now()
       };
     } else if (customFields.title) {
-      // Manual article addition
       newArticle = {
-        id: Date.now(),
+        id: customFields.id || Date.now(),
         title: customFields.title,
         excerpt: customFields.excerpt || customFields.title,
         linkedinUrl: customFields.linkedinUrl || 'https://www.linkedin.com/company/galactic-3d/',
@@ -112,28 +118,34 @@ export async function POST(req) {
       );
     }
 
-    const currentArticles = loadArticles();
+    const { articlesColl } = await getArticlesCollection();
 
-    // Check if an article with this exact linkedinUrl or title already exists
-    const existingIndex = currentArticles.findIndex(
-      a => (targetUrl && a.linkedinUrl === targetUrl) || (a.title && a.title.toLowerCase() === newArticle.title.toLowerCase())
-    );
+    // Check if an article with matching URL or Title already exists
+    const query = {
+      $or: [
+        ...(targetUrl ? [{ linkedinUrl: targetUrl }] : []),
+        { title: newArticle.title }
+      ]
+    };
 
-    let updatedArticles;
-    if (existingIndex !== -1) {
-      // Update existing
-      updatedArticles = [...currentArticles];
-      updatedArticles[existingIndex] = { ...updatedArticles[existingIndex], ...newArticle };
+    const existing = await articlesColl.findOne(query);
+
+    if (existing) {
+      const matchId = existing._id || existing.id;
+      await articlesColl.updateOne(
+        { $or: [{ _id: matchId }, { id: matchId }] },
+        { $set: newArticle }
+      );
     } else {
-      // Prepend newly added article to the top of the list!
-      updatedArticles = [newArticle, ...currentArticles];
+      await articlesColl.insertOne(newArticle);
     }
 
-    saveArticles(updatedArticles);
+    const updatedArticles = await articlesColl.find({}).toArray();
+    syncLocalFile(updatedArticles);
 
     return NextResponse.json({
       success: true,
-      message: existingIndex !== -1 ? 'Article updated with latest LinkedIn data' : 'Article added successfully!',
+      message: existing ? 'Article updated with latest LinkedIn data' : 'Article added successfully!',
       article: newArticle,
       articles: updatedArticles
     });
@@ -145,6 +157,7 @@ export async function POST(req) {
     );
   }
 }
+
 export async function DELETE(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -159,15 +172,18 @@ export async function DELETE(req) {
       return NextResponse.json({ success: false, error: 'Article ID is required' }, { status: 400 });
     }
 
-    const currentArticles = loadArticles();
-    const numericId = Number(id);
-    const updatedArticles = currentArticles.filter(a => a.id !== id && a.id !== numericId);
+    const { articlesColl } = await getArticlesCollection();
 
-    if (updatedArticles.length === currentArticles.length) {
-      return NextResponse.json({ success: false, error: 'Article not found' }, { status: 404 });
-    }
+    await articlesColl.deleteOne({
+      $or: [
+        { id: id },
+        { id: Number(id) },
+        { _id: id }
+      ]
+    });
 
-    saveArticles(updatedArticles);
+    const updatedArticles = await articlesColl.find({}).toArray();
+    syncLocalFile(updatedArticles);
 
     return NextResponse.json({
       success: true,
@@ -192,29 +208,34 @@ export async function PATCH(req) {
       return NextResponse.json({ success: false, error: 'Article ID is required' }, { status: 400 });
     }
 
-    const currentArticles = loadArticles();
-    const index = currentArticles.findIndex(a => String(a.id) === String(id));
+    const { articlesColl } = await getArticlesCollection();
 
-    if (index === -1) {
-      return NextResponse.json({ success: false, error: 'Article not found' }, { status: 404 });
-    }
+    const updateFields = {};
+    if (category) updateFields.category = category;
+    if (title) updateFields.title = title;
+    if (image) updateFields.image = image;
+    if (excerpt) updateFields.excerpt = excerpt;
+    if (author) updateFields.author = author;
+    if (authorRole) updateFields.authorRole = authorRole;
 
-    const updated = { ...currentArticles[index] };
-    if (category) updated.category = category;
-    if (title) updated.title = title;
-    if (image) updated.image = image;
-    if (excerpt) updated.excerpt = excerpt;
-    if (author) updated.author = author;
-    if (authorRole) updated.authorRole = authorRole;
+    await articlesColl.updateOne(
+      {
+        $or: [
+          { id: id },
+          { id: Number(id) },
+          { _id: id }
+        ]
+      },
+      { $set: updateFields }
+    );
 
-    currentArticles[index] = updated;
-    saveArticles(currentArticles);
+    const updatedArticles = await articlesColl.find({}).toArray();
+    syncLocalFile(updatedArticles);
 
     return NextResponse.json({
       success: true,
       message: 'Article updated successfully',
-      article: updated,
-      articles: currentArticles
+      articles: updatedArticles
     });
   } catch (error) {
     console.error('PATCH /api/articles error:', error);
