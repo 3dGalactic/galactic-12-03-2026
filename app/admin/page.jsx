@@ -1,78 +1,80 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
-  Activity,
-  Database,
-  Globe,
-  FileText,
-  Users,
-  MessageSquare,
-  Settings,
   RefreshCw,
-  Search,
   Plus,
   Trash2,
-  Edit,
-  Download,
   Upload,
   CheckCircle2,
   AlertCircle,
-  TrendingUp,
-  Award,
-  ShieldCheck,
   Lock,
   LogOut,
   ExternalLink,
-  ChevronRight,
-  Filter,
-  Eye
+  Newspaper,
+  Sparkles,
+  Image as ImageIcon,
+  X
 } from "lucide-react";
+import { ARTICLE_CATEGORIES } from "../lib/defaultArticles";
+
+const ADMIN_PRESET_IMAGES = [
+  { name: 'Aerospace & Defense', url: '/articles/aerospace-future.png' },
+  { name: 'Space Technology', url: '/articles/space-industry.png' },
+  { name: 'EV Battery Cooling', url: '/articles/ev-battery-cooling.png' },
+  { name: 'Lattice Armour', url: '/articles/lattice-structures.png' },
+  { name: 'EOS M290 Precision', url: '/articles/eos-m290-microns.png' },
+  { name: 'Bone Implants', url: '/articles/bone-implants.png' },
+  { name: 'Nuclear Energy', url: '/articles/nuclear-power.png' },
+  { name: 'Supply Chain AM', url: '/articles/supply-chain-disruption.png' },
+  { name: 'Automobile 3D', url: '/articles/automobile-industry.png' },
+];
+
+function getCategoryDefaultImage(cat) {
+  switch (cat) {
+    case 'Space Technology': return '/articles/space-industry.png';
+    case 'Automotive & EV Innovation': return '/articles/ev-battery-cooling.png';
+    case 'Healthcare & Biomaterials': return '/articles/bone-implants.png';
+    case 'Nuclear Energy & AM': return '/articles/nuclear-power.png';
+    case 'Precision Engineering & Technology': return '/articles/eos-m290-microns.png';
+    case 'Supply Chain & Manufacturing': return '/articles/supply-chain-disruption.png';
+    default: return '/articles/aerospace-future.png';
+  }
+}
 
 export default function AdminDashboardPage() {
   // Authentication
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [authEmail, setAuthEmail] = useState("admin@galactic-3d.com");
+  const [authEmail, setAuthEmail] = useState("");
   const [authPassword, setAuthPassword] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState("");
 
-  // Dashboard Tabs: overview | crawler | knowledge | documents | leads | conversations
-  const [activeTab, setActiveTab] = useState("overview");
+  // Articles & LinkedIn state
+  const [adminArticles, setAdminArticles] = useState([]);
+  const [adminLinkedinUrl, setAdminLinkedinUrl] = useState("");
+  const [adminLinkedinCategory, setAdminLinkedinCategory] = useState("auto");
+  const [adminArticleLoading, setAdminArticleLoading] = useState(false);
+  const [adminArticleMsg, setAdminArticleMsg] = useState("");
 
-  // Data States
-  const [analytics, setAnalytics] = useState(null);
-  const [crawlerStatus, setCrawlerStatus] = useState(null);
-  const [crawledPages, setCrawledPages] = useState([]);
-  const [knowledgeChunks, setKnowledgeChunks] = useState([]);
-  const [documents, setDocuments] = useState([]);
-  const [leads, setLeads] = useState([]);
-  const [selectedLead, setSelectedLead] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  // Filters & Search
-  const [knowledgeSearch, setKnowledgeSearch] = useState("");
-  const [knowledgeCategory, setKnowledgeCategory] = useState("All");
-  const [leadStatusFilter, setLeadStatusFilter] = useState("All");
-
-  // Add Chunk Modal State
-  const [isAddChunkOpen, setIsAddChunkOpen] = useState(false);
-  const [newChunk, setNewChunk] = useState({
-    sourceTitle: "",
-    sourceUrl: "https://www.galactic-3d.com/",
-    category: "Services",
-    content: "",
+  // Custom Article Modal & Image Upload state
+  const [isCustomArticleModalOpen, setIsCustomArticleModalOpen] = useState(false);
+  const [customArticleForm, setCustomArticleForm] = useState({
+    title: "",
+    category: "Aerospace & Defense",
+    author: "Galactic 3D Team",
+    authorRole: "Aerospace & Defense Team",
+    linkedinUrl: "",
+    image: "/articles/aerospace-future.png",
+    excerpt: "",
+    paragraphs: "",
   });
-
-  // File Upload State
-  const [uploadFile, setUploadFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [uploadMsg, setUploadMsg] = useState("");
-
-  // Crawl Action State
-  const [isCrawling, setIsCrawling] = useState(false);
-  const [crawlMsg, setCrawlMsg] = useState("");
+  const [adminImageTab, setAdminImageTab] = useState("upload");
+  const [adminUploadingImage, setAdminUploadingImage] = useState(false);
+  const [adminImageError, setAdminImageError] = useState("");
+  const [adminIsDragging, setAdminIsDragging] = useState(false);
+  const adminFileInputRef = useRef(null);
 
   // Check Local Auth Token
   useEffect(() => {
@@ -82,14 +84,10 @@ export default function AdminDashboardPage() {
     }
   }, []);
 
-  // Fetch data on tab change or auth
+  // Fetch articles on auth
   useEffect(() => {
     if (isAuthenticated) {
-      fetchAnalytics();
-      fetchCrawlerData();
-      fetchKnowledgeChunks();
-      fetchDocuments();
-      fetchLeads();
+      fetchAdminArticles();
     }
   }, [isAuthenticated]);
 
@@ -108,7 +106,7 @@ export default function AdminDashboardPage() {
         localStorage.setItem("galactic_admin_token", data.token);
         setIsAuthenticated(true);
       } else {
-        setAuthError(data.error || "Invalid credentials. Use admin@galactic-3d.com / galactic2026");
+        setAuthError(data.error || "Invalid email or password. Please try again.");
       }
     } catch (err) {
       setAuthError("Network error. Please try again.");
@@ -122,196 +120,201 @@ export default function AdminDashboardPage() {
     setIsAuthenticated(false);
   };
 
-  const fetchAnalytics = async () => {
+  const fetchAdminArticles = async () => {
     try {
-      const res = await fetch("/api/admin/analytics");
+      const res = await fetch("/api/articles");
       const data = await res.json();
-      if (data.success) setAnalytics(data.metrics);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const fetchCrawlerData = async () => {
-    try {
-      const res = await fetch("/api/crawler");
-      const data = await res.json();
-      if (data.success) {
-        setCrawlerStatus(data.crawlerStatus);
-        setCrawledPages(data.pages || []);
+      if (data.success && Array.isArray(data.articles)) {
+        setAdminArticles(data.articles);
       }
     } catch (e) {
-      console.error(e);
+      console.error("Error loading admin articles:", e);
     }
   };
 
-  const fetchKnowledgeChunks = async () => {
+  const handleAdminImportArticle = async (e) => {
+    e.preventDefault();
+    if (!adminLinkedinUrl.trim()) return;
+    setAdminArticleLoading(true);
+    setAdminArticleMsg("Connecting to LinkedIn & extracting article metadata...");
     try {
-      const res = await fetch("/api/admin/knowledge");
-      const data = await res.json();
-      if (data.success) setKnowledgeChunks(data.chunks || []);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const fetchDocuments = async () => {
-    try {
-      const res = await fetch("/api/documents");
-      const data = await res.json();
-      if (data.success) setDocuments(data.documents || []);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const fetchLeads = async () => {
-    try {
-      const res = await fetch("/api/admin/leads");
-      const data = await res.json();
-      if (data.success) setLeads(data.leads || []);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const triggerReindex = async () => {
-    setIsCrawling(true);
-    setCrawlMsg("Crawl in progress... Extracting content, generating embeddings & updating vector index...");
-    try {
-      const res = await fetch("/api/crawler", {
+      const res = await fetch("/api/articles", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "reindex" }),
+        body: JSON.stringify({
+          linkedinUrl: adminLinkedinUrl.trim(),
+          category: adminLinkedinCategory !== "auto" ? adminLinkedinCategory : undefined,
+        }),
       });
       const data = await res.json();
       if (data.success) {
-        setCrawlMsg("Reindexing completed successfully!");
-        fetchCrawlerData();
-        fetchKnowledgeChunks();
-        fetchAnalytics();
+        setAdminLinkedinUrl("");
+        setAdminLinkedinCategory("auto");
+        setAdminArticleMsg("✓ Article added successfully!");
+        fetchAdminArticles();
       } else {
-        setCrawlMsg("Reindexing failed: " + data.error);
+        setAdminArticleMsg("Error: " + (data.error || "Failed to import"));
       }
     } catch (err) {
-      setCrawlMsg("Error executing crawler.");
+      setAdminArticleMsg("Network error importing article");
     } finally {
-      setIsCrawling(false);
-      setTimeout(() => setCrawlMsg(""), 5000);
+      setAdminArticleLoading(false);
+      setTimeout(() => setAdminArticleMsg(""), 6000);
     }
   };
 
-  const handleAddChunk = async (e) => {
-    e.preventDefault();
-    if (!newChunk.content || !newChunk.sourceTitle) return;
-
-    setLoading(true);
+  const handleUpdateArticleCategory = async (id, newCategory) => {
     try {
-      const res = await fetch("/api/admin/knowledge", {
-        method: "POST",
+      // Optimistic state update
+      setAdminArticles(prev =>
+        prev.map(art => (art.id === id ? { ...art, category: newCategory } : art))
+      );
+      const res = await fetch("/api/articles", {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newChunk),
+        body: JSON.stringify({ id, category: newCategory }),
       });
       const data = await res.json();
+      if (!data.success) {
+        fetchAdminArticles();
+      }
+    } catch (err) {
+      console.error("Failed to update category:", err);
+      fetchAdminArticles();
+    }
+  };
+
+  const handleDeleteAdminArticle = async (id) => {
+    if (!confirm("Are you sure you want to delete this article?")) return;
+    try {
+      const res = await fetch(`/api/articles?id=${id}`, { method: "DELETE" });
+      const data = await res.json();
       if (data.success) {
-        setIsAddChunkOpen(false);
-        setNewChunk({ sourceTitle: "", sourceUrl: "https://www.galactic-3d.com/", category: "Services", content: "" });
-        fetchKnowledgeChunks();
-        fetchAnalytics();
-      } else {
-        alert(data.error || "Failed to add chunk");
+        fetchAdminArticles();
       }
-    } catch (err) {
-      alert("Error adding chunk");
-    } finally {
-      setLoading(false);
+    } catch (e) {
+      console.error(e);
     }
   };
 
-  const handleDeleteChunk = async (id, chunkId) => {
-    if (!confirm("Are you sure you want to delete this knowledge chunk from the vector database?")) return;
-    try {
-      const url = id ? `/api/admin/knowledge?id=${id}` : `/api/admin/knowledge?chunkId=${chunkId}`;
-      const res = await fetch(url, { method: "DELETE" });
-      if (res.ok) {
-        fetchKnowledgeChunks();
-        fetchAnalytics();
-      }
-    } catch (err) {
-      alert("Error deleting chunk");
+  const handleAdminImageUpload = async (file) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setAdminImageError("Please select a valid image file (PNG, JPG, WebP).");
+      return;
     }
-  };
-
-  const handleFileUpload = async (e) => {
-    e.preventDefault();
-    if (!uploadFile) return;
-
-    setUploading(true);
-    setUploadMsg("Parsing document, generating vector embeddings & adding to knowledge base...");
-    const formData = new FormData();
-    formData.append("file", uploadFile);
-
+    setAdminUploadingImage(true);
+    setAdminImageError("");
     try {
-      const res = await fetch("/api/documents", {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/articles/upload-image", {
         method: "POST",
         body: formData,
       });
       const data = await res.json();
-      if (res.ok && data.success) {
-        setUploadMsg(`File "${uploadFile.name}" indexed successfully!`);
-        setUploadFile(null);
-        fetchDocuments();
-        fetchKnowledgeChunks();
-        fetchAnalytics();
+      if (data.success && data.url) {
+        setCustomArticleForm(prev => ({ ...prev, image: data.url }));
       } else {
-        setUploadMsg("Failed: " + (data.error || "Upload error"));
+        setAdminImageError(data.error || "Failed to upload image.");
       }
     } catch (err) {
-      setUploadMsg("Error uploading document.");
+      setAdminImageError("Network error uploading image: " + err.message);
     } finally {
-      setUploading(false);
-      setTimeout(() => setUploadMsg(""), 6000);
+      setAdminUploadingImage(false);
     }
   };
 
-  const handleLeadStatusChange = async (leadId, newStatus) => {
+  const handleAdminCategoryChange = (cat) => {
+    setCustomArticleForm(prev => {
+      const isDefault = !prev.image || prev.image.startsWith("/articles/");
+      const newImg = isDefault ? getCategoryDefaultImage(cat) : prev.image;
+      return {
+        ...prev,
+        category: cat,
+        image: newImg,
+      };
+    });
+  };
+
+  const handleAdminSaveCustomArticle = async (e) => {
+    e.preventDefault();
+    if (!customArticleForm.title.trim()) return;
+    setAdminArticleLoading(true);
+    setAdminArticleMsg("Publishing custom article...");
     try {
-      const res = await fetch("/api/admin/leads", {
-        method: "PATCH",
+      const paragraphsArray = customArticleForm.paragraphs
+        ? customArticleForm.paragraphs.split("\n\n").filter(p => p.trim())
+        : [customArticleForm.excerpt || customArticleForm.title];
+
+      const res = await fetch("/api/articles", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: leadId, status: newStatus }),
+        body: JSON.stringify({
+          title: customArticleForm.title,
+          category: customArticleForm.category,
+          author: customArticleForm.author,
+          authorRole: customArticleForm.authorRole,
+          linkedinUrl: customArticleForm.linkedinUrl || "https://www.linkedin.com/company/galactic-3d/",
+          image: customArticleForm.image || "/articles/aerospace-future.png",
+          excerpt: customArticleForm.excerpt || customArticleForm.title,
+          paragraphs: paragraphsArray,
+        }),
       });
-      if (res.ok) {
-        fetchLeads();
+      const data = await res.json();
+      if (data.success) {
+        setIsCustomArticleModalOpen(false);
+        setCustomArticleForm({
+          title: "",
+          category: "Aerospace & Defense",
+          author: "Galactic 3D Team",
+          authorRole: "Aerospace & Defense Team",
+          linkedinUrl: "",
+          image: "/articles/aerospace-future.png",
+          excerpt: "",
+          paragraphs: "",
+        });
+        setAdminArticleMsg("✓ Custom article published successfully!");
+        fetchAdminArticles();
+      } else {
+        setAdminArticleMsg("Error: " + (data.error || "Failed to publish"));
       }
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      setAdminArticleMsg("Network error saving article");
+    } finally {
+      setAdminArticleLoading(false);
+      setTimeout(() => setAdminArticleMsg(""), 6000);
     }
   };
 
-  const exportLeadsCSV = () => {
-    window.open("/api/admin/leads?format=csv", "_blank");
-  };
-
-  // LOGIN GATEWAY
+  // LOGIN GATEWAY (WHITE THEME MATCHING MAIN SITE)
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#111111] flex items-center justify-center p-4 font-sans">
-        <div className="w-full max-w-md bg-zinc-950 border border-zinc-800 rounded-2xl p-8 shadow-2xl space-y-6">
+      <div className="min-h-screen bg-white text-[#111111] flex items-center justify-center p-4 font-sans relative overflow-hidden">
+        {/* SUBTLE ENGINEERING GRID BACKGROUND */}
+        <div
+          className="absolute inset-0 opacity-40 pointer-events-none z-0"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+            backgroundSize: '48px 48px'
+          }}
+        />
+
+        <div className="w-full max-w-md bg-white border border-gray-200 rounded-3xl p-8 shadow-xl space-y-6 relative z-10">
           <div className="text-center space-y-2">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#D32F2F] text-white shadow-lg mb-2">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#D32F2F] text-white shadow-md mb-2">
               <Lock className="w-6 h-6" />
             </div>
-            <h1 className="text-2xl font-black text-white uppercase tracking-wider">
-              Galactic 3D AI Admin
+            <h1 className="text-2xl font-black text-[#111111] tracking-tight">
+              Galactic 3D <span className="text-[#D32F2F]">Admin</span>
             </h1>
-            <p className="text-xs text-zinc-400">
-              Autonomous Assistant Control & Knowledge Management Center
+            <p className="text-xs text-gray-500 font-medium">
+              Official Article & LinkedIn Publishing Management
             </p>
           </div>
 
           {authError && (
-            <div className="p-3 rounded-xl bg-red-950/60 border border-red-800/80 text-red-300 text-xs flex items-center gap-2">
+            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-[#D32F2F] text-xs font-semibold flex items-center gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{authError}</span>
             </div>
@@ -319,106 +322,82 @@ export default function AdminDashboardPage() {
 
           <form onSubmit={handleLogin} className="space-y-4 text-xs">
             <div>
-              <label className="text-zinc-300 block mb-1 font-semibold">Admin Email</label>
+              <label className="text-gray-700 block mb-1 font-bold">Admin Email</label>
               <input
                 type="email"
                 required
                 value={authEmail}
                 onChange={(e) => setAuthEmail(e.target.value)}
-                placeholder="admin@galactic-3d.com"
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white placeholder-zinc-500 focus:outline-none focus:border-[#D32F2F]"
+                placeholder="Enter admin email"
+                className="w-full bg-gray-50 border border-gray-300 rounded-xl px-3.5 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-[#D32F2F] focus:ring-1 focus:ring-[#D32F2F]"
               />
             </div>
 
             <div>
-              <label className="text-zinc-300 block mb-1 font-semibold">Password</label>
+              <label className="text-gray-700 block mb-1 font-bold">Password</label>
               <input
                 type="password"
                 required
                 value={authPassword}
                 onChange={(e) => setAuthPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-white placeholder-zinc-500 focus:outline-none focus:border-[#D32F2F]"
+                className="w-full bg-gray-50 border border-gray-300 rounded-xl px-3.5 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-[#D32F2F] focus:ring-1 focus:ring-[#D32F2F]"
               />
             </div>
 
             <button
               type="submit"
               disabled={authLoading}
-              className="w-full py-3 rounded-xl bg-[#D32F2F] hover:bg-[#B71C1C] text-white font-bold uppercase tracking-wider text-xs transition shadow-lg flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-xl bg-[#D32F2F] hover:bg-[#B71C1C] text-white font-bold uppercase tracking-wider text-xs transition shadow-md flex items-center justify-center gap-2"
             >
-              {authLoading ? "Authenticating..." : "Sign In to Control Center"}
+              {authLoading ? "Authenticating..." : "Sign In to Articles Studio"}
             </button>
           </form>
-
-          <div className="text-center text-[11px] text-zinc-500 pt-2 border-t border-zinc-900">
-            Default credentials: <code className="text-zinc-400">admin@galactic-3d.com / galactic2026</code>
-          </div>
         </div>
       </div>
     );
   }
 
-  // Filtered Knowledge
-  const filteredChunks = knowledgeChunks.filter((chunk) => {
-    const matchesSearch =
-      !knowledgeSearch ||
-      (chunk.content || "").toLowerCase().includes(knowledgeSearch.toLowerCase()) ||
-      (chunk.sourceTitle || "").toLowerCase().includes(knowledgeSearch.toLowerCase());
-    const matchesCat =
-      knowledgeCategory === "All" || chunk.category === knowledgeCategory;
-    return matchesSearch && matchesCat;
-  });
-
-  // Filtered Leads
-  const filteredLeads = leads.filter((l) => {
-    if (leadStatusFilter === "All") return true;
-    return l.status === leadStatusFilter;
-  });
-
   return (
-    <div className="min-h-screen bg-[#0d0d0e] text-zinc-100 font-sans">
-      {/* TOP NAVBAR */}
-      <header className="border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur-xl sticky top-0 z-40 px-6 py-3.5 flex items-center justify-between">
+    <div className="min-h-screen bg-white text-[#111111] font-sans relative overflow-hidden">
+      {/* SUBTLE ENGINEERING GRID BACKGROUND */}
+      <div
+        className="absolute inset-0 opacity-40 pointer-events-none z-0"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)`,
+          backgroundSize: '48px 48px'
+        }}
+      />
+
+      {/* TOP NAVBAR (MATCHING MAIN SITE THEME) */}
+      <header className="border-b border-gray-200 bg-white/95 backdrop-blur-md sticky top-0 z-40 px-6 py-3.5 flex items-center justify-between shadow-xs relative">
         <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl bg-[#D32F2F] text-white flex items-center justify-center font-bold text-lg shadow-md">
-              G
-            </div>
-            <div>
-              <span className="font-extrabold text-white text-sm tracking-wide block">
-                GALACTIC 3D
-              </span>
-              <span className="text-[10px] text-zinc-400 font-mono uppercase tracking-widest">
-                AI Assistant Engine
+          <Link href="/" className="flex items-center gap-3 group">
+            <img
+              src="/navbar/logo.svg"
+              alt="Galactic 3D"
+              className="h-8 sm:h-9 w-auto transition-transform group-hover:scale-105"
+            />
+            <div className="hidden sm:block border-l border-gray-200 pl-3">
+              <span className="text-[11px] text-gray-500 font-bold uppercase tracking-wider block">
+                Publishing Portal
               </span>
             </div>
           </Link>
-
-          <div className="hidden md:flex items-center gap-2 pl-6 border-l border-zinc-800">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-800/60 text-emerald-400 text-[10px] font-mono">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              RAG Engine Live
-            </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 text-[10px] font-mono">
-              <Database className="w-3 h-3 text-[#D32F2F]" />
-              MongoDB Vector Active
-            </span>
-          </div>
         </div>
 
         <div className="flex items-center gap-3">
           <Link
-            href="/"
+            href="/blog"
             target="_blank"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 text-xs transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0A66C2] hover:bg-[#084e96] text-white text-xs font-bold transition shadow-xs"
           >
-            <span>Live Site</span>
-            <ExternalLink className="w-3 h-3 text-zinc-400" />
+            <span>View Public /blog</span>
+            <ExternalLink className="w-3.5 h-3.5" />
           </Link>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-950/50 hover:bg-red-900/60 border border-red-800/60 text-red-300 text-xs font-semibold transition"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gray-100 hover:bg-red-50 border border-gray-200 hover:border-red-200 text-gray-700 hover:text-[#D32F2F] text-xs font-bold transition"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Sign Out</span>
@@ -427,72 +406,22 @@ export default function AdminDashboardPage() {
       </header>
 
       {/* DASHBOARD LAYOUT */}
-      <div className="flex flex-col md:flex-row min-h-[calc(100vh-61px)]">
-        {/* SIDEBAR NAVIGATION */}
-        <aside className="w-full md:w-64 border-r border-zinc-800/80 bg-zinc-950 p-4 space-y-1">
+      <div className="flex flex-col md:flex-row min-h-[calc(100vh-61px)] relative z-10">
+        {/* SIDEBAR NAVIGATION - ONLY ARTICLES OPTION */}
+        <aside className="w-full md:w-64 border-r border-gray-200 bg-white/90 backdrop-blur-xs p-4 space-y-3 shrink-0">
+          <div className="text-[11px] uppercase font-bold text-gray-400 tracking-wider px-3 pb-2 border-b border-gray-100">
+            Publishing Center
+          </div>
           <button
-            onClick={() => setActiveTab("overview")}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
-              activeTab === "overview"
-                ? "bg-[#D32F2F] text-white shadow-lg"
-                : "text-zinc-400 hover:bg-zinc-900 hover:text-white"
-            }`}
-          >
-            <Activity className="w-4 h-4" />
-            <span>Overview & Analytics</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("crawler")}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
-              activeTab === "crawler"
-                ? "bg-[#D32F2F] text-white shadow-lg"
-                : "text-zinc-400 hover:bg-zinc-900 hover:text-white"
-            }`}
-          >
-            <Globe className="w-4 h-4" />
-            <span>Website Crawler & Index</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("knowledge")}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
-              activeTab === "knowledge"
-                ? "bg-[#D32F2F] text-white shadow-lg"
-                : "text-zinc-400 hover:bg-zinc-900 hover:text-white"
-            }`}
-          >
-            <Database className="w-4 h-4" />
-            <span>Knowledge Base Manager</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("documents")}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
-              activeTab === "documents"
-                ? "bg-[#D32F2F] text-white shadow-lg"
-                : "text-zinc-400 hover:bg-zinc-900 hover:text-white"
-            }`}
-          >
-            <FileText className="w-4 h-4" />
-            <span>File Ingestion (PDF/DOCX)</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("leads")}
-            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
-              activeTab === "leads"
-                ? "bg-[#D32F2F] text-white shadow-lg"
-                : "text-zinc-400 hover:bg-zinc-900 hover:text-white"
-            }`}
+            className="w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-bold transition bg-[#D32F2F] text-white shadow-sm"
           >
             <div className="flex items-center gap-3">
-              <Users className="w-4 h-4" />
-              <span>Smart Leads</span>
+              <Newspaper className="w-4 h-4" />
+              <span>Articles & LinkedIn</span>
             </div>
-            {leads.length > 0 && (
-              <span className="px-2 py-0.5 rounded-full bg-red-950 text-red-300 text-[10px] font-bold">
-                {leads.length}
+            {adminArticles.length > 0 && (
+              <span className="px-2 py-0.5 rounded-full bg-white/25 text-white text-[10px] font-bold font-mono">
+                {adminArticles.length}
               </span>
             )}
           </button>
@@ -500,731 +429,475 @@ export default function AdminDashboardPage() {
 
         {/* MAIN CONTENT AREA */}
         <main className="flex-1 p-6 md:p-8 overflow-y-auto max-w-7xl">
-          {/* TAB 1: OVERVIEW & ANALYTICS */}
-          {activeTab === "overview" && (
-            <div className="space-y-8 animate-fadeIn">
+          <div className="space-y-6">
+            {/* HEADER ACTIONS */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-gray-100">
               <div>
-                <h2 className="text-2xl font-bold text-white tracking-tight">
-                  Executive AI Assistant Analytics
-                </h2>
-                <p className="text-xs text-zinc-400 mt-1">
-                  Real-time visitor interactions, manufacturing intent conversion, and vector coverage metrics.
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111111] tracking-tight flex items-center gap-2.5">
+                  <span>Articles & LinkedIn</span>
+                  <span className="text-[#D32F2F]">Publications</span>
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-red-50 text-[#D32F2F] font-mono border border-red-200 font-bold">
+                    {adminArticles.length} Live
+                  </span>
+                </h1>
+                <p className="text-xs sm:text-sm text-gray-600 mt-1 font-medium">
+                  Manage official publications displayed on Galactic 3D Articles (/blog). Paste LinkedIn links or write custom articles with images.
                 </p>
               </div>
 
-              {/* METRICS CARDS */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
-                  <div className="flex items-center justify-between text-zinc-400 text-xs font-semibold uppercase tracking-wider">
-                    <span>Conversations</span>
-                    <MessageSquare className="w-4 h-4 text-blue-400" />
-                  </div>
-                  <div className="text-3xl font-extrabold text-white">
-                    {analytics?.totalConversations || 42}
-                  </div>
-                  <p className="text-[11px] text-emerald-400 flex items-center gap-1 font-mono">
-                    <TrendingUp className="w-3 h-3" /> +18% from last week
-                  </p>
-                </div>
-
-                <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
-                  <div className="flex items-center justify-between text-zinc-400 text-xs font-semibold uppercase tracking-wider">
-                    <span>Captured Leads</span>
-                    <Users className="w-4 h-4 text-[#D32F2F]" />
-                  </div>
-                  <div className="text-3xl font-extrabold text-white">
-                    {analytics?.totalLeads || leads.length || 14}
-                  </div>
-                  <p className="text-[11px] text-zinc-400 font-mono">
-                    Direct buying & prototype inquiries
-                  </p>
-                </div>
-
-                <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
-                  <div className="flex items-center justify-between text-zinc-400 text-xs font-semibold uppercase tracking-wider">
-                    <span>Conversion Rate</span>
-                    <TrendingUp className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <div className="text-3xl font-extrabold text-emerald-400">
-                    {analytics?.conversionRate || "28.5%"}
-                  </div>
-                  <p className="text-[11px] text-zinc-400 font-mono">
-                    Intent-to-lead qualification ratio
-                  </p>
-                </div>
-
-                <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
-                  <div className="flex items-center justify-between text-zinc-400 text-xs font-semibold uppercase tracking-wider">
-                    <span>User Satisfaction</span>
-                    <Award className="w-4 h-4 text-yellow-400" />
-                  </div>
-                  <div className="text-3xl font-extrabold text-white">
-                    {analytics?.satisfactionRate || "96%"}
-                  </div>
-                  <p className="text-[11px] text-emerald-400 font-mono">
-                    Based on user feedback votes
-                  </p>
-                </div>
-              </div>
-
-              {/* INTENT BREAKDOWN & POPULAR TOPICS */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-4">
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-[#D32F2F]" />
-                    Most Asked Topics & Intent Categories
-                  </h3>
-                  <div className="space-y-3 text-xs">
-                    {[
-                      { label: "Quote & Pricing Requests", count: 38, pct: "85%" },
-                      { label: "Metal Materials (Titanium, Inconel, AlSi10Mg)", count: 31, pct: "70%" },
-                      { label: "DMLS Laser Tolerances & Accuracy", count: 24, pct: "55%" },
-                      { label: "Rapid Prototyping Turnaround", count: 19, pct: "42%" },
-                      { label: "Training & University Workshops", count: 14, pct: "30%" },
-                    ].map((item, idx) => (
-                      <div key={idx} className="space-y-1">
-                        <div className="flex justify-between text-zinc-300 font-medium">
-                          <span>{item.label}</span>
-                          <span className="font-mono text-zinc-400">{item.count} queries</span>
-                        </div>
-                        <div className="h-2 w-full bg-zinc-900 rounded-full overflow-hidden border border-zinc-800">
-                          <div
-                            className="h-full bg-[#D32F2F] rounded-full"
-                            style={{ width: item.pct }}
-                          ></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-4">
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                    <Database className="w-4 h-4 text-emerald-400" />
-                    Knowledge Base & Vector Store Health
-                  </h3>
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-                      <span className="text-zinc-500 block text-[10px] uppercase">Indexed Chunks</span>
-                      <span className="text-xl font-bold text-white">{knowledgeChunks.length || 45}</span>
-                    </div>
-                    <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-                      <span className="text-zinc-500 block text-[10px] uppercase">Website Pages</span>
-                      <span className="text-xl font-bold text-white">{crawledPages.length || 14}</span>
-                    </div>
-                    <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-                      <span className="text-zinc-500 block text-[10px] uppercase">Ingested Files</span>
-                      <span className="text-xl font-bold text-white">{documents.length || 0}</span>
-                    </div>
-                    <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-                      <span className="text-zinc-500 block text-[10px] uppercase">Vector Dimensions</span>
-                      <span className="text-xl font-bold text-emerald-400">1536 (OpenAI)</span>
-                    </div>
-                  </div>
-                  <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 flex items-center justify-between">
-                    <span>Autonomous Crawl Schedule:</span>
-                    <span className="font-mono text-emerald-400 font-bold uppercase">Daily at 00:00 IST</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 2: WEBSITE CRAWLER & INDEXER */}
-          {activeTab === "crawler" && (
-            <div className="space-y-6 animate-fadeIn">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-6">
-                <div>
-                  <h2 className="text-2xl font-bold text-white tracking-tight">
-                    Website Crawler & Vector Indexer
-                  </h2>
-                  <p className="text-xs text-zinc-400 mt-1">
-                    Continuously scans <code className="text-zinc-300">https://www.galactic-3d.com</code>, removes duplicates, chunks content, and vectorizes into MongoDB Atlas.
-                  </p>
-                </div>
-
+              <div className="flex items-center gap-2.5 shrink-0">
                 <button
-                  onClick={triggerReindex}
-                  disabled={isCrawling}
-                  className="px-5 py-2.5 rounded-xl bg-[#D32F2F] hover:bg-[#B71C1C] disabled:bg-zinc-800 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 flex-shrink-0"
-                >
-                  <RefreshCw className={`w-4 h-4 ${isCrawling ? "animate-spin" : ""}`} />
-                  <span>{isCrawling ? "Crawling & Vectorizing..." : "Reindex Website Now"}</span>
-                </button>
-              </div>
-
-              {crawlMsg && (
-                <div className="p-3.5 rounded-xl bg-zinc-900 border border-red-500/40 text-xs text-zinc-200 flex items-center gap-2">
-                  <RefreshCw className="w-4 h-4 text-[#D32F2F] animate-spin" />
-                  <span>{crawlMsg}</span>
-                </div>
-              )}
-
-              {/* CRAWL STATUS SUMMARY */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] uppercase block">Last Crawl Timestamp</span>
-                  <span className="text-sm font-mono font-bold text-white mt-1 block">
-                    {crawlerStatus?.lastCrawl ? new Date(crawlerStatus.lastCrawl).toLocaleString() : "Just now"}
-                  </span>
-                </div>
-                <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] uppercase block">Crawl Status</span>
-                  <span className="text-sm font-bold text-emerald-400 mt-1 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4" /> Ready & Up to Date
-                  </span>
-                </div>
-                <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] uppercase block">Reindex Frequency</span>
-                  <span className="text-sm font-mono font-bold text-white mt-1 block">
-                    Daily Automatic Crawl
-                  </span>
-                </div>
-              </div>
-
-              {/* PAGES INVENTORY */}
-              <div className="space-y-3">
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                  Indexed Website Pages ({crawledPages.length})
-                </h3>
-                <div className="rounded-2xl border border-zinc-800 bg-zinc-950 overflow-hidden">
-                  <table className="w-full text-left text-xs text-zinc-300">
-                    <thead className="bg-zinc-900/80 border-b border-zinc-800 text-[10px] uppercase text-zinc-400">
-                      <tr>
-                        <th className="p-3.5">Page Title & URL</th>
-                        <th className="p-3.5">Category</th>
-                        <th className="p-3.5">Vector Chunks</th>
-                        <th className="p-3.5">HTTP Status</th>
-                        <th className="p-3.5">Last Crawled</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-zinc-900">
-                      {crawledPages.map((page, idx) => (
-                        <tr key={idx} className="hover:bg-zinc-900/40 transition">
-                          <td className="p-3.5">
-                            <div className="font-semibold text-white">{page.title}</div>
-                            <div className="text-[11px] text-zinc-500 font-mono">{page.url}</div>
-                          </td>
-                          <td className="p-3.5">
-                            <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-300">
-                              {page.category || "General"}
-                            </span>
-                          </td>
-                          <td className="p-3.5 font-mono text-zinc-300">{page.chunkCount || 1} chunks</td>
-                          <td className="p-3.5">
-                            <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] font-bold">
-                              {page.httpStatus || 200} OK
-                            </span>
-                          </td>
-                          <td className="p-3.5 text-zinc-400 text-[11px]">
-                            {page.lastCrawled ? new Date(page.lastCrawled).toLocaleDateString() : "Active"}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 3: KNOWLEDGE BASE MANAGER */}
-          {activeTab === "knowledge" && (
-            <div className="space-y-6 animate-fadeIn">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-6">
-                <div>
-                  <h2 className="text-2xl font-bold text-white tracking-tight">
-                    Knowledge Base & Vector Store
-                  </h2>
-                  <p className="text-xs text-zinc-400 mt-1">
-                    Manage fine-grained knowledge chunks and custom manufacturing instructions.
-                  </p>
-                </div>
-
-                <button
-                  onClick={() => setIsAddChunkOpen(true)}
-                  className="px-4 py-2.5 rounded-xl bg-[#D32F2F] hover:bg-[#B71C1C] text-white font-bold text-xs uppercase tracking-wider transition shadow flex items-center gap-2 flex-shrink-0"
+                  onClick={() => setIsCustomArticleModalOpen(true)}
+                  className="px-4 py-2.5 rounded-xl bg-[#D32F2F] hover:bg-[#B71C1C] text-white text-xs font-bold transition flex items-center gap-2 shadow-sm"
                 >
                   <Plus className="w-4 h-4" />
-                  <span>Add Knowledge Chunk</span>
+                  <span>Create Custom Article</span>
+                </button>
+                <button
+                  onClick={fetchAdminArticles}
+                  className="p-2.5 rounded-xl bg-white hover:bg-gray-100 text-gray-700 transition text-xs font-bold flex items-center gap-2 border border-gray-200 shadow-2xs"
+                  title="Refresh articles"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Refresh</span>
+                </button>
+              </div>
+            </div>
+
+            {/* LINKEDIN AUTO IMPORT CARD */}
+            <div className="p-6 bg-white border border-gray-200 rounded-2xl space-y-4 shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-[#0A66C2] text-white flex items-center justify-center font-black text-xl tracking-tighter shrink-0 shadow-xs">
+                    in
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-extrabold text-[#111111] flex items-center gap-2">
+                      <span>Import from LinkedIn</span>
+                      <span className="text-[10px] bg-red-50 text-[#D32F2F] px-2 py-0.5 rounded-md border border-red-200 font-mono font-bold">
+                        Auto Extractor
+                      </span>
+                    </h3>
+                    <p className="text-xs text-gray-600 font-medium">
+                      Paste any LinkedIn article link to automatically extract title, cover image, author, reading time, and body paragraphs.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsCustomArticleModalOpen(true)}
+                  className="text-xs text-gray-700 hover:text-black font-bold flex items-center gap-1.5 px-3.5 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl transition border border-gray-200 shrink-0 self-start sm:self-auto"
+                >
+                  <Plus className="w-3.5 h-3.5 text-[#D32F2F]" />
+                  <span>Compose Manually</span>
                 </button>
               </div>
 
-              {/* SEARCH & FILTERS */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="flex-1 relative">
-                  <Search className="w-4 h-4 absolute left-3.5 top-3 text-zinc-500" />
-                  <input
-                    type="text"
-                    value={knowledgeSearch}
-                    onChange={(e) => setKnowledgeSearch(e.target.value)}
-                    placeholder="Search knowledge by keyword (titanium, quote, DMLS, tolerances)..."
-                    className="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#D32F2F]"
-                  />
-                </div>
-
+              <form onSubmit={handleAdminImportArticle} className="flex flex-col md:flex-row gap-3">
+                <input
+                  type="url"
+                  value={adminLinkedinUrl}
+                  onChange={(e) => setAdminLinkedinUrl(e.target.value)}
+                  placeholder="Paste LinkedIn article link (e.g. https://www.linkedin.com/pulse/future-aerospace-...)"
+                  className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-[#D32F2F] focus:ring-1 focus:ring-[#D32F2F] font-mono"
+                  disabled={adminArticleLoading}
+                />
                 <select
-                  value={knowledgeCategory}
-                  onChange={(e) => setKnowledgeCategory(e.target.value)}
-                  className="bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-300 focus:outline-none focus:border-[#D32F2F]"
+                  value={adminLinkedinCategory}
+                  onChange={(e) => setAdminLinkedinCategory(e.target.value)}
+                  className="px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-xs font-semibold text-gray-800 focus:outline-none focus:bg-white focus:border-[#D32F2F] focus:ring-1 focus:ring-[#D32F2F] shrink-0 cursor-pointer"
+                  title="Choose category or let auto-detect categorize it"
                 >
-                  <option value="All">All Categories</option>
-                  <option value="Company Overview">Company Overview</option>
-                  <option value="Services">Services</option>
-                  <option value="Materials">Materials</option>
-                  <option value="Equipment">Equipment</option>
-                  <option value="Industries">Industries</option>
-                  <option value="Training">Training</option>
-                  <option value="FAQ">FAQ</option>
-                  <option value="Custom Knowledge">Custom Knowledge</option>
-                  <option value="Uploaded Document">Uploaded Document</option>
-                </select>
-              </div>
-
-              {/* CHUNKS LIST */}
-              <div className="space-y-3">
-                <div className="text-xs text-zinc-400 font-medium">
-                  Showing {filteredChunks.length} of {knowledgeChunks.length} chunks
-                </div>
-
-                <div className="space-y-3">
-                  {filteredChunks.map((chunk, idx) => (
-                    <div
-                      key={idx}
-                      className="p-4 rounded-xl bg-zinc-950 border border-zinc-800/90 hover:border-zinc-700 transition space-y-2.5"
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-sm text-white">{chunk.sourceTitle}</span>
-                            <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-300 font-mono">
-                              {chunk.category || "General"}
-                            </span>
-                            {chunk.isCustom && (
-                              <span className="px-1.5 py-0.5 rounded bg-red-950 text-red-400 border border-red-800 text-[9px] font-bold">
-                                Custom
-                              </span>
-                            )}
-                          </div>
-                          <a
-                            href={chunk.sourceUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[11px] text-zinc-500 hover:text-zinc-300 font-mono flex items-center gap-1 mt-0.5"
-                          >
-                            {chunk.sourceUrl}
-                            <ExternalLink className="w-2.5 h-2.5" />
-                          </a>
-                        </div>
-
-                        <button
-                          onClick={() => handleDeleteChunk(chunk._id, chunk.chunkId)}
-                          className="p-1.5 rounded-lg bg-zinc-900 hover:bg-red-950 text-zinc-400 hover:text-red-400 transition"
-                          title="Delete chunk"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-
-                      <div className="p-3 rounded-lg bg-zinc-900/50 border border-zinc-900 text-xs text-zinc-300 leading-relaxed font-sans">
-                        {chunk.content}
-                      </div>
-                    </div>
+                  <option value="auto">⚡ Auto-Detect Category</option>
+                  {ARTICLE_CATEGORIES.filter(c => c !== "All Posts").map(c => (
+                    <option key={c} value={c}>{c}</option>
                   ))}
-                </div>
-              </div>
+                </select>
+                <button
+                  type="submit"
+                  disabled={adminArticleLoading || !adminLinkedinUrl.trim()}
+                  className="px-5 py-2.5 bg-[#D32F2F] hover:bg-[#B71C1C] disabled:opacity-50 text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 shrink-0 shadow-sm"
+                >
+                  {adminArticleLoading ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      <span>Extracting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Fetch & Add Article</span>
+                    </>
+                  )}
+                </button>
+              </form>
 
-              {/* ADD CHUNK MODAL */}
-              {isAddChunkOpen && (
-                <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-                  <div className="w-full max-w-xl bg-zinc-950 border border-zinc-800 rounded-2xl p-6 shadow-2xl space-y-4">
-                    <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-                      <h3 className="font-bold text-sm text-white">Add Custom Knowledge Chunk</h3>
-                      <button
-                        onClick={() => setIsAddChunkOpen(false)}
-                        className="text-zinc-400 hover:text-white"
-                      >
-                        ✕
-                      </button>
+              {adminArticleMsg && (
+                <div className={`p-3.5 rounded-xl text-xs font-semibold ${
+                  adminArticleMsg.startsWith("✓")
+                    ? "bg-emerald-50 border border-emerald-200 text-emerald-800"
+                    : "bg-blue-50 border border-blue-200 text-blue-800"
+                }`}>
+                  {adminArticleMsg}
+                </div>
+              )}
+            </div>
+
+            {/* CUSTOM ARTICLE MODAL WITH IMAGE UPLOADER */}
+            {isCustomArticleModalOpen && (
+              <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+                <div className="w-full max-w-2xl bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto space-y-5 text-gray-900">
+                  <div className="flex items-center justify-between border-b border-gray-200 pb-4">
+                    <div>
+                      <h3 className="font-extrabold text-lg text-[#111111]">Create Custom Article</h3>
+                      <p className="text-xs text-gray-500 font-medium">Compose an engineering publication with custom title, content & cover image</p>
+                    </div>
+                    <button
+                      onClick={() => setIsCustomArticleModalOpen(false)}
+                      className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-black flex items-center justify-center transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <form onSubmit={handleAdminSaveCustomArticle} className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-800 mb-1">Article Title *</label>
+                      <input
+                        type="text"
+                        required
+                        value={customArticleForm.title}
+                        onChange={(e) => setCustomArticleForm({ ...customArticleForm, title: e.target.value })}
+                        placeholder="e.g. Breakthrough in Metal AM Cooling Systems"
+                        className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-[#D32F2F] focus:ring-1 focus:ring-[#D32F2F]"
+                      />
                     </div>
 
-                    <form onSubmit={handleAddChunk} className="space-y-3 text-xs">
+                    <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="text-zinc-300 block mb-1 font-semibold">Title / Topic *</label>
+                        <label className="block text-xs font-bold text-gray-800 mb-1">Category</label>
+                        <select
+                          value={customArticleForm.category}
+                          onChange={(e) => handleAdminCategoryChange(e.target.value)}
+                          className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-xl text-xs text-gray-900 focus:outline-none focus:bg-white focus:border-[#D32F2F]"
+                        >
+                          {ARTICLE_CATEGORIES.filter(c => c !== "All Posts").map(c => (
+                            <option key={c} value={c}>{c}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-gray-800 mb-1">Author</label>
                         <input
                           type="text"
-                          required
-                          value={newChunk.sourceTitle}
-                          onChange={(e) => setNewChunk({ ...newChunk, sourceTitle: e.target.value })}
-                          placeholder="e.g. Copper 3D Printing Induction Coils"
-                          className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-white placeholder-zinc-500 focus:outline-none focus:border-[#D32F2F]"
+                          value={customArticleForm.author}
+                          onChange={(e) => setCustomArticleForm({ ...customArticleForm, author: e.target.value })}
+                          placeholder="Galactic 3D Team"
+                          className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-xl text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-[#D32F2F]"
                         />
                       </div>
+                    </div>
 
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="text-zinc-300 block mb-1 font-semibold">Category</label>
-                          <select
-                            value={newChunk.category}
-                            onChange={(e) => setNewChunk({ ...newChunk, category: e.target.value })}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#D32F2F]"
+                    {/* COVER IMAGE SECTION */}
+                    <div className="space-y-3 p-4 bg-gray-50 rounded-2xl border border-gray-200">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <label className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                          <ImageIcon className="w-3.5 h-3.5 text-[#D32F2F]" />
+                          <span>Article Cover Image</span>
+                        </label>
+
+                        <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg text-[11px] font-bold border border-gray-200 shadow-2xs">
+                          <button
+                            type="button"
+                            onClick={() => setAdminImageTab("upload")}
+                            className={`px-2.5 py-1 rounded-md transition ${
+                              adminImageTab === "upload" ? "bg-[#D32F2F] text-white shadow-2xs" : "text-gray-600 hover:text-black"
+                            }`}
                           >
-                            <option value="Services">Services</option>
-                            <option value="Materials">Materials</option>
-                            <option value="Equipment">Equipment</option>
-                            <option value="Industries">Industries</option>
-                            <option value="Training">Training</option>
-                            <option value="FAQ">FAQ</option>
-                            <option value="Custom Knowledge">Custom Knowledge</option>
-                          </select>
+                            Upload File
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setAdminImageTab("url")}
+                            className={`px-2.5 py-1 rounded-md transition ${
+                              adminImageTab === "url" ? "bg-[#D32F2F] text-white shadow-2xs" : "text-gray-600 hover:text-black"
+                            }`}
+                          >
+                            Image URL
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setAdminImageTab("presets")}
+                            className={`px-2.5 py-1 rounded-md transition ${
+                              adminImageTab === "presets" ? "bg-[#D32F2F] text-white shadow-2xs" : "text-gray-600 hover:text-black"
+                            }`}
+                          >
+                            Presets
+                          </button>
                         </div>
+                      </div>
+
+                      {/* TAB 1: UPLOAD FILE */}
+                      {adminImageTab === "upload" && (
                         <div>
-                          <label className="text-zinc-300 block mb-1 font-semibold">Source Link</label>
                           <input
-                            type="text"
-                            value={newChunk.sourceUrl}
-                            onChange={(e) => setNewChunk({ ...newChunk, sourceUrl: e.target.value })}
-                            placeholder="https://www.galactic-3d.com/..."
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-white placeholder-zinc-500 focus:outline-none focus:border-[#D32F2F]"
+                            ref={adminFileInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => e.target.files?.[0] && handleAdminImageUpload(e.target.files[0])}
+                            className="hidden"
                           />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="text-zinc-300 block mb-1 font-semibold">Knowledge Content *</label>
-                        <textarea
-                          rows={6}
-                          required
-                          value={newChunk.content}
-                          onChange={(e) => setNewChunk({ ...newChunk, content: e.target.value })}
-                          placeholder="Enter complete technical parameters, alloy descriptions, process specs, or quote guidelines..."
-                          className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-white placeholder-zinc-500 focus:outline-none focus:border-[#D32F2F]"
-                        />
-                      </div>
-
-                      <div className="flex justify-end gap-2 pt-2">
-                        <button
-                          type="button"
-                          onClick={() => setIsAddChunkOpen(false)}
-                          className="px-4 py-2 rounded-xl bg-zinc-900 text-zinc-300 text-xs font-semibold"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          type="submit"
-                          disabled={loading}
-                          className="px-5 py-2 rounded-xl bg-[#D32F2F] text-white text-xs font-bold uppercase tracking-wider"
-                        >
-                          {loading ? "Vectorizing..." : "Save & Vectorize"}
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* TAB 4: FILE INGESTION (PDF/DOCX) */}
-          {activeTab === "documents" && (
-            <div className="space-y-6 animate-fadeIn">
-              <div className="border-b border-zinc-800 pb-6">
-                <h2 className="text-2xl font-bold text-white tracking-tight">
-                  Document Ingestion Engine
-                </h2>
-                <p className="text-xs text-zinc-400 mt-1">
-                  Upload internal technical datasheets, CAD manuals, whitepapers (PDF, DOCX, PPTX, TXT) for instant vector search.
-                </p>
-              </div>
-
-              {/* UPLOADER CARD */}
-              <div className="p-6 rounded-2xl bg-zinc-950 border-2 border-dashed border-zinc-800 hover:border-red-500/50 transition">
-                <form onSubmit={handleFileUpload} className="space-y-4 text-center">
-                  <div className="flex flex-col items-center justify-center space-y-2">
-                    <div className="h-12 w-12 rounded-full bg-red-600/10 border border-red-500/30 flex items-center justify-center text-[#D32F2F]">
-                      <Upload className="w-6 h-6" />
-                    </div>
-                    <div className="text-sm font-bold text-white">
-                      Drag & Drop or Select File
-                    </div>
-                    <p className="text-xs text-zinc-500">
-                      Supports PDF, DOCX, PPTX, TXT up to 25MB
-                    </p>
-                  </div>
-
-                  <div className="max-w-xs mx-auto">
-                    <input
-                      type="file"
-                      accept=".pdf,.docx,.pptx,.txt"
-                      onChange={(e) => setUploadFile(e.target.files[0])}
-                      className="block w-full text-xs text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-zinc-900 file:text-zinc-200 hover:file:bg-zinc-800 cursor-pointer"
-                    />
-                  </div>
-
-                  {uploadFile && (
-                    <div className="pt-2">
-                      <button
-                        type="submit"
-                        disabled={uploading}
-                        className="px-6 py-2.5 rounded-xl bg-[#D32F2F] hover:bg-[#B71C1C] text-white font-bold text-xs uppercase tracking-wider transition shadow-lg inline-flex items-center gap-2"
-                      >
-                        <Upload className="w-4 h-4" />
-                        <span>{uploading ? "Ingesting..." : `Vectorize "${uploadFile.name}"`}</span>
-                      </button>
-                    </div>
-                  )}
-
-                  {uploadMsg && (
-                    <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-300">
-                      {uploadMsg}
-                    </div>
-                  )}
-                </form>
-              </div>
-
-              {/* INGESTED DOCUMENTS TABLE */}
-              <div className="space-y-3">
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                  Ingested Technical Documents ({documents.length})
-                </h3>
-
-                {documents.length === 0 ? (
-                  <div className="p-8 rounded-2xl bg-zinc-950 border border-zinc-800 text-center text-xs text-zinc-500">
-                    No custom documents uploaded yet. Upload a datasheet above to make it searchable in chat!
-                  </div>
-                ) : (
-                  <div className="rounded-2xl border border-zinc-800 bg-zinc-950 overflow-hidden">
-                    <table className="w-full text-left text-xs text-zinc-300">
-                      <thead className="bg-zinc-900/80 border-b border-zinc-800 text-[10px] uppercase text-zinc-400">
-                        <tr>
-                          <th className="p-3.5">Document Name</th>
-                          <th className="p-3.5">Size</th>
-                          <th className="p-3.5">Chunks Generated</th>
-                          <th className="p-3.5">Status</th>
-                          <th className="p-3.5">Uploaded Date</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-zinc-900">
-                        {documents.map((doc, i) => (
-                          <tr key={i} className="hover:bg-zinc-900/40 transition">
-                            <td className="p-3.5 font-bold text-white flex items-center gap-2">
-                              <FileText className="w-4 h-4 text-[#D32F2F]" />
-                              <span>{doc.fileName}</span>
-                            </td>
-                            <td className="p-3.5 font-mono text-zinc-400">
-                              {Math.round((doc.fileSize || 1024) / 1024)} KB
-                            </td>
-                            <td className="p-3.5 font-mono text-emerald-400 font-bold">
-                              {doc.chunkCount} vector chunks
-                            </td>
-                            <td className="p-3.5">
-                              <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] font-bold">
-                                Searchable
-                              </span>
-                            </td>
-                            <td className="p-3.5 text-zinc-400 text-[11px]">
-                              {doc.uploadedAt ? new Date(doc.uploadedAt).toLocaleDateString() : "Recent"}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* TAB 5: LEADS & INQUIRIES */}
-          {activeTab === "leads" && (
-            <div className="space-y-6 animate-fadeIn">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-6">
-                <div>
-                  <h2 className="text-2xl font-bold text-white tracking-tight">
-                    Smart Lead Generation & CRM Pipeline
-                  </h2>
-                  <p className="text-xs text-zinc-400 mt-1">
-                    Direct manufacturing leads and CAD quote requests captured automatically from the AI Assistant.
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={exportLeadsCSV}
-                    className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-200 text-xs font-bold transition flex items-center gap-2"
-                  >
-                    <Download className="w-3.5 h-3.5 text-[#D32F2F]" />
-                    <span>Export CSV</span>
-                  </button>
-                  <button
-                    onClick={fetchLeads}
-                    className="p-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 transition"
-                    title="Refresh Leads"
-                  >
-                    <RefreshCw className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* FILTER BAR */}
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-zinc-400 font-semibold">Status:</span>
-                {["All", "New", "Contacted", "Qualified", "Closed"].map((st) => (
-                  <button
-                    key={st}
-                    onClick={() => setLeadStatusFilter(st)}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
-                      leadStatusFilter === st
-                        ? "bg-[#D32F2F] text-white"
-                        : "bg-zinc-950 border border-zinc-800 text-zinc-400 hover:text-white"
-                    }`}
-                  >
-                    {st}
-                  </button>
-                ))}
-              </div>
-
-              {/* LEADS TABLE */}
-              {filteredLeads.length === 0 ? (
-                <div className="p-12 rounded-2xl bg-zinc-950 border border-zinc-800 text-center space-y-2">
-                  <Users className="w-8 h-8 text-zinc-600 mx-auto" />
-                  <div className="text-sm font-bold text-white">No Leads Captured Yet</div>
-                  <p className="text-xs text-zinc-500 max-w-sm mx-auto">
-                    When visitors inquire about quotes, materials, or prototyping in chat, the AI Assistant will capture and list their details here.
-                  </p>
-                </div>
-              ) : (
-                <div className="rounded-2xl border border-zinc-800 bg-zinc-950 overflow-hidden">
-                  <table className="w-full text-left text-xs text-zinc-300">
-                    <thead className="bg-zinc-900/80 border-b border-zinc-800 text-[10px] uppercase text-zinc-400">
-                      <tr>
-                        <th className="p-3.5">Lead Name & Org</th>
-                        <th className="p-3.5">Contact Details</th>
-                        <th className="p-3.5">Requirement Preview</th>
-                        <th className="p-3.5">Status</th>
-                        <th className="p-3.5">Date</th>
-                        <th className="p-3.5">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-zinc-900">
-                      {filteredLeads.map((lead, i) => (
-                        <tr key={i} className="hover:bg-zinc-900/40 transition">
-                          <td className="p-3.5">
-                            <div className="font-bold text-white">{lead.name}</div>
-                            <div className="text-[11px] text-zinc-400 flex items-center gap-1">
-                              <Building2 className="w-3 h-3 text-zinc-500" />
-                              {lead.company || "Individual"}
-                            </div>
-                          </td>
-                          <td className="p-3.5 space-y-0.5">
-                            <div className="text-zinc-200 font-mono text-[11px] flex items-center gap-1">
-                              <Mail className="w-3 h-3 text-[#D32F2F]" />
-                              <a href={`mailto:${lead.email}`} className="hover:underline">
-                                {lead.email}
-                              </a>
-                            </div>
-                            {lead.phone && (
-                              <div className="text-zinc-400 font-mono text-[10px] flex items-center gap-1">
-                                <Phone className="w-3 h-3 text-emerald-500" />
-                                {lead.phone}
+                          <div
+                            onClick={() => adminFileInputRef.current?.click()}
+                            onDragOver={(e) => { e.preventDefault(); setAdminIsDragging(true); }}
+                            onDragLeave={() => setAdminIsDragging(false)}
+                            onDrop={(e) => {
+                              e.preventDefault();
+                              setAdminIsDragging(false);
+                              if (e.dataTransfer.files?.[0]) handleAdminImageUpload(e.dataTransfer.files[0]);
+                            }}
+                            className={`border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition ${
+                              adminIsDragging ? "border-[#D32F2F] bg-red-50" : "border-gray-300 hover:border-[#D32F2F] bg-white"
+                            }`}
+                          >
+                            {adminUploadingImage ? (
+                              <div className="flex items-center justify-center gap-2 py-3 text-xs font-bold text-[#D32F2F]">
+                                <RefreshCw className="w-4 h-4 animate-spin" />
+                                <span>Uploading image...</span>
+                              </div>
+                            ) : (
+                              <div className="space-y-1">
+                                <Upload className="w-6 h-6 mx-auto text-gray-400" />
+                                <p className="text-xs font-bold text-gray-700">Click or drag & drop image here</p>
+                                <p className="text-[10px] text-gray-400">PNG, JPG, WebP up to 10MB</p>
                               </div>
                             )}
-                          </td>
-                          <td className="p-3.5 max-w-xs truncate text-zinc-300">
-                            {lead.requirement || "General Inquiry"}
-                          </td>
-                          <td className="p-3.5">
-                            <select
-                              value={lead.status || "New"}
-                              onChange={(e) => handleLeadStatusChange(lead._id, e.target.value)}
-                              className={`text-[11px] font-bold px-2 py-1 rounded-lg border focus:outline-none cursor-pointer ${
-                                lead.status === "Qualified"
-                                  ? "bg-emerald-950 text-emerald-400 border-emerald-800"
-                                  : lead.status === "Contacted"
-                                  ? "bg-blue-950 text-blue-400 border-blue-800"
-                                  : lead.status === "Closed"
-                                  ? "bg-zinc-900 text-zinc-400 border-zinc-700"
-                                  : "bg-red-950 text-red-400 border-red-800"
+                          </div>
+                          {adminImageError && (
+                            <p className="text-[11px] text-[#D32F2F] font-bold mt-1.5 flex items-center gap-1">
+                              <AlertCircle className="w-3.5 h-3.5" /> {adminImageError}
+                            </p>
+                          )}
+                        </div>
+                      )}
+
+                      {/* TAB 2: IMAGE URL */}
+                      {adminImageTab === "url" && (
+                        <div>
+                          <input
+                            type="url"
+                            value={customArticleForm.image}
+                            onChange={(e) => setCustomArticleForm({ ...customArticleForm, image: e.target.value })}
+                            placeholder="https://images.example.com/banner.jpg or /articles/..."
+                            className="w-full px-3 py-2 bg-white border border-gray-300 rounded-xl text-xs text-gray-900 focus:outline-none focus:border-[#D32F2F] focus:ring-1 focus:ring-[#D32F2F]"
+                          />
+                        </div>
+                      )}
+
+                      {/* TAB 3: GALLERY PRESETS */}
+                      {adminImageTab === "presets" && (
+                        <div className="grid grid-cols-3 gap-2 max-h-36 overflow-y-auto p-1 bg-white rounded-xl border border-gray-200">
+                          {ADMIN_PRESET_IMAGES.map((preset) => (
+                            <button
+                              key={preset.url}
+                              type="button"
+                              onClick={() => setCustomArticleForm({ ...customArticleForm, image: preset.url })}
+                              className={`group relative aspect-[16/9] rounded-lg overflow-hidden border-2 text-left transition ${
+                                customArticleForm.image === preset.url ? "border-[#D32F2F] ring-1 ring-[#D32F2F]" : "border-gray-200 hover:border-gray-400"
                               }`}
                             >
-                              <option value="New">New</option>
-                              <option value="Contacted">Contacted</option>
-                              <option value="Qualified">Qualified</option>
-                              <option value="Closed">Closed</option>
-                            </select>
-                          </td>
-                          <td className="p-3.5 text-zinc-400 text-[11px]">
-                            {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : "Today"}
-                          </td>
-                          <td className="p-3.5">
-                            <button
-                              onClick={() => setSelectedLead(lead)}
-                              className="p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 transition"
-                              title="View full requirement details"
-                            >
-                              <Eye className="w-3.5 h-3.5" />
+                              <img src={preset.url} alt={preset.name} className="w-full h-full object-cover" />
+                              <div className="absolute inset-x-0 bottom-0 bg-black/70 text-white text-[9px] font-bold px-1.5 py-0.5 truncate">
+                                {preset.name}
+                              </div>
+                              {customArticleForm.image === preset.url && (
+                                <div className="absolute top-1 right-1 w-4 h-4 bg-[#D32F2F] text-white rounded-full flex items-center justify-center">
+                                  <CheckCircle2 className="w-2.5 h-2.5" />
+                                </div>
+                              )}
                             </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+                          ))}
+                        </div>
+                      )}
 
-              {/* LEAD DETAIL MODAL */}
-              {selectedLead && (
-                <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-                  <div className="w-full max-w-lg bg-zinc-950 border border-zinc-800 rounded-2xl p-6 shadow-2xl space-y-4">
-                    <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-                      <h3 className="font-bold text-sm text-white">Lead Requirement Specification</h3>
+                      {/* CURRENT IMAGE PREVIEW */}
+                      {customArticleForm.image && (
+                        <div className="pt-2 border-t border-gray-200 flex items-center gap-3">
+                          <div className="relative w-24 aspect-[16/9] rounded-lg overflow-hidden bg-gray-100 border border-gray-200 shrink-0">
+                            <img
+                              src={customArticleForm.image}
+                              alt="Preview"
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = "/articles/aerospace-future.png";
+                              }}
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 inline-flex items-center gap-1 font-mono">
+                              <CheckCircle2 className="w-2.5 h-2.5" /> Active Cover Image
+                            </span>
+                            <p className="text-[11px] font-mono text-gray-500 truncate mt-0.5">{customArticleForm.image}</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setCustomArticleForm({ ...customArticleForm, image: "" })}
+                            className="text-[11px] font-bold text-[#D32F2F] hover:text-red-700 px-2 py-1 rounded"
+                          >
+                            Clear
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-gray-800 mb-1">LinkedIn Reference URL (Optional)</label>
+                      <input
+                        type="url"
+                        value={customArticleForm.linkedinUrl}
+                        onChange={(e) => setCustomArticleForm({ ...customArticleForm, linkedinUrl: e.target.value })}
+                        placeholder="https://www.linkedin.com/pulse/..."
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-xl text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-[#D32F2F]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-gray-800 mb-1">Excerpt / Brief Summary</label>
+                      <textarea
+                        rows={2}
+                        value={customArticleForm.excerpt}
+                        onChange={(e) => setCustomArticleForm({ ...customArticleForm, excerpt: e.target.value })}
+                        placeholder="Short summary displayed on the card..."
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-xl text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-[#D32F2F]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-gray-800 mb-1">Full Article Paragraphs (Separate with double line breaks)</label>
+                      <textarea
+                        rows={4}
+                        value={customArticleForm.paragraphs}
+                        onChange={(e) => setCustomArticleForm({ ...customArticleForm, paragraphs: e.target.value })}
+                        placeholder="Paragraph 1...&#10;&#10;Paragraph 2..."
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-xl text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-[#D32F2F]"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-end gap-3 pt-3 border-t border-gray-200">
                       <button
-                        onClick={() => setSelectedLead(null)}
-                        className="text-zinc-400 hover:text-white"
+                        type="button"
+                        onClick={() => setIsCustomArticleModalOpen(false)}
+                        className="px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:text-black hover:bg-gray-100 transition"
                       >
-                        ✕
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={adminArticleLoading}
+                        className="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#D32F2F] hover:bg-[#B71C1C] text-white shadow-sm flex items-center gap-2"
+                      >
+                        {adminArticleLoading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
+                        <span>Save & Publish Article</span>
                       </button>
                     </div>
-
-                    <div className="space-y-3 text-xs">
-                      <div>
-                        <span className="text-zinc-500 block text-[10px] uppercase font-semibold">Lead Information</span>
-                        <div className="text-base font-bold text-white mt-0.5">{selectedLead.name}</div>
-                        <div className="text-zinc-400">{selectedLead.company || "Individual / Not specified"}</div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2 p-3 bg-zinc-900/60 rounded-xl border border-zinc-800 font-mono">
-                        <div>
-                          <span className="text-zinc-500 text-[10px] block">Email</span>
-                          <a href={`mailto:${selectedLead.email}`} className="text-white hover:underline">
-                            {selectedLead.email}
-                          </a>
-                        </div>
-                        <div>
-                          <span className="text-zinc-500 text-[10px] block">Phone</span>
-                          <span className="text-white">{selectedLead.phone || "N/A"}</span>
-                        </div>
-                      </div>
-
-                      <div>
-                        <span className="text-zinc-500 block text-[10px] uppercase font-semibold mb-1">
-                          Part Requirement / CAD Scope
-                        </span>
-                        <div className="p-3 bg-zinc-900 rounded-xl border border-zinc-800 text-zinc-200 leading-relaxed whitespace-pre-wrap">
-                          {selectedLead.requirement}
-                        </div>
-                      </div>
-
-                      <div className="flex justify-between items-center pt-2 text-[11px] text-zinc-500">
-                        <span>Source: {selectedLead.source}</span>
-                        <span>{selectedLead.createdAt ? new Date(selectedLead.createdAt).toLocaleString() : ""}</span>
-                      </div>
-                    </div>
-                  </div>
+                  </form>
                 </div>
-              )}
+              </div>
+            )}
+
+            {/* ARTICLES LIST TABLE */}
+            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+              <div className="p-4 sm:p-5 border-b border-gray-200 flex items-center justify-between bg-white">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700">
+                  Live Published Articles ({adminArticles.length})
+                </h4>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-gray-200 text-[10px] uppercase font-bold text-gray-500 bg-gray-50/80">
+                      <th className="p-3.5">Cover Banner</th>
+                      <th className="p-3.5">Title & Category</th>
+                      <th className="p-3.5">Author</th>
+                      <th className="p-3.5">Date</th>
+                      <th className="p-3.5 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 text-xs">
+                    {adminArticles.map((article) => (
+                      <tr key={article.id} className="hover:bg-gray-50/80 transition">
+                        <td className="p-3.5 w-24">
+                          <div className="w-20 h-12 rounded-lg overflow-hidden bg-gray-100 border border-gray-200 shadow-2xs">
+                            <img
+                              src={article.image}
+                              alt={article.title}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = "/articles/aerospace-future.png";
+                              }}
+                            />
+                          </div>
+                        </td>
+                        <td className="p-3.5 max-w-md">
+                          <div className="font-bold text-[#111111] line-clamp-1">{article.title}</div>
+                          <div className="flex items-center gap-2 mt-1.5">
+                            <select
+                              value={article.category}
+                              onChange={(e) => handleUpdateArticleCategory(article.id, e.target.value)}
+                              className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-red-50 hover:bg-red-100 text-[#D32F2F] border border-red-200 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#D32F2F] transition"
+                              title="Click to change category"
+                            >
+                              {ARTICLE_CATEGORIES.filter(c => c !== "All Posts").map(c => (
+                                <option key={c} value={c} className="text-gray-900 bg-white">
+                                  {c}
+                                </option>
+                              ))}
+                            </select>
+                            <span className="text-gray-500 text-[11px] font-mono">
+                              {article.readTime}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="p-3.5 text-gray-700 text-xs">
+                          <div className="font-semibold">{article.author}</div>
+                          <div className="text-[10px] text-gray-500">{article.authorRole}</div>
+                        </td>
+                        <td className="p-3.5 text-gray-600 text-xs font-mono">
+                          {article.date}
+                        </td>
+                        <td className="p-3.5 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            {article.linkedinUrl && (
+                              <a
+                                href={article.linkedinUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="p-2 rounded-lg bg-gray-100 hover:bg-blue-50 text-gray-600 hover:text-[#0A66C2] transition border border-gray-200"
+                                title="View original on LinkedIn"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </a>
+                            )}
+                            <button
+                              onClick={() => handleDeleteAdminArticle(article.id)}
+                              className="p-2 rounded-lg bg-gray-100 hover:bg-red-50 text-gray-500 hover:text-[#D32F2F] hover:border-red-200 transition border border-gray-200"
+                              title="Delete article"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          )}
+          </div>
         </main>
       </div>
     </div>
