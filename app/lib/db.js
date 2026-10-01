@@ -166,7 +166,11 @@ function getLocalDBWrapper() {
         const db = getLocalDB();
         if (!db[name]) db[name] = [];
         const newDoc = { _id: Date.now().toString() + Math.random().toString(36).substring(2, 7), ...doc };
-        db[name].push(newDoc);
+        if (name === 'articles') {
+          db[name].unshift(newDoc);
+        } else {
+          db[name].push(newDoc);
+        }
         saveLocalDB(db);
         return { insertedId: newDoc._id };
       },

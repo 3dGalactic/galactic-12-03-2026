@@ -8,30 +8,65 @@ import { connectToDatabase, getLocalDB, saveLocalDB } from '../../lib/db';
 const DATA_DIR = path.join(process.cwd(), '.data');
 const ARTICLES_FILE = path.join(DATA_DIR, 'articles.json');
 
+/**
+ * Sort articles so newly added articles appear AT THE TOP.
+ * 1. Articles with newest timestamps (Date.now() > 1000000000 or createdAt) come first.
+ * 2. Original / default articles follow below them.
+ */
+export function sortArticlesNewestFirst(articles) {
+  if (!Array.isArray(articles)) return [];
+  return [...articles].sort((a, b) => {
+    // 1. If explicit createdAt exists on both, compare ISO dates
+    const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    if (timeA && timeB && timeA !== timeB) {
+      return timeB - timeA;
+    }
+    if (timeA && !timeB) return -1;
+    if (!timeA && timeB) return 1;
+
+    // 2. Numeric IDs (Date.now() timestamp IDs > 1000000000 are newly added)
+    const numA = Number(a.id) || 0;
+    const numB = Number(b.id) || 0;
+    const isNewA = numA > 1000000000;
+    const isNewB = numB > 1000000000;
+
+    if (isNewA && isNewB) {
+      return numB - numA; // Newer timestamp first!
+    }
+    if (isNewA && !isNewB) return -1; // Newly added article goes to top!
+    if (!isNewA && isNewB) return 1;
+
+    // Default articles (IDs 1-14) sorted in defined order
+    return numA - numB;
+  });
+}
+
 function loadFallbackArticles() {
   try {
     if (fs.existsSync(ARTICLES_FILE)) {
       const raw = fs.readFileSync(ARTICLES_FILE, 'utf-8');
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
+        return sortArticlesNewestFirst(parsed);
       }
     }
   } catch (err) {
     // Read-only filesystem on Vercel
   }
-  return DEFAULT_ARTICLES;
+  return sortArticlesNewestFirst(DEFAULT_ARTICLES);
 }
 
 function syncLocalFile(articles) {
   try {
+    const sorted = sortArticlesNewestFirst(articles);
     if (!fs.existsSync(DATA_DIR)) {
       fs.mkdirSync(DATA_DIR, { recursive: true });
     }
-    fs.writeFileSync(ARTICLES_FILE, JSON.stringify(articles, null, 2), 'utf-8');
+    fs.writeFileSync(ARTICLES_FILE, JSON.stringify(sorted, null, 2), 'utf-8');
     try {
       const db = getLocalDB();
-      db.articles = articles;
+      db.articles = sorted;
       saveLocalDB(db);
     } catch (e) {}
   } catch (err) {
@@ -63,9 +98,11 @@ export async function GET() {
       }
     }
 
+    const sorted = sortArticlesNewestFirst(articles);
+
     return NextResponse.json({
       success: true,
-      articles: articles || [],
+      articles: sorted,
       isAtlas
     });
   } catch (error) {
@@ -85,6 +122,8 @@ export async function POST(req) {
     const targetUrl = linkedinUrl || url || customFields.link;
 
     let newArticle;
+    const now = Date.now();
+    const isoDate = new Date().toISOString();
 
     if (targetUrl) {
       const overrideCat = customFields.category && customFields.category !== 'auto' && customFields.category !== 'All Posts'
@@ -95,11 +134,13 @@ export async function POST(req) {
         ...scraped,
         ...customFields,
         ...(overrideCat ? { category: overrideCat } : {}),
-        id: customFields.id || Date.now()
+        id: customFields.id || now,
+        createdAt: customFields.createdAt || isoDate
       };
     } else if (customFields.title) {
       newArticle = {
-        id: customFields.id || Date.now(),
+        id: customFields.id || now,
+        createdAt: customFields.createdAt || isoDate,
         title: customFields.title,
         excerpt: customFields.excerpt || customFields.title,
         linkedinUrl: customFields.linkedinUrl || 'https://www.linkedin.com/company/galactic-3d/',
@@ -140,14 +181,15 @@ export async function POST(req) {
       await articlesColl.insertOne(newArticle);
     }
 
-    const updatedArticles = await articlesColl.find({}).toArray();
-    syncLocalFile(updatedArticles);
+    const allArticles = await articlesColl.find({}).toArray();
+    const sorted = sortArticlesNewestFirst(allArticles);
+    syncLocalFile(sorted);
 
     return NextResponse.json({
       success: true,
       message: existing ? 'Article updated with latest LinkedIn data' : 'Article added successfully!',
       article: newArticle,
-      articles: updatedArticles
+      articles: sorted
     });
   } catch (error) {
     console.error('POST /api/articles error:', error);
@@ -182,13 +224,14 @@ export async function DELETE(req) {
       ]
     });
 
-    const updatedArticles = await articlesColl.find({}).toArray();
-    syncLocalFile(updatedArticles);
+    const allArticles = await articlesColl.find({}).toArray();
+    const sorted = sortArticlesNewestFirst(allArticles);
+    syncLocalFile(sorted);
 
     return NextResponse.json({
       success: true,
       message: 'Article removed successfully',
-      articles: updatedArticles
+      articles: sorted
     });
   } catch (error) {
     console.error('DELETE /api/articles error:', error);
@@ -229,13 +272,14 @@ export async function PATCH(req) {
       { $set: updateFields }
     );
 
-    const updatedArticles = await articlesColl.find({}).toArray();
-    syncLocalFile(updatedArticles);
+    const allArticles = await articlesColl.find({}).toArray();
+    const sorted = sortArticlesNewestFirst(allArticles);
+    syncLocalFile(sorted);
 
     return NextResponse.json({
       success: true,
       message: 'Article updated successfully',
-      articles: updatedArticles
+      articles: sorted
     });
   } catch (error) {
     console.error('PATCH /api/articles error:', error);

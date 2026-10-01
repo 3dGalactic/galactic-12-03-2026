@@ -1,10 +1,11 @@
 [
   {
-    "id": 1790847516973,
+    "_id": "1790850464833pvqp8",
+    "id": 1790850463844,
     "title": "Topology Optimization using Additive Manufacturing | Galactic 3D PVT LTD",
     "excerpt": "Topology Optimization using Additive Manufacturing",
     "linkedinUrl": "https://www.linkedin.com/posts/galactic-3d_activity-7326508733814001665-MTI3?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE5L28YBhS4C_KwL2BgCn0_nMsibDBg-nq0",
-    "image": "/articles/linkedin-topology-optimization-using-ad-1790847516971.png",
+    "image": "/articles/linkedin-topology-optimization-using-ad-1790850464832.png",
     "author": "Galactic 3D PVT LTD",
     "authorRole": "Precision Engineering Team",
     "date": "May 9, 2025",
@@ -14,7 +15,8 @@
       "Topology Optimization using Additive Manufacturing",
       "Galactic 3D's advanced metal additive manufacturing technologies help high-reliability industrial organizations accelerate production with reduced lead times, lighter structures, and exceptional quality standards.",
       "Read the full article and join the technical discussion on LinkedIn by clicking the reference link below."
-    ]
+    ],
+    "createdAt": "2026-10-01T10:27:43.844Z"
   },
   {
     "id": 1790847073074,
