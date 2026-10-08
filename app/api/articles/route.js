@@ -13,7 +13,7 @@ const ARTICLES_FILE = path.join(DATA_DIR, 'articles.json');
  * 1. Articles with newest timestamps (Date.now() > 1000000000 or createdAt) come first.
  * 2. Original / default articles follow below them.
  */
-export function sortArticlesNewestFirst(articles) {
+function sortArticlesNewestFirst(articles) {
   if (!Array.isArray(articles)) return [];
   return [...articles].sort((a, b) => {
     // 1. If explicit createdAt exists on both, compare ISO dates
