@@ -1,9 +1,19 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { extractTokenFromRequest, verifyAdminToken } from '../../../lib/auth';
 
 export async function POST(req) {
   try {
+    const token = extractTokenFromRequest(req);
+    const authResult = verifyAdminToken(token);
+    if (!authResult.valid) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Admin authentication required' },
+        { status: 401 }
+      );
+    }
+
     const formData = await req.formData();
     const file = formData.get('file') || formData.get('image');
 

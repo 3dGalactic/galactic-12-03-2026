@@ -1,8 +1,19 @@
 import { NextResponse } from 'next/server';
 import { connectToDatabase, getLocalDB, saveLocalDB } from '../../../lib/db';
+import { extractTokenFromRequest, verifyAdminToken } from '../../../lib/auth';
+import { getClientIp, checkRateLimit } from '../../../lib/sendEmail';
 
-export async function GET() {
+export async function GET(req) {
   try {
+    const token = extractTokenFromRequest(req);
+    const authResult = verifyAdminToken(token);
+    if (!authResult.valid) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Valid admin token required to view analytics' },
+        { status: 401 }
+      );
+    }
+
     const { db } = await connectToDatabase();
     const sessionsColl = db.collection('chat_sessions');
     const messagesColl = db.collection('chat_messages');
@@ -71,6 +82,15 @@ export async function GET() {
 
 export async function POST(req) {
   try {
+    const ip = getClientIp(req);
+    // Rate limit feedback: max 10 per minute per IP
+    if (!checkRateLimit(`feedback_${ip}`, 10, 60 * 1000)) {
+      return NextResponse.json(
+        { error: 'Too many feedback submissions. Please slow down.' },
+        { status: 429 }
+      );
+    }
+
     const body = await req.json();
     const { sessionId, rating = 1 } = body; // rating: 1 (helpful) or 0 (not helpful)
 

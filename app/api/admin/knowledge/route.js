@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { connectToDatabase } from '../../../lib/db';
 import { generateEmbedding } from '../../../lib/embeddings';
 import { seedKnowledgeBase } from '../../../lib/crawler';
+import { extractTokenFromRequest, verifyAdminToken } from '../../../lib/auth';
 
 export async function GET(req) {
   try {
@@ -39,6 +40,15 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
+    const token = extractTokenFromRequest(req);
+    const authResult = verifyAdminToken(token);
+    if (!authResult.valid) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Valid admin token required to add knowledge' },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json();
     const {
       sourceTitle,
@@ -89,6 +99,15 @@ export async function POST(req) {
 
 export async function PUT(req) {
   try {
+    const token = extractTokenFromRequest(req);
+    const authResult = verifyAdminToken(token);
+    if (!authResult.valid) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Valid admin token required to update knowledge' },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json();
     const { _id, chunkId, sourceTitle, category, content } = body;
 
@@ -131,6 +150,15 @@ export async function PUT(req) {
 
 export async function DELETE(req) {
   try {
+    const token = extractTokenFromRequest(req);
+    const authResult = verifyAdminToken(token);
+    if (!authResult.valid) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Valid admin token required to delete knowledge' },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
     const chunkId = searchParams.get('chunkId');

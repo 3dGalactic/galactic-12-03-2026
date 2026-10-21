@@ -4,6 +4,7 @@ import path from 'path';
 import { DEFAULT_ARTICLES } from '../../lib/defaultArticles';
 import { scrapeLinkedInArticle } from '../../lib/linkedinScraper';
 import { connectToDatabase, getLocalDB, saveLocalDB } from '../../lib/db';
+import { extractTokenFromRequest, verifyAdminToken } from '../../lib/auth';
 
 const DATA_DIR = path.join(process.cwd(), '.data');
 const ARTICLES_FILE = path.join(DATA_DIR, 'articles.json');
@@ -117,6 +118,15 @@ export async function GET() {
 
 export async function POST(req) {
   try {
+    const token = extractTokenFromRequest(req);
+    const authResult = verifyAdminToken(token);
+    if (!authResult.valid) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Admin authentication required' },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json().catch(() => ({}));
     const { linkedinUrl, url, ...customFields } = body;
     const targetUrl = linkedinUrl || url || customFields.link;
@@ -202,6 +212,15 @@ export async function POST(req) {
 
 export async function DELETE(req) {
   try {
+    const token = extractTokenFromRequest(req);
+    const authResult = verifyAdminToken(token);
+    if (!authResult.valid) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Admin authentication required' },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(req.url);
     let id = searchParams.get('id');
 
@@ -244,6 +263,15 @@ export async function DELETE(req) {
 
 export async function PATCH(req) {
   try {
+    const token = extractTokenFromRequest(req);
+    const authResult = verifyAdminToken(token);
+    if (!authResult.valid) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Admin authentication required' },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json().catch(() => ({}));
     const { id, category, title, image, excerpt, author, authorRole } = body;
 

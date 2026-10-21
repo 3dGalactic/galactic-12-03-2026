@@ -9,12 +9,13 @@ import {
   isGibberish,
   checkRateLimit,
   checkHourlyRateLimit,
+  getClientIp,
   ADMIN_EMAIL,
 } from '../../lib/sendEmail';
 
 export async function POST(req) {
   try {
-    const ip = req.headers.get('x-forwarded-for') || 'leads_ip';
+    const ip = getClientIp(req);
 
     // Rate limiting
     if (!checkRateLimit(ip, 2, 60 * 1000)) {
@@ -31,12 +32,12 @@ export async function POST(req) {
     }
 
     const body = await req.json();
-    const name        = sanitizeString(body.name || '');
-    const email       = sanitizeString(body.email || '');
-    const phone       = sanitizeString(body.phone || '');
-    const company     = sanitizeString(body.company || 'N/A');
+    const name = sanitizeString(body.name || '');
+    const email = sanitizeString(body.email || '');
+    const phone = sanitizeString(body.phone || '');
+    const company = sanitizeString(body.company || 'N/A');
     const requirement = sanitizeString(body.requirement || 'General Inquiry / Prototyping');
-    const source      = sanitizeString(body.source || 'AI Chatbot Assistant');
+    const source = sanitizeString(body.source || 'AI Chatbot Assistant');
     const { sessionId } = body;
 
     // Basic required fields

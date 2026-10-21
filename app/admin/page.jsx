@@ -138,9 +138,13 @@ export default function AdminDashboardPage() {
     setAdminArticleLoading(true);
     setAdminArticleMsg("Connecting to LinkedIn & extracting article metadata...");
     try {
+      const token = localStorage.getItem("galactic_admin_token") || "";
       const res = await fetch("/api/articles", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({
           linkedinUrl: adminLinkedinUrl.trim(),
           category: adminLinkedinCategory !== "auto" ? adminLinkedinCategory : undefined,
@@ -169,9 +173,13 @@ export default function AdminDashboardPage() {
       setAdminArticles(prev =>
         prev.map(art => (art.id === id ? { ...art, category: newCategory } : art))
       );
+      const token = localStorage.getItem("galactic_admin_token") || "";
       const res = await fetch("/api/articles", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ id, category: newCategory }),
       });
       const data = await res.json();
@@ -187,7 +195,11 @@ export default function AdminDashboardPage() {
   const handleDeleteAdminArticle = async (id) => {
     if (!confirm("Are you sure you want to delete this article?")) return;
     try {
-      const res = await fetch(`/api/articles?id=${id}`, { method: "DELETE" });
+      const token = localStorage.getItem("galactic_admin_token") || "";
+      const res = await fetch(`/api/articles?id=${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` },
+      });
       const data = await res.json();
       if (data.success) {
         fetchAdminArticles();
@@ -208,8 +220,10 @@ export default function AdminDashboardPage() {
     try {
       const formData = new FormData();
       formData.append("file", file);
+      const token = localStorage.getItem("galactic_admin_token") || "";
       const res = await fetch("/api/articles/upload-image", {
         method: "POST",
+        headers: { "Authorization": `Bearer ${token}` },
         body: formData,
       });
       const data = await res.json();
@@ -247,9 +261,13 @@ export default function AdminDashboardPage() {
         ? customArticleForm.paragraphs.split("\n\n").filter(p => p.trim())
         : [customArticleForm.excerpt || customArticleForm.title];
 
+      const token = localStorage.getItem("galactic_admin_token") || "";
       const res = await fetch("/api/articles", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({
           title: customArticleForm.title,
           category: customArticleForm.category,

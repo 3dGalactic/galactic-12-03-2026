@@ -1,8 +1,18 @@
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '../../../lib/db';
+import { extractTokenFromRequest, verifyAdminToken } from '../../../lib/auth';
 
 export async function GET(req) {
   try {
+    const token = extractTokenFromRequest(req);
+    const authResult = verifyAdminToken(token);
+    if (!authResult.valid) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Valid admin token required to access leads', details: authResult.error },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(req.url);
     const status = searchParams.get('status');
     const format = searchParams.get('format'); // 'csv' or json
@@ -61,6 +71,15 @@ export async function GET(req) {
 
 export async function PATCH(req) {
   try {
+    const token = extractTokenFromRequest(req);
+    const authResult = verifyAdminToken(token);
+    if (!authResult.valid) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Valid admin token required to modify leads' },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json();
     const { id, status, notes } = body;
 
@@ -99,6 +118,15 @@ export async function PATCH(req) {
 
 export async function DELETE(req) {
   try {
+    const token = extractTokenFromRequest(req);
+    const authResult = verifyAdminToken(token);
+    if (!authResult.valid) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Valid admin token required to delete leads' },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
 

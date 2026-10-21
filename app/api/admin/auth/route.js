@@ -1,22 +1,48 @@
 import { NextResponse } from 'next/server';
+import {
+  validateAdminCredentials,
+  createAdminToken,
+  checkLoginRateLimit,
+} from '../../../lib/auth';
+import { getClientIp } from '../../../lib/sendEmail';
 
 export async function POST(req) {
   try {
-    const body = await req.json();
+    const ip = getClientIp(req);
+
+    // Rate limiting: max 5 failed attempts per 15 min per IP
+    if (!checkLoginRateLimit(ip, 5, 15 * 60 * 1000)) {
+      console.warn(`[SECURITY ALERT] Admin login brute-force throttled for IP: ${ip}`);
+      return NextResponse.json(
+        { error: 'Too many login attempts. Please wait 15 minutes before trying again.' },
+        { status: 429 }
+      );
+    }
+
+    const body = await req.json().catch(() => ({}));
     const { email, password } = body;
 
-    const validEmail = process.env.ADMIN_EMAIL || 'admin@galactic-3d.com';
-    const validPassword = process.env.ADMIN_PASSWORD || 'galactic2026';
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: 'Email and password are required' },
+        { status: 400 }
+      );
+    }
 
-    if (
-      (email === validEmail || email === 'admin@galactic-3d.com') &&
-      (password === validPassword || password === 'galactic2026' || password === 'admin123')
-    ) {
-      const token = `g3d_jwt_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
+    const isValid = validateAdminCredentials(email, password);
+
+    if (isValid) {
+      const token = createAdminToken({
+        email: email.trim().toLowerCase(),
+        role: 'Super Admin',
+      });
+
+      console.info(`[SECURITY AUDIT] Admin login successful for ${email} from ${ip}`);
+
       return NextResponse.json({
         success: true,
         user: {
-          email,
+          email: email.trim().toLowerCase(),
           role: 'Super Admin',
           name: 'Galactic 3D Engineering Lead',
         },
@@ -24,14 +50,15 @@ export async function POST(req) {
       });
     }
 
+    console.warn(`[SECURITY ALERT] Failed admin login attempt for ${email} from ${ip}`);
     return NextResponse.json(
       { error: 'Invalid admin credentials' },
       { status: 401 }
     );
   } catch (error) {
-    console.error('Error in admin auth:', error);
+    console.error('Error in admin auth handler:', error);
     return NextResponse.json(
-      { error: 'Authentication failed', details: error.message },
+      { error: 'Authentication service error' },
       { status: 500 }
     );
   }

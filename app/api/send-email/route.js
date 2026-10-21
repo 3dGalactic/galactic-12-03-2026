@@ -8,11 +8,12 @@ import {
   isHoneypotTripped,
   isGibberish,
   sanitizeString,
+  getClientIp,
 } from "../../lib/sendEmail";
 
 export async function POST(req) {
   try {
-    const ip = req.headers.get("x-forwarded-for") || "send_email_ip";
+    const ip = getClientIp(req);
 
     // LAYER 4: Rate limiting — 2 per minute, 3 per hour per IP
     if (!checkRateLimit(ip, 2, 60 * 1000)) {

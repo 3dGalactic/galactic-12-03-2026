@@ -10,6 +10,7 @@ import {
   isBlockedEmailDomain,
   isHoneypotTripped,
   isGibberish,
+  getClientIp,
   processCentralizedSubmission,
 } from "../../lib/sendEmail";
 
@@ -26,15 +27,7 @@ export async function POST(req) {
           const bytes = await value.arrayBuffer();
           const buffer = Buffer.from(bytes);
 
-          // Save copy locally in public/uploads if applicable
-          try {
-            const uploadDir = path.join(process.cwd(), "public", "uploads");
-            await mkdir(uploadDir, { recursive: true });
-            const savedFilePath = path.join(uploadDir, `${Date.now()}_${value.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`);
-            await writeFile(savedFilePath, buffer);
-          } catch (fileSaveErr) {
-            console.warn("Local file save note:", fileSaveErr.message);
-          }
+          // Attachments handled as in-memory buffers passed to secure mail dispatcher
 
           attachments.push({
             filename: value.name,
@@ -126,7 +119,7 @@ export async function POST(req) {
     }
 
     // LAYER 4: Rate limiting — 2 per minute, 3 per hour per IP
-    const ip = req.headers.get("x-forwarded-for") || "anonymous";
+    const ip = getClientIp(req);
     const rateLimitKey = `${ip}:${sourcePage}`;
     if (!checkRateLimit(rateLimitKey, 2, 60 * 1000)) {
       return NextResponse.json(
@@ -157,9 +150,9 @@ export async function POST(req) {
     };
 
     try {
-      const uploadDir = path.join(process.cwd(), "public", "uploads");
-      await mkdir(uploadDir, { recursive: true });
-      const storeFile = path.join(uploadDir, "contact_submissions.json");
+      const dataDir = path.join(process.cwd(), ".data");
+      await mkdir(dataDir, { recursive: true });
+      const storeFile = path.join(dataDir, "contact_submissions.json");
 
       let existing = [];
       try {

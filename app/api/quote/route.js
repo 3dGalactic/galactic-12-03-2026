@@ -8,11 +8,12 @@ import {
   isGibberish,
   checkRateLimit,
   checkHourlyRateLimit,
+  getClientIp,
 } from "../../lib/sendEmail";
 
 export async function POST(req) {
   try {
-    const ip = req.headers.get("x-forwarded-for") || "quote_ip";
+    const ip = getClientIp(req);
 
     // Rate limiting
     if (!checkRateLimit(ip, 2, 60 * 1000)) {
@@ -29,8 +30,8 @@ export async function POST(req) {
     }
 
     const body = await req.json();
-    const email   = sanitizeString(body.email || "");
-    const name    = sanitizeString(body.name || body.fullName || "");
+    const email = sanitizeString(body.email || "");
+    const name = sanitizeString(body.name || body.fullName || "");
     const company = sanitizeString(body.company || body.organization || "");
     const message = sanitizeString(body.message || body.projectDetails || body.description || "");
     const subject = sanitizeString(body.subject || "Get Quote Request");

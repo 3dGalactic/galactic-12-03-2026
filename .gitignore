@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# sensitive submission logs & applicant files
+.data/contact_submissions.json
+.data/careers_submissions.json
+.data/resumes/
+.data/uploads/
+

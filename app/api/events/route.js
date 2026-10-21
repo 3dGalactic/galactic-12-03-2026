@@ -8,11 +8,12 @@ import {
   isGibberish,
   checkRateLimit,
   checkHourlyRateLimit,
+  getClientIp,
 } from "../../lib/sendEmail";
 
 export async function POST(req) {
   try {
-    const ip = req.headers.get("x-forwarded-for") || "events_ip";
+    const ip = getClientIp(req);
 
     // Rate limiting
     if (!checkRateLimit(ip, 2, 60 * 1000)) {

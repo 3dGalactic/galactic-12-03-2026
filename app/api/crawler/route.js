@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { crawlWebsite, seedKnowledgeBase } from '../../lib/crawler';
 import { connectToDatabase, getLocalDB, saveLocalDB } from '../../lib/db';
+import { extractTokenFromRequest, verifyAdminToken } from '../../lib/auth';
 
 export async function GET() {
   try {
@@ -42,6 +43,15 @@ export async function GET() {
 
 export async function POST(req) {
   try {
+    const token = extractTokenFromRequest(req);
+    const authResult = verifyAdminToken(token);
+    if (!authResult.valid) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Valid admin token required to trigger crawler' },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json().catch(() => ({}));
     const { action = 'reindex', frequency } = body;
 

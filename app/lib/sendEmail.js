@@ -4,7 +4,6 @@ export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.EMAIL_USER || 
 
 // ─────────────────────────────────────────────────────────────
 // LAYER 5: Blocked / Disposable Email Domains
-// Add any domain you want to block here.
 // ─────────────────────────────────────────────────────────────
 export const BLOCKED_EMAIL_DOMAINS = [
   // Known disposable / temp-mail services
@@ -34,7 +33,7 @@ export const BLOCKED_EMAIL_DOMAINS = [
   "willselfdestruct.com", "wronghead.com", "wuzupmail.net",
   "xsecurity.org", "yuurok.com", "zehnminuten.de", "zehnminutenmail.de",
   "zippymail.info", "zoemail.org",
-  // Specifically block the domain seen in the attack
+  // Specifically block domain observed in earlier attack patterns
   "fam-blankenburg.de",
 ];
 
@@ -51,10 +50,8 @@ export function isBlockedEmailDomain(email) {
 
 // ─────────────────────────────────────────────────────────────
 // LAYER 2: Honeypot check
-// Pass the full payload; if the honeypot field is filled → it's a bot.
 // ─────────────────────────────────────────────────────────────
 export function isHoneypotTripped(payload = {}) {
-  // Bots will fill hidden fields. Humans never see them.
   const honeypotFields = ["website", "bot_check", "url", "fax", "hp_email"];
   return honeypotFields.some(
     (field) => payload[field] && String(payload[field]).trim().length > 0
@@ -63,11 +60,8 @@ export function isHoneypotTripped(payload = {}) {
 
 // ─────────────────────────────────────────────────────────────
 // LAYER 3: Gibberish / Bot Input Detection
-// Detects random-character strings typical of spam bots.
 // ─────────────────────────────────────────────────────────────
-
-// Common real English / Indian words to whitelist short inputs
-const REAL_WORD_PATTERNS = /\b(the|and|for|are|but|not|you|all|any|can|her|was|one|our|out|day|get|has|him|his|how|its|let|may|new|now|old|see|two|way|who|boy|did|big|end|far|few|got|had|has|here|help|just|know|like|make|more|need|over|part|play|put|run|said|same|she|show|side|some|take|than|that|them|then|they|this|time|turn|very|well|went|were|what|when|will|with|work|your|about|above|after|again|along|being|could|every|first|found|given|going|great|group|large|later|learn|left|light|might|never|often|other|place|plant|point|right|small|sound|still|study|their|there|these|thing|think|those|three|through|under|until|using|where|which|while|world|would|write|city|metal|print|india|bangalore|company|project|machine|product|service|training|enquiry|design|material|order|quote|price|cost|need|want|request|information|detail|support|contact|send|help|know|use|make|build|create|provide|offer|tech|steel|titanium|aerospace|medical|automotive|industrial|rapid|prototype|prototype)\b/i;
+const REAL_WORD_PATTERNS = /\b(the|and|for|are|but|not|you|all|any|can|her|was|one|our|out|day|get|has|him|his|how|its|let|may|new|now|old|see|two|way|who|boy|did|big|end|far|few|got|had|has|here|help|just|know|like|make|more|need|over|part|play|put|run|said|same|she|show|side|some|take|than|that|them|then|they|this|time|turn|very|well|went|were|what|when|will|with|work|your|about|above|after|again|along|being|could|every|first|found|given|going|great|group|large|later|learn|left|light|might|never|often|other|place|plant|point|right|small|sound|still|study|their|there|these|thing|think|those|three|through|under|until|using|where|which|while|world|would|write|city|metal|print|india|bangalore|company|project|machine|product|service|training|enquiry|design|material|order|quote|price|cost|need|want|request|information|detail|support|contact|send|help|know|use|make|build|create|provide|offer|tech|steel|titanium|aerospace|medical|automotive|industrial|rapid|prototype)\b/i;
 
 export function isGibberish(str) {
   if (!str || typeof str !== "string") return false;
@@ -83,23 +77,22 @@ export function isGibberish(str) {
   const vowels = (s.match(/[aeiouAEIOU]/g) || []).length;
   const vowelRatio = vowels / letters;
 
-  // Check 1: Very low vowel ratio — catches "dfvdfg", "fdfdgrgg", "dgrggdf" etc.
+  // Very low vowel ratio
   if (vowelRatio < 0.15) return true;
 
-  // Check 2: Any single run of 4+ consecutive consonants → gibberish
-  // Catches "dgrggdfera" (starts with 7 consonants: d-g-r-g-g-d-f)
+  // 4+ consecutive consonants
   const longConsonantRun = /[^aeiouAEIOU\s\d\W]{4,}/.test(s);
   if (longConsonantRun) return true;
 
-  // Check 3: Excessive random case alternation (e.g. "adADASwhnxxTXsOnc")
+  // Excessive random case alternation
   const alterations = (s.match(/[a-z][A-Z]|[A-Z][a-z][A-Z]|[a-z][A-Z][a-z]/g) || []).length;
   if (alterations >= 3 && letters >= 8) return true;
 
-  // Check 4: No spaces and very long single "word" with no real structure
+  // Long single token without structure
   const words = s.split(/\s+/);
   if (words.length === 1 && s.length > 18 && letters > 14) return true;
 
-  // Check 5: Repeated same consonant clusters (gg, ff, rr etc. more than once) — bot pattern
+  // Repeated consonant clusters
   const repeatedClusters = (s.match(/([^aeiouAEIOU\s])\1{1,}/g) || []).length;
   if (repeatedClusters >= 2 && letters <= 12) return true;
 
@@ -107,11 +100,37 @@ export function isGibberish(str) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// LAYER 4: Rate Limiting
-// Tighter: 2 per minute per IP, 3 per hour per IP
+// Robust IP Extraction
+// ─────────────────────────────────────────────────────────────
+export function getClientIp(req) {
+  if (!req) return "unknown_ip";
+  try {
+    // 1. Cloudflare header
+    const cfIp = req.headers?.get?.("cf-connecting-ip");
+    if (cfIp && cfIp.trim()) return cfIp.trim();
+
+    // 2. Standard Forwarded header (comma-separated, leftmost is real client)
+    const forwarded = req.headers?.get?.("x-forwarded-for");
+    if (forwarded) {
+      const parts = forwarded.split(",");
+      const clientIp = parts[0]?.trim();
+      if (clientIp) return clientIp;
+    }
+
+    // 3. Real-IP header
+    const realIp = req.headers?.get?.("x-real-ip");
+    if (realIp && realIp.trim()) return realIp.trim();
+  } catch (e) { }
+
+  return "anonymous_ip";
+}
+
+// ─────────────────────────────────────────────────────────────
+// LAYER 4: Rate Limiting & Anti-Spam Controls
 // ─────────────────────────────────────────────────────────────
 const rateLimitMap = new Map();
 const hourlyRateLimitMap = new Map();
+const destinationRateLimitMap = new Map();
 
 export function checkRateLimit(identifier, limit = 2, windowMs = 60 * 1000) {
   const now = Date.now();
@@ -144,15 +163,63 @@ export function checkHourlyRateLimit(identifier, limit = 3) {
   return true;
 }
 
+// Destination Rate Limit: Prevents using our contact forms to flood a single target email (Email Bombing)
+export function checkDestinationRateLimit(email, limit = 1, windowMs = 60 * 60 * 1000) {
+  if (!email || typeof email !== "string") return false;
+  const now = Date.now();
+  const key = email.trim().toLowerCase();
+  const current = destinationRateLimitMap.get(key) || [];
+  const valid = current.filter((ts) => ts > now - windowMs);
+
+  if (valid.length >= limit) {
+    return false;
+  }
+
+  valid.push(now);
+  destinationRateLimitMap.set(key, valid);
+  return true;
+}
+
+// ─────────────────────────────────────────────────────────────
+// Global Outbound Volume Circuit Breaker (Anti-Spam Spike Protection)
+// ─────────────────────────────────────────────────────────────
+const MAX_HOURLY_OUTBOUND = Number(process.env.MAX_HOURLY_OUTBOUND_EMAILS || 50);
+const outboundTimestamps = [];
+
+export function checkOutboundVolumeLimit() {
+  const now = Date.now();
+  const oneHourAgo = now - 60 * 60 * 1000;
+
+  // Prune entries older than 1 hour
+  while (outboundTimestamps.length > 0 && outboundTimestamps[0] < oneHourAgo) {
+    outboundTimestamps.shift();
+  }
+
+  if (outboundTimestamps.length >= MAX_HOURLY_OUTBOUND) {
+    console.error(
+      `[SECURITY ALERT] Global outbound email spike threshold reached (${outboundTimestamps.length}/${MAX_HOURLY_OUTBOUND} in last hour). Throttling outgoing messages.`
+    );
+    return false;
+  }
+
+  outboundTimestamps.push(now);
+  return true;
+}
+
 export function sanitizeString(value) {
-  return String(value ?? "").replace(/<[^>]*>?/gm, "").trim();
+  return String(value ?? "")
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/<[^>]*>?/gm, "")
+    .trim();
 }
 
 export function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || "");
 }
 
-// Build Admin Email Content
+// ─────────────────────────────────────────────────────────────
+// Email Builders
+// ─────────────────────────────────────────────────────────────
 export function buildAdminEmailContent(data = {}) {
   const name = sanitizeString(data.name || data.fullName);
   const email = sanitizeString(data.email);
@@ -232,7 +299,6 @@ Website Page Submitted From: ${sourcePage}`;
   return { subject: emailSubject, text, html };
 }
 
-// Build User Auto-Reply Email
 export function buildUserAutoReplyEmail(data = {}) {
   const name = sanitizeString(data.name || data.fullName || "Valued Contact");
   const email = sanitizeString(data.email || "");
@@ -276,12 +342,34 @@ https://www.galactic-3d.com`;
   return { to: email, subject: "Thank You for Contacting Galactic 3D", text, html };
 }
 
-// Direct Nodemailer Transport with Timeout Protection
+// ─────────────────────────────────────────────────────────────
+// Direct Nodemailer Transport (Secure, Environment-Driven Only)
+// ─────────────────────────────────────────────────────────────
 export async function sendSmtpMail({ to, fromName = "Galactic 3D", subject, text, html, replyTo, attachments = [] }) {
   const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
   const smtpPort = Number(process.env.SMTP_PORT || 465);
   const smtpUser = process.env.SMTP_USER || process.env.EMAIL_USER || "admin@galactic-3d.com";
-  const smtpPass = process.env.SMTP_PASS || process.env.EMAIL_PASSWORD || "cmcc spkd lsfo bhji";
+  const smtpPass = process.env.SMTP_PASS || process.env.EMAIL_PASSWORD || "";
+
+  // SAFETY RULE: Never hardcode credentials. If credentials are missing, do not attempt send.
+  if (!smtpPass) {
+    console.warn(
+      "[EMAIL_SECURITY] SMTP password is not configured in environment variables (SMTP_PASS or EMAIL_PASSWORD). Outgoing email dispatch safely skipped."
+    );
+    return {
+      success: false,
+      skipped: true,
+      reason: "SMTP password not configured in environment variables",
+    };
+  }
+
+  // Outbound volume spike circuit breaker
+  if (!checkOutboundVolumeLimit()) {
+    return {
+      success: false,
+      error: "Hourly outbound email volume limit reached. Dispatch throttled.",
+    };
+  }
 
   const transporter = nodemailer.createTransport({
     host: smtpHost,
@@ -295,7 +383,8 @@ export async function sendSmtpMail({ to, fromName = "Galactic 3D", subject, text
     greetingTimeout: 4000,
     socketTimeout: 6000,
     tls: {
-      rejectUnauthorized: false,
+      // Reject invalid or self-signed certificates in production
+      rejectUnauthorized: process.env.NODE_ENV === "production",
     },
   });
 
@@ -314,29 +403,38 @@ export async function sendSmtpMail({ to, fromName = "Galactic 3D", subject, text
   );
 
   const info = await Promise.race([sendPromise, timeoutPromise]);
+  console.info(`[EMAIL_AUDIT] Email sent successfully to ${to} (MessageID: ${info.messageId})`);
   return { success: true, messageId: info.messageId, accepted: info.accepted || [] };
 }
 
+// ─────────────────────────────────────────────────────────────
 // Centralized Dispatcher
+// ─────────────────────────────────────────────────────────────
 export async function processCentralizedSubmission(payload = {}, attachments = []) {
   const dateTime = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
   const data = { ...payload, dateTime };
 
   const adminEmailContent = buildAdminEmailContent(data);
 
-  // Trigger User Auto-Reply in background asynchronously
-  if (payload.email && validateEmail(payload.email)) {
-    const userAutoReply = buildUserAutoReplyEmail(data);
-    sendSmtpMail({
-      to: payload.email,
-      fromName: "Galactic 3D",
-      subject: userAutoReply.subject,
-      text: userAutoReply.text,
-      html: userAutoReply.html,
-      replyTo: ADMIN_EMAIL,
-    }).catch((autoReplyErr) => {
-      console.warn("Auto-reply send background notice:", autoReplyErr.message);
-    });
+  // Trigger User Auto-Reply only if enabled, valid, and within destination rate limit
+  const isAutoReplyEnabled = process.env.ENABLE_USER_AUTOREPLY !== "false";
+  if (isAutoReplyEnabled && payload.email && validateEmail(payload.email)) {
+    // Only send if recipient has not received an auto-reply within the past hour
+    if (checkDestinationRateLimit(payload.email, 1, 60 * 60 * 1000)) {
+      const userAutoReply = buildUserAutoReplyEmail(data);
+      sendSmtpMail({
+        to: payload.email,
+        fromName: "Galactic 3D",
+        subject: userAutoReply.subject,
+        text: userAutoReply.text,
+        html: userAutoReply.html,
+        replyTo: ADMIN_EMAIL,
+      }).catch((autoReplyErr) => {
+        console.warn("[EMAIL_NOTICE] Auto-reply send notice:", autoReplyErr.message);
+      });
+    } else {
+      console.warn(`[EMAIL_SECURITY] Auto-reply rate-limited for recipient: ${payload.email}`);
+    }
   }
 
   // Send Admin Notification Email
@@ -352,7 +450,7 @@ export async function processCentralizedSubmission(payload = {}, attachments = [
       attachments,
     });
   } catch (adminErr) {
-    console.warn("Admin SMTP email notice:", adminErr.message);
+    console.warn("[EMAIL_NOTICE] Admin SMTP notification notice:", adminErr.message);
     adminResult = { success: false, error: adminErr.message };
   }
 
