@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useState, useRef } from "react";
-// import { motion } from "motion/react";
 import {
   MapPin,
   Phone,
@@ -12,19 +11,10 @@ import {
   Building2,
   MessageSquare,
   MessageCircle,
+  Linkedin,
+  Instagram,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import {
-  MapPinIcon,
-  PhoneIcon,
-  EnvelopeIcon,
-  ClockIcon,
-} from "@heroicons/react/24/outline";
-import {
-  FaLinkedinIn,
-  FaInstagram,
-  FaXTwitter,
-} from "react-icons/fa6";
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -422,7 +412,7 @@ export default function Contact() {
                 rel="noopener noreferrer"
                 className="group flex items-start gap-4 py-5"
               >
-                <MapPinIcon className="w-6 h-6 text-black mt-1 shrink-0" />
+                <MapPin strokeWidth={1.5} className="w-6 h-6 text-black mt-1 shrink-0" />
 
                 <div>
                   <p className="text-xs uppercase tracking-[0.3em] font-mono text-black font-bold mb-1">
@@ -440,7 +430,7 @@ export default function Contact() {
                 href="tel:8939058575"
                 className="group flex items-start gap-4 py-5"
               >
-                <PhoneIcon className="w-6 h-6 text-black mt-1 shrink-0" />
+                <Phone strokeWidth={1.5} className="w-6 h-6 text-black mt-1 shrink-0" />
 
                 <div>
                   <p className="text-xs uppercase tracking-[0.3em] font-mono text-black font-bold mb-1">
@@ -477,7 +467,7 @@ export default function Contact() {
 
               {/* Hours */}
               <div className="flex items-start gap-4 py-5">
-                <ClockIcon className="w-6 h-6 text-black mt-1 shrink-0" />
+                <Clock strokeWidth={1.5} className="w-6 h-6 text-black mt-1 shrink-0" />
 
                 <div>
                   <p className="text-xs uppercase tracking-[0.3em] font-mono text-black font-bold mb-1">
@@ -511,19 +501,12 @@ export default function Contact() {
             {/* SOCIALS */}
             <div className="flex gap-4 pt-2">
 
-              {/* <a
-            href="#"
-            className="w-11 h-11 flex items-center justify-center rounded-full border border-white/10 hover:bg-white/10 transition"
-          >
-            <FaXTwitter className="text-white text-sm" />
-          </a> */}
-
               <a
                 href="https://www.linkedin.com/company/galactic-3d/posts/?feedView=all"
                 target="_blank"
                 className="w-11 h-11 flex items-center justify-center rounded-full border border-white/10 hover:bg-white/10 transition"
               >
-                <FaLinkedinIn className="text-white text-sm" />
+                <Linkedin size={16} className="text-white" />
               </a>
 
               <a
@@ -531,7 +514,7 @@ export default function Contact() {
                 target="_blank"
                 className="w-11 h-11 flex items-center justify-center rounded-full border border-white/10 hover:bg-white/10 transition"
               >
-                <FaInstagram className="text-white text-sm" />
+                <Instagram size={16} className="text-white" />
               </a>
 
             </div>

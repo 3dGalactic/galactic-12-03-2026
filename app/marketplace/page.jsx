@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
-import { motion } from 'motion/react'
+import { motion } from 'framer-motion'
 import { Search, Filter, Upload, ShoppingCart, User, CheckCircle2, Download, ArrowRight, Star, Clock, Tag, Grid3X3, ListFilter, X } from 'lucide-react'
 
 export default function MarketplacePage() {

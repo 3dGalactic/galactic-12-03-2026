@@ -2,7 +2,7 @@
 
 import { CheckCircle2, Download, ExternalLink } from "lucide-react"
 import Link from "next/link"
-import { motion } from "motion/react"
+import { motion } from "framer-motion"
 
 export default function MachinesPage() {
   return (

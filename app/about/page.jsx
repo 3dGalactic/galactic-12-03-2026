@@ -4,8 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { EyeIcon, RocketLaunchIcon, CheckCircleIcon } from "@heroicons/react/24/outline"
-import { Users, Award, Building, Briefcase, Handshake, ArrowRight, CheckCircle, ExternalLink, Linkedin, ChevronRight } from 'lucide-react'
+import { Users, Award, Building, Briefcase, Handshake, ArrowRight, CheckCircle, ExternalLink, Linkedin, ChevronRight, Eye, Rocket } from 'lucide-react'
 import TrustCertifications from '../components/TrustCertifications'
 
 export default function About() {
@@ -267,7 +266,7 @@ image: "/hist2.jpg"
               <div className="flex items-center gap-4 mb-8">
 
                 <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                  <EyeIcon className="w-6 h-6 text-primary" />
+                  <Eye strokeWidth={1.5} className="w-6 h-6 text-primary" />
                 </div>
 
                 <h3 className="text-3xl font-['test']">
@@ -299,7 +298,7 @@ image: "/hist2.jpg"
               <div className="flex items-center gap-4 mb-8">
 
                 <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center">
-                  <RocketLaunchIcon className="w-6 h-6 text-secondary" />
+                  <Rocket strokeWidth={1.5} className="w-6 h-6 text-secondary" />
                 </div>
 
                 <h3 className="text-3xl font-['test']">
@@ -311,22 +310,22 @@ image: "/hist2.jpg"
               <ul className="space-y-5 font-['scrib'] text-white/80 text-lg">
 
                 <li className="flex gap-3">
-                  <CheckCircleIcon className="w-5 h-5 text-primary mt-1" />
+                  <CheckCircle strokeWidth={1.5} className="w-5 h-5 text-primary mt-1" />
                   Develop next-generation 3D printing technologies that redefine speed, precision and material capabilities.
                 </li>
 
                 <li className="flex gap-3">
-                  <CheckCircleIcon className="w-5 h-5 text-primary mt-1" />
+                  <CheckCircle strokeWidth={1.5} className="w-5 h-5 text-primary mt-1" />
                   Foster continuous innovation through research, collaboration and knowledge sharing.
                 </li>
 
                 <li className="flex gap-3">
-                  <CheckCircleIcon className="w-5 h-5 text-primary mt-1" />
+                  <CheckCircle strokeWidth={1.5} className="w-5 h-5 text-primary mt-1" />
                   Empower clients to unlock the full potential of additive manufacturing.
                 </li>
 
                 <li className="flex gap-3">
-                  <CheckCircleIcon className="w-5 h-5 text-primary mt-1" />
+                  <CheckCircle strokeWidth={1.5} className="w-5 h-5 text-primary mt-1" />
                   Lead the industry toward sustainable and responsible manufacturing practices.
                 </li>
 

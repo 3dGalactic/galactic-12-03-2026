@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { motion } from 'motion/react'
+import { motion } from 'framer-motion'
 import { Search, FileText, BookOpen, Video, Download, ArrowRight, Play, Book, FileCheck, Bookmark, ExternalLink } from 'lucide-react'
 
 export default function ResourcesPage() {
